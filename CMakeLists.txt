@@ -37,6 +37,7 @@ set(Scene
 set(Utility
     Utility/Enum.h
     Utility/AssetLoader.h
+    Utility/StateMachine.h
     Utility/AssetLoader.cpp
 )
 list(APPEND MODULES ${App} ${Scene} ${Utility})
@@ -55,6 +56,7 @@ set(RELEASE_LIB "${GEARS_LIBRARY_DIR}/Lib/release")
 # ヘッダーファイルのインクルードディレクトリの設定
 file(GLOB INTERNAL_DIRS ${GEARS_LIBRARY_DIR}/Include/*/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/Include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/External/DirectXTex)
 target_include_directories(${PROJECT_NAME} PUBLIC ${INTERNAL_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MODULES})
 target_link_libraries(${PROJECT_NAME} debug ${DEBUG_LIB}/*.lib)
