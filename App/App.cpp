@@ -9,6 +9,7 @@ using namespace Glib;
 void App::Start()
 {
     ResiterScenes();
+    SceneManager::LoadScene("PlayScene");
 }
 
 void App::End()
