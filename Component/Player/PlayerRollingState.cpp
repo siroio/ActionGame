@@ -1,0 +1,58 @@
+﻿#include "PlayerRollingState.h"
+#include <GameObject.h>
+#include <Components/Animator.h>
+#include <Components/AudioSource.h>
+#include <Components/Camera.h>
+#include <Components/Rigidbody.h>
+#include <Components/Transform.h>
+#include <GLGUI.h>
+
+#include "../Common/Rotator.h"
+#include "../../Enum/Player/PlayerState.h"
+#include "../../Input/Input.h"
+#include "../../Utility/CameraUtility.h"
+#include "../../Utility/RigidbodyUility.h"
+
+using namespace Glib;
+
+PlayerRollingState::PlayerRollingState(const Parameter& param) :
+    parameter_{ param }
+{}
+
+void PlayerRollingState::OnInitialize()
+{
+    const auto& camera = GameObjectManager::Find("Camera Parent");
+    camera_ = camera->Transform();
+    animator_ = GameObject()->GetComponent<Animator>();
+    rigidbody_ = GameObject()->GetComponent<Rigidbody>();
+    audio_ = GameObject()->GetComponent<AudioSource>();
+    rotator_ = GameObject()->GetComponent<Rotator>();
+}
+
+void PlayerRollingState::OnEnter()
+{
+    animator_->AnimationID(parameter_.dodgeAnimID);
+    animator_->Loop(false);
+    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    RigidbodyUtility::KillXZVelocity(rigidbody_);
+}
+
+int PlayerRollingState::OnFixedUpdate(float elapsedTime)
+{
+    Move(elapsedTime <= parameter_.dodgeDuration);
+    if (elapsedTime >= parameter_.dodgeDuration)
+    {
+        return PlayerState::Moving;
+    }
+    return STATE_MAINTAIN;
+}
+
+void PlayerRollingState::Move(bool moving)
+{
+    Vector3 velocity = moving ?
+        GameObject()->Transform()->Forward().Normalized() * parameter_.moveSpeed :
+        Vector3::Zero();
+
+    Vector3 ignoreYVelocity = Vector3::Scale(rigidbody_->LinearVelocity(), Vector3{ 1.0f, 0.0f, 1.0f });
+    rigidbody_->AddForce(parameter_.moveForceMultiplier * (velocity - ignoreYVelocity));
+}

@@ -1,0 +1,124 @@
+﻿#include "PlayerAttackState.h"
+#include <GameObject.h>
+#include <Components/Animator.h>
+#include <Components/AudioSource.h>
+#include <Components/Camera.h>
+#include <Components/Rigidbody.h>
+#include <Components/Transform.h>
+#include <Components/EffectSystem.h>
+#include <GLGUI.h>
+
+#include "../Common/Rotator.h"
+#include "../../Enum/Player/PlayerState.h"
+#include "../../Input/Input.h"
+#include "../../Utility/CameraUtility.h"
+#include "../../Utility/RigidbodyUility.h"
+
+using namespace Glib;
+
+PlayerAttackState::PlayerAttackState(const Parameter& param, const WeakPtr<EffectSystem>& slash) :
+    parameter_{ param }, slashEfk_{ slash }
+{}
+
+void PlayerAttackState::OnInitialize()
+{
+    const auto& camera = GameObjectManager::Find("Camera Parent");
+    camera_ = camera->Transform();
+    animator_ = GameObject()->GetComponent<Animator>();
+    rigidbody_ = GameObject()->GetComponent<Rigidbody>();
+    audio_ = GameObject()->GetComponent<AudioSource>();
+    rotator_ = GameObject()->GetComponent<Rotator>();
+}
+
+void PlayerAttackState::OnEnter()
+{
+    animator_->AnimationID(parameter_.attackAnimID);
+    animator_->Loop(false);
+    if (!slashEfk_.expired()) slashEfk_->Play();
+    audio_->AudioID(parameter_.attackSEID);
+    audio_->Play();
+    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    RigidbodyUtility::KillXZVelocity(rigidbody_);
+}
+
+void PlayerAttackState::OnExit()
+{
+    if (!slashEfk_.expired()) slashEfk_->Stop();
+    RigidbodyUtility::KillXZVelocity(rigidbody_);
+}
+
+int PlayerAttackState::OnUpdate(float elapsedTime)
+{
+    if (IsAtacck(elapsedTime))
+    {
+        return parameter_.nextAttackState;
+    }
+
+    if (IsTimeOver(elapsedTime))
+    {
+        return PlayerState::Moving;
+    }
+
+    return STATE_MAINTAIN;
+}
+
+int PlayerAttackState::OnFixedUpdate(float elapsedTime)
+{
+    Move(elapsedTime);
+    return STATE_MAINTAIN;
+}
+
+bool PlayerAttackState::IsAtacck(float elapsedTime)
+{
+    return parameter_.inputTimer.Reception(elapsedTime) && Input::Attack();
+}
+
+bool PlayerAttackState::IsTimeOver(float elapsedTime) const
+{
+    float endTime{
+        parameter_.inputTimer.ReceptionTime() +
+        parameter_.inputTimer.StartTime() +
+        parameter_.stateEndTime
+    };
+    return elapsedTime >= endTime;
+}
+
+void PlayerAttackState::Move(float elapsedTime)
+{
+    Vector3 ignoreYVelocity = Vector3::Scale(rigidbody_->LinearVelocity(), Vector3{ 1.0f, 0.0f, 1.0f });
+    rigidbody_->AddForce(parameter_.moveForceMultiplier * (MoveSpeed(elapsedTime <= parameter_.moveDuration) - ignoreYVelocity));
+}
+
+Vector3 PlayerAttackState::MoveSpeed(bool moving)
+{
+    return moving ?
+        GameObject()->Transform()->Forward().Normalized() * parameter_.moveSpeed :
+        Vector3::Zero();
+}
+
+void PlayerAttackState::OnGUI()
+{
+    int attack{ parameter_.attack };
+    if (GLGUI::DragInt("ATK", &attack))
+    {
+        parameter_.attack = attack;
+    }
+
+    float moveDuration{ parameter_.moveDuration };
+    if (GLGUI::DragFloat("MoveTime", &moveDuration, 0.001f))
+    {
+        parameter_.moveDuration = moveDuration;
+    }
+
+    float moveSpeed{ parameter_.moveSpeed };
+    if (GLGUI::DragFloat("MoveSpeed", &moveSpeed, 0.01f))
+    {
+        parameter_.moveSpeed = moveSpeed;
+    }
+
+    float moveForce{ parameter_.moveForceMultiplier };
+    if (GLGUI::DragFloat("MoveForce", &moveForce, 0.01f))
+    {
+        parameter_.moveForceMultiplier = moveForce;
+    }
+}
