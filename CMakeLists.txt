@@ -34,13 +34,79 @@ set(Scene
     Scene/ResultScene.cpp
 )
 
-set(Utility
-    Utility/Enum.h
-    Utility/AssetLoader.h
-    Utility/StateMachine.h
-    Utility/AssetLoader.cpp
+set(Constant
+    Constant/CameraConstant.h
+    Constant/GameObjectName.h
 )
-list(APPEND MODULES ${App} ${Scene} ${Utility})
+
+set(Character
+    Character/Camera/MainCamera.h
+    Character/Camera/MainCamera.cpp
+    Character/Player/Player.h
+    Character/Player/Player.cpp
+)
+
+set(Component
+    Component/Camera/CameraController.h
+    Component/Camera/CameraController.cpp
+    Component/Camera/CameraRotator.h
+    Component/Camera/CameraRotator.cpp
+    Component/Common/AttackColliderController.h
+    Component/Common/AttackColliderController.cpp
+    Component/Common/Rotator.h
+    Component/Common/Rotator.cpp
+    Component/Player/PlayerMoveState.h
+    Component/Player/PlayerMoveState.cpp
+    Component/Player/PlayerAttackState.h
+    Component/Player/PlayerAttackState.cpp
+    Component/Player/PlayerRollingState.h
+    Component/Player/PlayerRollingState.cpp
+    Component/StateMachine/State.h
+    Component/StateMachine/StateBehavior.h
+    Component/StateMachine/StateBehavior.cpp
+)
+
+set(Enum
+    Enum/Player/PlayerState.h
+    Enum/AnimationID.h
+    Enum/AudioID.h
+    Enum/CollisionLayer.h
+    Enum/EffectID.h
+    Enum/MeshID.h
+    Enum/TextureID.h
+)
+
+set(Input
+    Input/Input.h
+    Input/Input.cpp
+)
+
+set(Utility
+    Utility/AssetLoader.h
+    Utility/AssetLoader.cpp
+    Utility/CameraUtility.h
+    Utility/CameraUtility.cpp
+    Utility/Enum.h
+    Utility/Fuzzy.h
+    Utility/Fuzzy.cpp
+    Utility/ReceptionTimer.h
+    Utility/ReceptionTimer.cpp
+    Utility/RigidbodyUility.h
+    Utility/RigidbodyUility.cpp
+)
+
+# ソース一覧
+list(APPEND MODULES 
+    ${App} 
+    ${Scene}
+    ${Constant}
+    ${Character}
+    ${Component} 
+    ${Enum} 
+    ${Context} 
+    ${Input}
+    ${Utility}
+)
 
 MakeFilter(${MODULES})
 
@@ -50,13 +116,14 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 # ライブラリの場所
 set(GEARS_LIBRARY_DIR ${PROJECT_SOURCE_DIR}/Library/GearsLibrary)
-set(DEBUG_LIB "${GEARS_LIBRARY_DIR}/Lib/debug")
-set(RELEASE_LIB "${GEARS_LIBRARY_DIR}/Lib/release")
+set(DEBUG_LIB "${GEARS_LIBRARY_DIR}/Lib/Debug")
+set(RELEASE_LIB "${GEARS_LIBRARY_DIR}/Lib/Release")
 
 # ヘッダーファイルのインクルードディレクトリの設定
 file(GLOB INTERNAL_DIRS ${GEARS_LIBRARY_DIR}/Include/*/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/Include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/External/DirectXTex)
+target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/External/PhysX)
 target_include_directories(${PROJECT_NAME} PUBLIC ${INTERNAL_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MODULES})
 target_link_libraries(${PROJECT_NAME} debug ${DEBUG_LIB}/*.lib)
