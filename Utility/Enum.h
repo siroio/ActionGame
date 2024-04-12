@@ -15,20 +15,28 @@ public:
     Enum() = default;
     Enum(value_type val) : value(static_cast<T>(val))
     {}
+    Enum(enum_type val) : value(val)
+    {}
 
     value_type Value() const
     {
         return value;
     }
 
-    explicit operator T() const
+    explicit operator enum_type() const
     {
         return value;
     }
 
+    Enum& operator=(const enum_type& val)
+    {
+        value = val;
+        return *this;
+    }
+
     Enum& operator=(const value_type& val)
     {
-        value = static_cast<T>(val);
+        value = static_cast<enum_type>(val);
         return *this;
     }
 
@@ -67,5 +75,5 @@ public:
         return value != static_cast<T>(other);
     }
 private:
-    T value;
+    enum_type value;
 };

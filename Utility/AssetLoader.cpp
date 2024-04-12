@@ -1,4 +1,5 @@
 ﻿#include "AssetLoader.h"
+#include <GearsDebug/Debugger.h>
 #include <GearsUtility/CSVLoader.h>
 #include <GearsAudio/AudioManager.h>
 #include <GearsEffect/EffectManager.h>
@@ -28,7 +29,8 @@ namespace
 
 void AssetLoader::Load(std::string_view path, const AssetType& type)
 {
-    auto csv = Glib::CSVLoader{ path }.Load();
+    const auto& csvPath = fs::path{ path }.is_absolute() ? path : fs::absolute(path);
+    auto csv = Glib::CSVLoader{ csvPath.generic_string() }.Load();
     if (csv.empty()) return;
 
     for (const auto& row : csv)
@@ -40,19 +42,19 @@ void AssetLoader::Load(std::string_view path, const AssetType& type)
         // アセットまでの絶対パス
         fs::path path{ row[1] };
         const auto& absolutePath = path.is_absolute() ? path : fs::absolute(path);
-        if ((type == AssetType::Skybox) && (row.size() > 7))
+        if ((type == AssetType::Skybox) && (row.size() == 7))
         {
             std::vector<std::string> params{ row.begin() + 1, row.begin() + 7 };
             for (auto& param : params)
             {
                 fs::path path{ param };
-                param = (path.is_absolute() ? path : fs::absolute(path)).string();
+                param = (path.is_absolute() ? path : fs::absolute(path)).generic_string();
             }
             LoadSkyBox(id, params);
         }
         else
         {
-            s_loadFunctions[type](id, absolutePath.string());
+            s_loadFunctions[type](id, absolutePath.generic_string());
         }
     }
 }
