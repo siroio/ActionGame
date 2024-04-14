@@ -1,7 +1,9 @@
 ﻿#include "AttackColliderController.h"
 #include <Components/BoxCollider.h>
 #include <GameObject.h>
-#include <Debugger.h>
+
+#include "Damageable.h"
+
 using namespace Glib;
 
 void AttackColliderController::Start()
@@ -17,4 +19,7 @@ void AttackColliderController::SetAttckActive(bool enable)
 void AttackColliderController::OnTriggerEnter(const GameObjectPtr& other)
 {
     if (other.expired()) return;
+    auto damageable = other->GetComponent<Damageable>();
+
+    if (damageable.expired()) return;
 }
