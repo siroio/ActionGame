@@ -23,9 +23,21 @@ public:
     float ReceptionTime() const;
 
     /**
+     * @brief 受付時間を設定
+     * @param time
+     */
+    void ReceptionTime(float time);
+
+    /**
      * @brief 受付開始までの時間を取得
      */
     float StartTime() const;
+
+    /**
+     * @brief 受付開始までの時間を設定
+     * @param time
+     */
+    void StartTime(float time);
 
 private:
     float receptionTime_;

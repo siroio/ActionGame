@@ -15,7 +15,17 @@ float ReceptionTimer::ReceptionTime() const
     return receptionTime_;
 }
 
+void ReceptionTimer::ReceptionTime(float time)
+{
+    receptionTime_ = time;
+}
+
 float ReceptionTimer::StartTime() const
 {
     return startTime_;
+}
+
+void ReceptionTimer::StartTime(float time)
+{
+    startTime_ = time;
 }
