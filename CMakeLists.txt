@@ -53,6 +53,8 @@ set(Component
     Component/Camera/CameraRotator.cpp
     Component/Common/AttackColliderController.h
     Component/Common/AttackColliderController.cpp
+    Component/Common/Damageable.h
+    Component/Common/Damageable.cpp
     Component/Common/Rotator.h
     Component/Common/Rotator.cpp
     Component/Player/PlayerMoveState.h
