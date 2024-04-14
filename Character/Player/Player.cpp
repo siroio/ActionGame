@@ -57,7 +57,7 @@ void Player::Create()
     playerEfk->Transform()->LocalPosition(Vector3{ 0.0f, 0.0f, 0.6f });
     playerEfk->Transform()->LocalEulerAngles(Vector3{ 90.0f, 0.0f, 0.0f });
     slashEfk->EffectID(EffectID::SwordSlash);
-    slashEfk->Speed(3.5f);
+    slashEfk->Speed(5.0f);
 
     player->AddComponent<Rotator>();
     auto stateMachine = player->AddComponent<StateBehavior>();
@@ -73,7 +73,7 @@ void Player::Create()
         0.09f,
         5.0f,
         20.0f,
-        ReceptionTimer{ 0.2f, 0.3f },
+        ReceptionTimer{ 0.2f, 0.25f },
         0.1f,
     };
 
@@ -89,7 +89,7 @@ void Player::Create()
         0.08f,
         4.0f,
         20.0f,
-        ReceptionTimer{ 0.2f, 0.5f },
+        ReceptionTimer{ 0.2f, 0.4f },
         0.1f,
     };
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
@@ -104,7 +104,7 @@ void Player::Create()
         0.125f,
         7.0f,
         20.0f,
-        ReceptionTimer{ 0.3f, 0.7f },
+        ReceptionTimer{ 0.3f, 0.5f },
         0.1f,
     };
     auto playerAtk3 = player->AddComponent<PlayerAttackState>(attack3, slashEfk);
@@ -166,7 +166,6 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
     collider->AddComponent<AttackColliderController>();
-    collider->Layer(CollisionLayer::PlayerAttack);
     auto rb = collider->AddComponent<Rigidbody>();
     rb->IsKinematic(true);
     auto boxCol = collider->AddComponent<BoxCollider>();
