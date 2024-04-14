@@ -121,4 +121,29 @@ void PlayerAttackState::OnGUI()
     {
         parameter_.moveForceMultiplier = moveForce;
     }
+
+    if (GLGUI::TreeNode("ATK Parameter"))
+    {
+        GLGUI::InputInt("NextState", &parameter_.nextAttackState);
+        GLGUI::InputInt("AnimationID", &parameter_.attackAnimID);
+        GLGUI::InputInt("AttackSEID", &parameter_.attackSEID);
+        GLGUI::InputInt("AttackPower", &parameter_.attack);
+        GLGUI::DragFloat("AttackEndTime", &parameter_.stateEndTime, 0.01f);
+
+        ReceptionTimer& timer = parameter_.inputTimer;
+
+        float startTime = timer.StartTime();
+        if (GLGUI::DragFloat("StartTime", &startTime, 0.01f))
+        {
+            timer.StartTime(startTime);
+        }
+
+        float receptionTime = timer.ReceptionTime();
+        if (GLGUI::DragFloat("ReceptionTime", &receptionTime, 0.01f))
+        {
+            timer.ReceptionTime(receptionTime);
+        }
+
+        GLGUI::TreePop();
+    }
 }
