@@ -41,6 +41,7 @@ void PlayScene::Start()
 
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
 
     auto player = GameObjectManager::Find(ObjectName::Player);
     if (!player.expired())
@@ -51,7 +52,7 @@ void PlayScene::Start()
     }
 
     auto stage = GameObjectManager::Instantiate("Stage");
-    stage->Layer(1);
+    stage->Layer(CollisionLayer::Stage);
     auto mr = stage->AddComponent<MeshRenderer>();
     mr->MeshID(1);
     auto mc = stage->AddComponent<MeshCollider>();
