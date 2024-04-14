@@ -23,5 +23,5 @@ void MainCamera::Create(const Vector3& offset, const float distance)
     CameraController::Parameter param{};
     param.Offset = offset;
     param.Distance = distance;
-    auto controller = cameraParent->AddComponent<CameraController>(param);
+    cameraParent->AddComponent<CameraController>(param);
 }
