@@ -1,10 +1,12 @@
 ﻿#include "App.h"
+#include <SceneManager.h>
+#include <AudioManager.h>
+#include "../Enum/AudioGroupID.h"
 #include "../Scene/TitleScene.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/ResultScene.h"
 #include "../Utility/AssetLoader.h"
-#include <GearsScene/SceneManager.h>
-#include <AudioManager.h>
+
 using namespace Glib;
 
 namespace
@@ -24,8 +26,10 @@ void App::Start()
     AssetLoader::Load(EFFECT, AssetType::Effect);
     AssetLoader::Load(MODEL, AssetType::Mesh);
     AssetLoader::Load(SKYBOX, AssetType::Skybox);
-    AudioManager::AddSoundGroup(0);
-    AudioManager::SetSoundGroupVolume(0, 0.1f);
+    AudioManager::AddSoundGroup(AudioGroupID::BGM);
+    AudioManager::AddSoundGroup(AudioGroupID::SE);
+    AudioManager::SetSoundGroupVolume(AudioGroupID::BGM, 0.1f);
+    AudioManager::SetSoundGroupVolume(AudioGroupID::SE, 0.1f);
     SceneManager::LoadScene("PlayScene");
 }
 
