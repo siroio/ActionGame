@@ -9,19 +9,21 @@
 #include <Components/CapsuleCollider.h>
 #include <Components/BoxCollider.h>
 
+#include "../../Enum/Player/PlayerState.h"
 #include "../../Enum/AnimationID.h"
 #include "../../Enum/AudioID.h"
+#include "../../Enum/AudioGroupID.h"
+#include "../../Enum/CollisionLayer.h"
+#include "../../Enum/EffectID.h"
 #include "../../Enum/MeshID.h"
-#include "../../Enum/Player/PlayerState.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Component/Common/AttackColliderController.h"
+#include "../../Component/Common/Damageable.h"
 #include "../../Component/Common/Rotator.h"
 #include "../../Component/StateMachine/StateBehavior.h"
 #include "../../Component/Player/PlayerMoveState.h"
 #include "../../Component/Player/PlayerAttackState.h"
 #include "../../Component/Player/PlayerRollingState.h"
-#include "../../Enum/CollisionLayer.h"
-#include "../../Enum/EffectID.h"
 
 using namespace Glib;
 
@@ -34,6 +36,9 @@ namespace
     const Vector3 ATK_COLLIDER_POSITION{ 0.08f, -0.03f, 0.63f };
     const Vector3 ATK_COLLIDER_SIZE{ 0.15f, 0.06f, 1.04f };
 
+    const Vector3 EFK_OFFSET_POSITION{ 0.0f, 0.0f, 0.6f };
+    const Vector3 EFK_OFFSET_LOCALANGLES{ 90.0f, 0.0f, 0.0f };
+    constexpr float EFK_PLAY_SPEED{ 5.0f };
     constexpr char ATK_COLLIDER_PARENT[]{ "Bip001 R Hand_WeaponBone" };
 }
 
@@ -51,13 +56,13 @@ void Player::Create()
     SetAttackCollider(player, playerAtk);
 
     auto audio = player->AddComponent<AudioSource>();
-    audio->SetGroup(0);
+    audio->SetGroup(AudioGroupID::SE);
     auto slashEfk = playerEfk->AddComponent<EffectSystem>();
     playerEfk->Transform()->Parent(playerAtk->Transform()->Parent());
-    playerEfk->Transform()->LocalPosition(Vector3{ 0.0f, 0.0f, 0.6f });
-    playerEfk->Transform()->LocalEulerAngles(Vector3{ 90.0f, 0.0f, 0.0f });
+    playerEfk->Transform()->LocalPosition(EFK_OFFSET_POSITION);
+    playerEfk->Transform()->LocalEulerAngles(EFK_OFFSET_LOCALANGLES);
     slashEfk->EffectID(EffectID::SwordSlash);
-    slashEfk->Speed(5.0f);
+    slashEfk->Speed(EFK_PLAY_SPEED);
 
     player->AddComponent<Rotator>();
     auto stateMachine = player->AddComponent<StateBehavior>();
@@ -128,7 +133,7 @@ void Player::Create()
     PlayerRollingState::Parameter rolling{
         AnimationID::PlayerRolling,
         0.5f,
-        6.5f,
+        10.0f,
         20.0f,
     };
     auto playerRolling = player->AddComponent<PlayerRollingState>(rolling);
@@ -162,13 +167,13 @@ void Player::SetBodyCollider(const GameObjectPtr& player)
 void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr& collider)
 {
     auto parent = GameObjectManager::Find(ATK_COLLIDER_PARENT);
+    auto boxCol = collider->AddComponent<BoxCollider>();
+    auto rb = collider->AddComponent<Rigidbody>();
     collider->Transform()->Parent(parent->Transform());
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
-    collider->AddComponent<AttackColliderController>();
-    auto rb = collider->AddComponent<Rigidbody>();
+    collider->AddComponent<AttackColliderController>(boxCol);
     rb->IsKinematic(true);
-    auto boxCol = collider->AddComponent<BoxCollider>();
     boxCol->IsTrigger(true);
     boxCol->Size(ATK_COLLIDER_SIZE);
 }
