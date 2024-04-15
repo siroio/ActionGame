@@ -72,6 +72,7 @@ set(Enum
     Enum/Player/PlayerState.h
     Enum/AnimationID.h
     Enum/AudioID.h
+    Enum/AudioGroupID.h
     Enum/CollisionLayer.h
     Enum/EffectID.h
     Enum/MeshID.h
