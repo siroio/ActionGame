@@ -8,6 +8,7 @@
 #include <GLGUI.h>
 
 #include "../Common/Rotator.h"
+#include "../Common/Damageable.h"
 #include "../../Enum/Player/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
@@ -27,6 +28,7 @@ void PlayerRollingState::OnInitialize()
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
     rotator_ = GameObject()->GetComponent<Rotator>();
+    damageable_ = GameObject()->GetComponent<Damageable>();
 }
 
 void PlayerRollingState::OnEnter()
@@ -34,6 +36,7 @@ void PlayerRollingState::OnEnter()
     animator_->AnimationID(parameter_.dodgeAnimID);
     animator_->Loop(false);
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    damageable_->Invincible(true);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
@@ -42,6 +45,7 @@ int PlayerRollingState::OnFixedUpdate(float elapsedTime)
     Move(elapsedTime <= parameter_.dodgeDuration);
     if (elapsedTime >= parameter_.dodgeDuration)
     {
+        damageable_->Invincible(false);
         return PlayerState::Moving;
     }
     return STATE_MAINTAIN;
