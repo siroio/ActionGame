@@ -4,7 +4,7 @@ struct AnimationID
 {
     enum : unsigned int
     {
-        PlayerIdle = 0,
+        PlayerIdle,
         PlayerMove,
         PlayerRolling,
         PlayerDamage,
