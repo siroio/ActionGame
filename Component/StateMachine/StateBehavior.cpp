@@ -61,9 +61,6 @@ void StateBehavior::ChangeState(unsigned int stateID)
 void StateBehavior::OnGUI()
 {
     std::string currentState{ "Current State: " };
-    if (!currentState_.expired())
-    {
-        currentState += nameof(*currentState_.get().get());
-    }
+    currentState += currentState_.expired() ? "None" : nameof(*currentState_.get().get());
     GLGUI::Text(currentState);
 }
