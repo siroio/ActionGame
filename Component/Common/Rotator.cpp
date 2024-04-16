@@ -16,7 +16,7 @@ void Rotator::Update()
 {
     Quaternion targetRotation = transform_->Rotation() * Quaternion::FromToRotation(transform_->Forward(), direction_);
     float turnSpeed = turnSpeed_ * GameTimer::DeltaTime();
-    Quaternion rotation = Quaternion::SlerpUnclamped(transform_->Rotation(), targetRotation, turnSpeed);
+    Quaternion rotation = Quaternion::Slerp(transform_->Rotation(), targetRotation, turnSpeed);
     transform_->LocalRotation(rotation);
 }
 
