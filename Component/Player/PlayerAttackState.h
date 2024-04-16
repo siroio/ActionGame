@@ -11,6 +11,7 @@ namespace Glib
     class Transform;
     class EffectSystem;
 }
+
 struct Vector3;
 class Rotator;
 
@@ -51,7 +52,7 @@ public:
     };
 
 public:
-    PlayerAttackState(const Parameter& para, const Glib::WeakPtr<Glib::EffectSystem>& slash);
+    PlayerAttackState(const Parameter& parameter, const Glib::WeakPtr<Glib::EffectSystem>& context);
 
 private:
     void OnInitialize() override;

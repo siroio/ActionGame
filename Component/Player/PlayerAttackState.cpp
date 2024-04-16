@@ -6,6 +6,7 @@
 #include <Components/Rigidbody.h>
 #include <Components/Transform.h>
 #include <Components/EffectSystem.h>
+#include <Random.h>
 #include <GLGUI.h>
 
 #include "../Common/Rotator.h"
@@ -14,10 +15,16 @@
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
 
+
 using namespace Glib;
 
-PlayerAttackState::PlayerAttackState(const Parameter& param, const WeakPtr<EffectSystem>& slash) :
-    parameter_{ param }, slashEfk_{ slash }
+namespace
+{
+    const Vector2 SE_PITCH_RANGE{ 0.8f, 1.2f };
+}
+
+PlayerAttackState::PlayerAttackState(const Parameter& parameter, const WeakPtr<EffectSystem>& slash) :
+    parameter_{ parameter }, slashEfk_{ slash }
 {}
 
 void PlayerAttackState::OnInitialize()
@@ -36,6 +43,7 @@ void PlayerAttackState::OnEnter()
     animator_->Loop(false);
     if (!slashEfk_.expired()) slashEfk_->Play();
     audio_->AudioID(parameter_.attackSEID);
+    audio_->Pitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
     audio_->Play();
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
     RigidbodyUtility::KillXZVelocity(rigidbody_);
