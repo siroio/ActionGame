@@ -16,8 +16,8 @@
 
 using namespace Glib;
 
-PlayerRollingState::PlayerRollingState(const Parameter& param) :
-    parameter_{ param }
+PlayerRollingState::PlayerRollingState(const Parameter& parameter) :
+    parameter_{ parameter }
 {}
 
 void PlayerRollingState::OnInitialize()
@@ -59,4 +59,12 @@ void PlayerRollingState::Move(bool moving)
 
     Vector3 ignoreYVelocity = Vector3::Scale(rigidbody_->LinearVelocity(), Vector3{ 1.0f, 0.0f, 1.0f });
     rigidbody_->AddForce(parameter_.moveForceMultiplier * (velocity - ignoreYVelocity));
+}
+
+void PlayerRollingState::OnGUI()
+{
+    Component::OnGUI();
+    GLGUI::DragFloat("Duration", &parameter_.dodgeDuration, 0.01f, 0.0f);
+    GLGUI::DragFloat("MoveSpeed", &parameter_.moveSpeed, 0.1f);
+    GLGUI::DragFloat("MoveForce", &parameter_.moveForceMultiplier, 0.1f);
 }

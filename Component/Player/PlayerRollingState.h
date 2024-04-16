@@ -32,7 +32,7 @@ public:
     };
 
 public:
-    PlayerRollingState(const Parameter& param);
+    PlayerRollingState(const Parameter& parameter);
 
 private:
     void OnInitialize() override;
@@ -41,6 +41,7 @@ private:
 
 private:
     void Move(bool moving);
+    void OnGUI() override;
 
 private:
     Glib::WeakPtr<Glib::Transform> camera_{};
