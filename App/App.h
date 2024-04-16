@@ -10,5 +10,7 @@ public:
     void End() override;
 
 private:
+    void LoadAssets();
+    void InitializeSound();
     void ResiterScenes();
 };
