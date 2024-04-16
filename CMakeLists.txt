@@ -1,25 +1,25 @@
 cmake_minimum_required(VERSION 3.4)
 
-# ƒvƒƒWƒFƒNƒg–¼‚Æƒo[ƒWƒ‡ƒ“‚Ìİ’è
+# ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆåã¨ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®è¨­å®š
 project(ActionGame VERSION 1.0.0 LANGUAGES CXX)
 
-# C++•W€‚ğ20‚Éİ’è
+# C++æ¨™æº–ã‚’20ã«è¨­å®š
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 include(cmake/MakeFilter.cmake)
 
-# UTF-8ƒRƒ“ƒpƒCƒ‹ƒIƒvƒVƒ‡ƒ“‚Ì’Ç‰Á
+# UTF-8ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®è¿½åŠ 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 if(MSVC)
-    # UTF8‚É•ÏX
+    # UTF8ã«å¤‰æ›´
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 endif()
 
-# ƒ\[ƒX‚Ì’Ç‰Á
+# ã‚½ãƒ¼ã‚¹ã®è¿½åŠ 
 set(App
     App/App.h
     App/App.cpp
@@ -55,12 +55,18 @@ set(Component
     Component/Common/AttackColliderController.cpp
     Component/Common/Damageable.h
     Component/Common/Damageable.cpp
+    Component/Common/ElapsedTimer.h
+    Component/Common/ElapsedTimer.cpp
     Component/Common/Rotator.h
     Component/Common/Rotator.cpp
     Component/Player/PlayerMoveState.h
     Component/Player/PlayerMoveState.cpp
     Component/Player/PlayerAttackState.h
     Component/Player/PlayerAttackState.cpp
+    Component/Player/PlayerDamageState.h
+    Component/Player/PlayerDamageState.cpp
+    Component/Player/PlayerDeadState.h
+    Component/Player/PlayerDeadState.cpp
     Component/Player/PlayerRollingState.h
     Component/Player/PlayerRollingState.cpp
     Component/StateMachine/State.h
@@ -98,7 +104,7 @@ set(Utility
     Utility/RigidbodyUility.cpp
 )
 
-# ƒ\[ƒXˆê——
+# ã‚½ãƒ¼ã‚¹ä¸€è¦§
 list(APPEND MODULES 
     ${App} 
     ${Scene}
@@ -113,16 +119,16 @@ list(APPEND MODULES
 
 MakeFilter(${MODULES})
 
-# ƒƒCƒ“‚ÌÀs‰Â”\ƒtƒ@ƒCƒ‹
+# ãƒ¡ã‚¤ãƒ³ã®å®Ÿè¡Œå¯èƒ½ãƒ•ã‚¡ã‚¤ãƒ«
 add_executable(${PROJECT_NAME} WIN32 main.cpp ${MODULES} $<$<CXX_COMPILER_ID:MSVC>:utf8api.manifest>)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-# ƒ‰ƒCƒuƒ‰ƒŠ‚ÌêŠ
+# ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®å ´æ‰€
 set(GEARS_LIBRARY_DIR ${PROJECT_SOURCE_DIR}/Library/GearsLibrary)
 set(DEBUG_LIB "${GEARS_LIBRARY_DIR}/Lib/Debug")
 set(RELEASE_LIB "${GEARS_LIBRARY_DIR}/Lib/Release")
 
-# ƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚ÌƒCƒ“ƒNƒ‹[ƒhƒfƒBƒŒƒNƒgƒŠ‚Ìİ’è
+# ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è¨­å®š
 file(GLOB INTERNAL_DIRS ${GEARS_LIBRARY_DIR}/Include/*/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/Include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GEARS_LIBRARY_DIR}/External/DirectXTex)
@@ -132,6 +138,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${MODULES})
 target_link_libraries(${PROJECT_NAME} debug ${DEBUG_LIB}/*.lib)
 target_link_libraries(${PROJECT_NAME} optimized ${RELEASE_LIB}/*.lib)
 
-#DLL‚ÌƒRƒs[
+#DLLã®ã‚³ãƒ”ãƒ¼
 set(DLL_FILES "${GEARS_LIBRARY_DIR}/Dll/*.dll")
 #set(DLL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
