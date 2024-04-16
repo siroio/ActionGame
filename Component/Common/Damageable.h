@@ -7,7 +7,7 @@ class StateBehavior;
 class Damageable : public Component
 {
 public:
-    Damageable(int health, int maxHealth, int damageStateID, int deadStateID);
+    Damageable(int health, int maxHealth, int poise, int damageStateID, int deadStateID);
 
     void Start();
 
@@ -52,6 +52,7 @@ public:
 private:
     int health_{ 0 };
     int maxHealth_{ 0 };
+    int poise_{ 0 };
     int damageStateID_{ -1 };
     int deadStateID_{ -1 };
     bool invincible_{ false };

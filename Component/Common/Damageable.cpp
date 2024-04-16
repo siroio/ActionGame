@@ -54,6 +54,7 @@ bool Damageable::TakeDamage(int power)
     // ステートマシンを持っている場合
     // 死亡かダメージのステートへ推移
     if (!stateBehavior_.expired()) return true;
+    if (poise_ >= power) return true;
     stateBehavior_->ChangeState(IsDead() ? deadStateID_ : damageStateID_);
 
     return true;
