@@ -28,5 +28,5 @@ public:
 
 private:
     Glib::WeakPtr<Glib::Collider> collider_;
-    float power_{ 0.0f };
+    int power_{ 0 };
 };
