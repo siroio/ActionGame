@@ -2,7 +2,6 @@
 
 #include "../../Constant/CameraConstant.h"
 #include "../../Constant/GameObjectName.h"
-#include "../../Input/Input.h"
 #include <GameObjectManager.h>
 #include <GameObject.h>
 #include <GameTimer.h>
@@ -12,11 +11,12 @@
 
 using namespace Glib;
 
+
 CameraController::CameraController(const CameraController::Parameter& parameter) :
     params_{ parameter }
 {}
 
-Vector3 CameraController::Parameter::LerpAngle(const Vector3& a, const Vector3& b, float t)
+Vector3 CameraController::LerpAngle(const Vector3& a, const Vector3& b, float t)
 {
     return Vector3{
         Mathf::LerpAngle(a.x, b.x, t),
@@ -25,7 +25,7 @@ Vector3 CameraController::Parameter::LerpAngle(const Vector3& a, const Vector3& 
     };
 }
 
-CameraController::Parameter CameraController::Parameter::Lerp(const Parameter& a, const Parameter& b, float t)
+CameraController::Parameter CameraController::Lerp(const Parameter& a, const Parameter& b, float t)
 {
     Parameter param{};
     param.Position = Vector3::Lerp(a.Position, b.Position, t);

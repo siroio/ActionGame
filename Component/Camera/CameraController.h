@@ -10,10 +10,6 @@ public:
     struct Parameter
     {
     public:
-        static Vector3 LerpAngle(const Vector3& a, const Vector3& b, float t);
-        static Parameter Lerp(const Parameter& a, const Parameter& b, float t);
-
-    public:
         Vector3 Position{ Vector3::Zero() };
         Vector3 Angle{ Vector3::Zero() };
         Vector3 Offset{ Vector3::Zero() };
@@ -23,6 +19,10 @@ public:
         float RotateSpeed{ 5.0f };
         Glib::WeakPtr<Glib::Transform> Target{};
     };
+
+public:
+    static Vector3 LerpAngle(const Vector3& a, const Vector3& b, float t);
+    static Parameter Lerp(const Parameter& a, const Parameter& b, float t);
 
 public:
     CameraController(const Parameter& parameter);
