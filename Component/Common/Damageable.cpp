@@ -10,10 +10,7 @@ Damageable::Damageable(int health, int maxHealth, int damageStateID, int deadSta
 
 void Damageable::Start()
 {
-    if (stateBehavior_.expired())
-    {
-        stateBehavior_ = GameObject()->GetComponent<StateBehavior>();
-    }
+    stateBehavior_ = GameObject()->GetComponent<StateBehavior>();
 }
 
 int Damageable::Health() const
@@ -28,7 +25,7 @@ void Damageable::Health(int add)
 
 float Damageable::HealthRate() const
 {
-    return health_ <= 0 ? 0.0f : health_ / maxHealth_;
+    return health_ <= 0.0f ? 0.0f : health_ / maxHealth_;
 }
 
 bool Damageable::Invincible() const
@@ -48,13 +45,11 @@ bool Damageable::IsDead() const
 
 bool Damageable::TakeDamage(int power)
 {
-    if (invincible_) return false;
+    if (invincible_ || IsDead()) return false;
 
     // ダメージを与える
+    // マイナス値の攻撃を与えられないようにMinで0に丸める
     health_ -= Mathf::Min(power, 0);
-
-    // 死亡していたらこれ以上ダメージを与えられないように攻撃を無効にする
-    if (IsDead()) Invincible(true);
 
     // ステートマシンを持っている場合
     // 死亡かダメージのステートへ推移
