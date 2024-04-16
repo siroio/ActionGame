@@ -24,6 +24,8 @@
 #include "../../Component/Player/PlayerMoveState.h"
 #include "../../Component/Player/PlayerAttackState.h"
 #include "../../Component/Player/PlayerRollingState.h"
+#include "../../Component/Player/PlayerDamageState.h"
+#include "../../Component/Player/PlayerDeadState.h"
 
 using namespace Glib;
 
@@ -65,6 +67,7 @@ void Player::Create()
     slashEfk->Speed(EFK_PLAY_SPEED);
 
     player->AddComponent<Rotator>();
+    player->AddComponent<Damageable>(100, 100, 0, 0);
     auto stateMachine = player->AddComponent<StateBehavior>();
     auto playerMove = player->AddComponent<PlayerMoveState>();
     stateMachine->AddState(playerMove, PlayerState::Moving);
@@ -91,8 +94,8 @@ void Player::Create()
         false,
         AudioID::PlayerSwing,
         5,
-        0.08f,
-        4.0f,
+        0.2f,
+        3.0f,
         20.0f,
         ReceptionTimer{ 0.2f, 0.4f },
         0.1f,
@@ -133,11 +136,23 @@ void Player::Create()
     PlayerRollingState::Parameter rolling{
         AnimationID::PlayerRolling,
         0.5f,
-        10.0f,
+        6.0f,
         20.0f,
     };
     auto playerRolling = player->AddComponent<PlayerRollingState>(rolling);
     stateMachine->AddState(playerRolling, PlayerState::Rolling);
+
+    PlayerDamageState::Parameter damage{
+        AnimationID::PlayerDamage,
+        0.2f,
+        3.0f,
+        20.0f,
+    };
+    auto playerDamage = player->AddComponent<PlayerDamageState>(damage);
+    stateMachine->AddState(playerDamage, PlayerState::Damage);
+
+    auto playerDead = player->AddComponent<PlayerDeadState>();
+    stateMachine->AddState(playerDead, PlayerState::Dead);
 }
 
 void Player::SetMesh(const GameObjectPtr& player)
@@ -167,8 +182,8 @@ void Player::SetBodyCollider(const GameObjectPtr& player)
 void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr& collider)
 {
     auto parent = GameObjectManager::Find(ATK_COLLIDER_PARENT);
-    auto boxCol = collider->AddComponent<BoxCollider>();
     auto rb = collider->AddComponent<Rigidbody>();
+    auto boxCol = collider->AddComponent<BoxCollider>();
     collider->Transform()->Parent(parent->Transform());
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
