@@ -67,7 +67,7 @@ void Player::Create()
     slashEfk->Speed(EFK_PLAY_SPEED);
 
     player->AddComponent<Rotator>();
-    player->AddComponent<Damageable>(100, 100, 0, 0);
+    player->AddComponent<Damageable>(100, 100, 0, 0, 0);
     auto stateMachine = player->AddComponent<StateBehavior>();
     auto playerMove = player->AddComponent<PlayerMoveState>();
     stateMachine->AddState(playerMove, PlayerState::Moving);
