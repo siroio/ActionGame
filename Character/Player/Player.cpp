@@ -136,6 +136,7 @@ void Player::Create()
     PlayerRollingState::Parameter rolling{
         AnimationID::PlayerRolling,
         0.5f,
+        ReceptionTimer{ 0.4f, 0.05f },
         6.0f,
         20.0f,
     };

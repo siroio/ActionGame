@@ -4,8 +4,9 @@
 
 #include "../StateMachine/StateBehavior.h"
 
-Damageable::Damageable(int health, int maxHealth, int damageStateID, int deadStateID) :
-    health_{ health }, maxHealth_{ maxHealth }, damageStateID_{ damageStateID }, deadStateID_{ deadStateID }
+Damageable::Damageable(int health, int maxHealth, int poise, int damageStateID, int deadStateID) :
+    health_{ health }, maxHealth_{ maxHealth }, poise_{ poise },
+    damageStateID_{ damageStateID }, deadStateID_{ deadStateID }
 {}
 
 void Damageable::Start()

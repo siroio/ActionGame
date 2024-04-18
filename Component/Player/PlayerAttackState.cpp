@@ -93,8 +93,9 @@ bool PlayerAttackState::IsTimeOver(float elapsedTime) const
 
 void PlayerAttackState::Move(float elapsedTime)
 {
-    Vector3 ignoreYVelocity = Vector3::Scale(rigidbody_->LinearVelocity(), Vector3{ 1.0f, 0.0f, 1.0f });
-    rigidbody_->AddForce(parameter_.moveForceMultiplier * (MoveSpeed(elapsedTime <= parameter_.moveDuration) - ignoreYVelocity));
+    const bool isMove = elapsedTime <= parameter_.moveDuration;
+    Vector3 velocity = RigidbodyUtility::GetMoveVelocity(rigidbody_, parameter_.moveForceMultiplier, MoveSpeed(isMove));
+    rigidbody_->AddForce(velocity);
 }
 
 Vector3 PlayerAttackState::MoveSpeed(bool moving)

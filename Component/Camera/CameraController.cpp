@@ -52,13 +52,11 @@ void CameraController::FixedUpdate()
 
     if (!params_.Target.expired())
     {
-        Vector3 pivot = Vector3::Lerp(
+        params_.Position = Vector3::Lerp(
             params_.Position,
             params_.Target->Position(),
             params_.FollowSpeed * GameTimer::FixedDeltaTime()
         );
-
-        params_.Position = pivot;
     }
 
     parent_->Position(params_.Position);
@@ -92,7 +90,7 @@ void CameraController::OnGUI()
     Component::OnGUI();
 
     Vector3 position{ params_.Position };
-    if (Glib::GLGUI::DragVector3("Position", &position, 0.1f, 0.0f))
+    if (GLGUI::DragVector3("Position", &position, 0.1f, 0.0f))
     {
         params_.Position = position;
     }

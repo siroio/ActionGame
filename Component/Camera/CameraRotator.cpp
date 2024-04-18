@@ -21,6 +21,8 @@ void CameraRotator::FixedUpdate()
     Rotate();
 }
 
+Vector3 euler;
+
 void CameraRotator::Rotate()
 {
     const auto& transform = GameObject()->Transform();
@@ -28,9 +30,8 @@ void CameraRotator::Rotate()
     const float deltaTime = GameTimer::FixedDeltaTime();
 
     Vector2 angle = Input::CameraRotate() * rotateSpeed_;
-    Vector3 euler = camera_->EulerAngles();
 
-    euler.x += angle.y * deltaTime;
+    euler.x -= angle.y * deltaTime;
     euler.y += angle.x * deltaTime;
 
     if (euler.x > 180.0f) euler.x -= 360.0f;
@@ -41,6 +42,7 @@ void CameraRotator::Rotate()
 
 void CameraRotator::OnGUI()
 {
+    Component::OnGUI();
     float rotateSpeed{ rotateSpeed_ };
     if (GLGUI::DragFloat("RotateSpeed", &rotateSpeed, 0.1f, 0.0f))
     {

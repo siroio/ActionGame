@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <WeakPtr.h>
 #include "../StateMachine/State.h"
+#include "../../Utility/ReceptionTimer.h"
 
 namespace Glib
 {
@@ -25,6 +26,8 @@ public:
         // 回避パラメータ
 
         float dodgeDuration{ 0.0f };
+
+        ReceptionTimer invincibleTimer{ 0.0f, 0.0f };
 
         // 移動パラメータ
         float moveSpeed{ 4.0f };

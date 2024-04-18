@@ -36,16 +36,15 @@ void PlayerRollingState::OnEnter()
     animator_->AnimationID(parameter_.dodgeAnimID);
     animator_->Loop(false);
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
-    damageable_->Invincible(true);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
 int PlayerRollingState::OnFixedUpdate(float elapsedTime)
 {
     Move(elapsedTime <= parameter_.dodgeDuration);
+    damageable_->Invincible(parameter_.invincibleTimer.Reception(elapsedTime));
     if (elapsedTime >= parameter_.dodgeDuration)
     {
-        damageable_->Invincible(false);
         return PlayerState::Moving;
     }
     return STATE_MAINTAIN;

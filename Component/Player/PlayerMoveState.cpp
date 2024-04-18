@@ -1,10 +1,4 @@
 ﻿#include "PlayerMoveState.h"
-#include "../../Enum/Player/PlayerState.h"
-#include "../../Enum/AnimationID.h"
-#include "../../Input/Input.h"
-#include "../../Utility/Enum.h"
-#include "../../Utility/CameraUtility.h"
-
 #include <Components/Transform.h>
 #include <Components/Rigidbody.h>
 #include <Components/Animator.h>
@@ -18,8 +12,14 @@
 #include <Debugger.h>
 #include <Color.h>
 #include <GLGUI.h>
-
 #include <vector>
+
+#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/AnimationID.h"
+#include "../../Input/Input.h"
+#include "../../Utility/Enum.h"
+#include "../../Utility/CameraUtility.h"
+#include "../../Utility/RigidbodyUility.h"
 
 using namespace Glib;
 
@@ -78,13 +78,16 @@ void PlayerMoveState::Move()
     // 操作方向へ回転
     rotator_->Direction(moveInput_);
 
-    Vector3 velocity = moveInput_ * moveSpeed_;
     unsigned int animationID{ AnimationID::PlayerIdle };
-    if (velocity.SqrMagnitude() > Mathf::EPSILON) animationID = AnimationID::PlayerMove;
+    if (moveInput_.SqrMagnitude() > Mathf::EPSILON) animationID = AnimationID::PlayerMove;
     ChangeAnimation(animationID);
 
-    Vector3 ignoreYVelocity = Vector3::Scale(rigidbody_->LinearVelocity(), Vector3{ 1.0f, 0.0f, 1.0f });
-    rigidbody_->AddForce(moveForceMultiplier_ * (velocity - ignoreYVelocity));
+    const Vector3 velocity{
+        RigidbodyUtility::GetMoveVelocity(
+        rigidbody_, moveForceMultiplier_,
+        moveInput_ * moveSpeed_)
+    };
+    rigidbody_->AddForce(velocity);
 }
 
 void PlayerMoveState::ChangeAnimation(unsigned int ID)
