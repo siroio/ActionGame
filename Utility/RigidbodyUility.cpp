@@ -11,27 +11,35 @@ namespace
     const Vector3 XZVECTOR{ 0.0f, 1.0f, 0.0f };
 }
 
-void RigidbodyUtility::KillVelocity(const Glib::WeakPtr<Glib::Rigidbody>& rigidbody)
+void RigidbodyUtility::KillVelocity(const RigidbodyPtr& rigidbody)
 {
     rigidbody->LinearVelocity(Vector3::Zero());
 }
 
-void RigidbodyUtility::KillXVelocity(const Glib::WeakPtr<Glib::Rigidbody>& rigidbody)
+void RigidbodyUtility::KillXVelocity(const RigidbodyPtr& rigidbody)
 {
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), XVECTOR));
 }
 
-void RigidbodyUtility::KillYVelocity(const Glib::WeakPtr<Glib::Rigidbody>& rigidbody)
+void RigidbodyUtility::KillYVelocity(const RigidbodyPtr& rigidbody)
 {
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), YVECTOR));
 }
 
-void RigidbodyUtility::KillZVelocity(const Glib::WeakPtr<Glib::Rigidbody>& rigidbody)
+void RigidbodyUtility::KillZVelocity(const RigidbodyPtr& rigidbody)
 {
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), ZVECTOR));
 }
 
-void RigidbodyUtility::KillXZVelocity(const Glib::WeakPtr<Glib::Rigidbody>& rigidbody)
+void RigidbodyUtility::KillXZVelocity(const RigidbodyPtr& rigidbody)
 {
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), XZVECTOR));
+}
+
+Vector3 RigidbodyUtility::GetMoveVelocity(const RigidbodyPtr& rigidbody, const float moveForceMultiplier, const Vector3& moveSpeed)
+{
+    // y軸方向を無視して重力を無効化しないようにする
+    Vector3 ignoreYVelocity = rigidbody->LinearVelocity();
+    ignoreYVelocity.y = 0.0f;
+    return moveForceMultiplier * (moveSpeed - ignoreYVelocity);
 }
