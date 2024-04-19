@@ -82,12 +82,15 @@ set(Component
     Component/Player/PlayerRollingState.h
     Component/Player/PlayerRollingState.cpp
     Component/StateMachine/State.h
+    Component/StateMachine/State.cpp
+    Component/StateMachine/AnimationInfo.h
     Component/StateMachine/StateBehavior.h
     Component/StateMachine/StateBehavior.cpp
 )
 
 set(Enum
-    Enum/Player/PlayerState.h
+    Enum/State/PlayerState.h
+    Enum/State/EnemyState.h
     Enum/AnimationID.h
     Enum/AudioID.h
     Enum/AudioGroupID.h

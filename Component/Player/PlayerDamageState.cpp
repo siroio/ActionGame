@@ -1,12 +1,11 @@
 ﻿#include "PlayerDamageState.h"
 #include <GameObject.h>
-#include <Components/Animator.h>
 #include <Components/AudioSource.h>
 #include <Components/Transform.h>
 #include <Components/Rigidbody.h>
 #include <GLGUI.h>
 
-#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/State/PlayerState.h"
 #include "../../Utility/RigidbodyUility.h"
 
 using namespace Glib;
@@ -17,14 +16,12 @@ PlayerDamageState::PlayerDamageState(const Parameter& parameter) :
 
 void PlayerDamageState::OnInitialize()
 {
-    animator_ = GameObject()->GetComponent<Animator>();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
 }
 
 void PlayerDamageState::OnEnter()
 {
-    animator_->AnimationID(parameter_.damageAnimID);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 

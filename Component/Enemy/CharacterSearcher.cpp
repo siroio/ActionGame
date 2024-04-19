@@ -1,8 +1,21 @@
 ﻿#include "CharacterSearcher.h"
 #include <Components/Transform.h>
 #include <GameObject.h>
-#include <Mathf.h>
 #include <GLGUI.h>
+
+CharacterSearcher::CharacterSearcher(float fov, float distance, GameObjectPtr target) :
+    fov_{ fov }, distance_{ distance }, target_{ target }
+{}
+
+float CharacterSearcher::Distance() const
+{
+    return distance_;
+}
+
+void CharacterSearcher::Distance(float distance)
+{
+    distance_ = distance;
+}
 
 float CharacterSearcher::Fov() const
 {
@@ -14,15 +27,33 @@ void CharacterSearcher::Fov(float fov)
     fov_ = Mathf::Min(Mathf::EPSILON, fov);
 }
 
-bool CharacterSearcher::TargetInFov(const Glib::WeakPtr<Glib::Transform>& target) const
+GameObjectPtr CharacterSearcher::Target() const
 {
-    if (target.expired()) return false;
+    return target_;
+}
+
+void CharacterSearcher::Target(const GameObjectPtr& target)
+{
+    target_ = target;
+}
+
+bool CharacterSearcher::TargetInView() const
+{
+    if (target_.expired()) return false;
     const auto& transform = GameObject()->Transform();
+    const auto& target = target_->Transform();
     Vector3 forward = transform->Forward();
     Vector3 toTarget = target->Position() - transform->Position();
+
+    // 高さを無視する
     forward.y = 0.0f;
     toTarget.y = 0.0f;
-    return fov_ <= Vector3::Angle(forward, toTarget);
+
+    // 一定距離離れているか？
+    if (toTarget.SqrMagnitude() > distance_ * distance_) return false;
+
+    // fovの内側か？
+    return fov_ <= Vector3::Angle(forward, toTarget.Normalized());
 }
 
 void CharacterSearcher::OnGUI()

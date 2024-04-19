@@ -5,7 +5,6 @@
 
 namespace Glib
 {
-    class Animator;
     class AudioSource;
     class Rigidbody;
     class Transform;
@@ -20,8 +19,6 @@ class PlayerAttackState : public State
 public:
     /**
      * @brief 次のステートID
-     * @brief アニメーションID
-     * @brief ループするか
      * @brief 攻撃力
      * @brief 受付時間(時間, 受付開始までの時間)
      * @brief 受付終了後のステート変更の待機時間
@@ -31,15 +28,11 @@ public:
         // 次の攻撃のID
         int nextAttackState{ -1 };
 
-        // アニメーションパラメータ
-        int attackAnimID{ -1 };
-        bool isLoop{ false };
-
         // SEパラメータ
         int attackSEID{ -1 };
 
         // 攻撃のパラメータ
-        int attack{ 0 };
+        int power{ 0 };
 
         // 攻撃時移動用パラメータ
         float moveDuration{ 0.0f };
@@ -69,7 +62,6 @@ private:
 private:
     Glib::WeakPtr<Glib::Transform> camera_{};
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Glib::AudioSource> audio_{};
     Glib::WeakPtr<Glib::EffectSystem> slashEfk_{};
     Glib::WeakPtr<Rotator> rotator_{};

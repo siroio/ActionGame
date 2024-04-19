@@ -15,21 +15,31 @@ namespace Glib
 
 class PlayerMoveState : public State
 {
+public:
+    struct Parameter
+    {
+        AnimationInfo idleInfo{};
+        AnimationInfo walkInfo{};
+        float moveSpeed{ 4.0f };
+        float moveForceMultiplier{ 20.0f };
+    };
+
+public:
+    PlayerMoveState(const Parameter& parameter);
+
 private:
-    void OnEnter() override;
     void OnInitialize() override;
     int OnUpdate(float elapsedTime) override;
     int OnFixedUpdate(float elapsedTime) override;
     void Move();
-    void ChangeAnimation(unsigned int ID);
+    void ChangeAnimation(bool moving);
     void OnGUI() override;
 
 private:
     Vector3 moveInput_{ Vector3::Zero() };
-    float moveSpeed_{ 4.0f };
-    float moveForceMultiplier_{ 20.0f };
+    Parameter parameter_{};
     Glib::WeakPtr<Glib::Transform> camera_;
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_;
-    Glib::WeakPtr<Glib::Animator> animator_;
+    Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Rotator> rotator_;
 };

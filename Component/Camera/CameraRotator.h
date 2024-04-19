@@ -20,8 +20,8 @@ private:
     void OnGUI() override;
 
 private:
-    Glib::WeakPtr<Glib::Transform> camera_{ nullptr };
-    Glib::WeakPtr<CameraController> controller_{ nullptr };
+    Glib::WeakPtr<Glib::Transform> camera_{};
+    Glib::WeakPtr<CameraController> controller_{};
     float rotateSpeed_{ 130.0f };
     float interpolateRate{ 5.0f };
     float angleLimitPositiveX{ 50.0f };

@@ -17,10 +17,6 @@ class PlayerDamageState : public State
 public:
     struct Parameter
     {
-        // アニメーションパラメータ
-
-        int damageAnimID{ -1 };
-
         // 長さ
         float damageDuration{ 0.0f };
 
@@ -45,7 +41,6 @@ private:
 
 private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Glib::AudioSource> audio_{};
     Parameter parameter_;
 };

@@ -1,6 +1,5 @@
 ﻿#include "PlayerRollingState.h"
 #include <GameObject.h>
-#include <Components/Animator.h>
 #include <Components/AudioSource.h>
 #include <Components/Camera.h>
 #include <Components/Rigidbody.h>
@@ -9,7 +8,7 @@
 
 #include "../Common/Rotator.h"
 #include "../Common/Damageable.h"
-#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
@@ -24,7 +23,6 @@ void PlayerRollingState::OnInitialize()
 {
     const auto& camera = GameObjectManager::Find("Camera Parent");
     camera_ = camera->Transform();
-    animator_ = GameObject()->GetComponent<Animator>();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
     rotator_ = GameObject()->GetComponent<Rotator>();
@@ -33,8 +31,6 @@ void PlayerRollingState::OnInitialize()
 
 void PlayerRollingState::OnEnter()
 {
-    animator_->AnimationID(parameter_.dodgeAnimID);
-    animator_->Loop(false);
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }

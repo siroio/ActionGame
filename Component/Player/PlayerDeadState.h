@@ -9,10 +9,5 @@ namespace Glib
 
 class PlayerDeadState : public State
 {
-public:
-    void OnInitialize() override;
-    void OnEnter();
 
-private:
-    Glib::WeakPtr<Glib::Animator> animator_{};
 };

@@ -1,6 +1,14 @@
 ﻿#pragma once
-
 #include <Component.h>
+#include "AnimationInfo.h"
+
+namespace Glib
+{
+    template<class T>
+    class WeakPtr;
+
+    class Animator;
+}
 
 class State : public Component
 {
@@ -28,4 +36,10 @@ public:
     }
     virtual void OnExit()
     {}
+
+    void SetAnimationInfo(const AnimationInfo& info);
+    void SetAnimation(Glib::WeakPtr<Glib::Animator>& animator) const;
+
+private:
+    AnimationInfo animationInfo_{};
 };

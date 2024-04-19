@@ -19,10 +19,6 @@ class PlayerRollingState : public State
 public:
     struct Parameter
     {
-        // アニメーションパラメータ
-
-        int dodgeAnimID{ -1 };
-
         // 回避パラメータ
 
         float dodgeDuration{ 0.0f };
@@ -49,7 +45,6 @@ private:
 private:
     Glib::WeakPtr<Glib::Transform> camera_{};
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Glib::AudioSource> audio_{};
     Glib::WeakPtr<Rotator> rotator_{};
     Glib::WeakPtr<Damageable> damageable_{};

@@ -1,8 +1,10 @@
 ﻿#include "StateBehavior.h"
 #include "State.h"
-#include <StringUtility.h>
+#include <Components/Animator.h>
+#include <GameObject.h>
 #include <GameTimer.h>
-#include <string>
+#include <StringUtility.h>
+#include <Debugger.h>
 #include <GLGUI.h>
 
 using namespace Glib;
@@ -10,6 +12,7 @@ using namespace Glib;
 void StateBehavior::Start()
 {
     if (currentState_.expired()) return;
+    animator_ = GameObject()->GetComponent<Animator>();
 }
 
 void StateBehavior::FixedUpdate()
@@ -37,7 +40,17 @@ void StateBehavior::LateUpdate()
 
 void StateBehavior::AddState(const WeakPtr<State>& state, unsigned int stateID)
 {
-    if (state.expired()) return;
+    const auto& idStr = std::to_string(stateID);
+    if (state.expired())
+    {
+        Debug::Error("ステートが見つかりません。 ID: " + idStr);
+        return;
+    }
+    if (stateList_.contains(stateID))
+    {
+        Debug::Warn("追加された、ステートIDが重複しています。ID: " + idStr);
+        Debug::Warn("重複したステートは上書きされます。");
+    }
     stateList_[stateID] = state;
     state->OnInitialize();
     if (currentState_.expired()) ChangeState(stateID);
@@ -53,6 +66,7 @@ void StateBehavior::ChangeState(unsigned int stateID)
         currentState_->OnExit();
     }
     currentState_ = state->second;
+    currentState_->SetAnimation(animator_);
     currentState_->OnEnter();
     elapsedFixedTime = 0.0f;
     elapsedTime = 0.0f;

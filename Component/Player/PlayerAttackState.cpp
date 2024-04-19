@@ -1,6 +1,5 @@
 ﻿#include "PlayerAttackState.h"
 #include <GameObject.h>
-#include <Components/Animator.h>
 #include <Components/AudioSource.h>
 #include <Components/Camera.h>
 #include <Components/Rigidbody.h>
@@ -10,7 +9,7 @@
 #include <GLGUI.h>
 
 #include "../Common/Rotator.h"
-#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
@@ -31,7 +30,6 @@ void PlayerAttackState::OnInitialize()
 {
     const auto& camera = GameObjectManager::Find("Camera Parent");
     camera_ = camera->Transform();
-    animator_ = GameObject()->GetComponent<Animator>();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
     rotator_ = GameObject()->GetComponent<Rotator>();
@@ -39,8 +37,6 @@ void PlayerAttackState::OnInitialize()
 
 void PlayerAttackState::OnEnter()
 {
-    animator_->AnimationID(parameter_.attackAnimID);
-    animator_->Loop(false);
     if (!slashEfk_.expired()) slashEfk_->Play();
     audio_->AudioID(parameter_.attackSEID);
     audio_->Pitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
@@ -107,12 +103,6 @@ Vector3 PlayerAttackState::MoveSpeed(bool moving)
 
 void PlayerAttackState::OnGUI()
 {
-    int attack{ parameter_.attack };
-    if (GLGUI::DragInt("ATK", &attack))
-    {
-        parameter_.attack = attack;
-    }
-
     float moveDuration{ parameter_.moveDuration };
     if (GLGUI::DragFloat("MoveTime", &moveDuration, 0.001f))
     {
@@ -134,9 +124,8 @@ void PlayerAttackState::OnGUI()
     if (GLGUI::TreeNode("ATK Parameter"))
     {
         GLGUI::InputInt("NextState", &parameter_.nextAttackState);
-        GLGUI::InputInt("AnimationID", &parameter_.attackAnimID);
         GLGUI::InputInt("AttackSEID", &parameter_.attackSEID);
-        GLGUI::InputInt("AttackPower", &parameter_.attack);
+        GLGUI::InputInt("AttackPower", &parameter_.power);
         GLGUI::DragFloat("AttackEndTime", &parameter_.stateEndTime, 0.01f);
 
         ReceptionTimer& timer = parameter_.inputTimer;

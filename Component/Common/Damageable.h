@@ -56,5 +56,5 @@ private:
     int damageStateID_{ -1 };
     int deadStateID_{ -1 };
     bool invincible_{ false };
-    Glib::WeakPtr<StateBehavior> stateBehavior_{ nullptr };
+    Glib::WeakPtr<StateBehavior> stateBehavior_{};
 };

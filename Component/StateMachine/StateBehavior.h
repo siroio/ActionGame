@@ -2,6 +2,11 @@
 #include <Component.h>
 #include <unordered_map>
 
+namespace Glib
+{
+    class Animator;
+}
+
 class State;
 
 class StateBehavior : public Component
@@ -20,6 +25,7 @@ private:
 private:
     float elapsedTime{ 0.0f };
     float elapsedFixedTime{ 0.0f };
-    Glib::WeakPtr<State> currentState_{ nullptr };
+    Glib::WeakPtr<State> currentState_{};
+    Glib::WeakPtr<Glib::Animator> animator_{};
     std::unordered_map<unsigned int, Glib::WeakPtr<State>> stateList_;
 };

@@ -9,7 +9,7 @@
 #include <Components/CapsuleCollider.h>
 #include <Components/BoxCollider.h>
 
-#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/State/PlayerState.h"
 #include "../../Enum/AnimationID.h"
 #include "../../Enum/AudioID.h"
 #include "../../Enum/AudioGroupID.h"
@@ -21,6 +21,7 @@
 #include "../../Component/Common/Damageable.h"
 #include "../../Component/Common/Rotator.h"
 #include "../../Component/StateMachine/StateBehavior.h"
+#include "../../Component/StateMachine/AnimationInfo.h"
 #include "../../Component/Player/PlayerMoveState.h"
 #include "../../Component/Player/PlayerAttackState.h"
 #include "../../Component/Player/PlayerRollingState.h"
@@ -69,13 +70,18 @@ void Player::Create()
     player->AddComponent<Rotator>();
     player->AddComponent<Damageable>(100, 100, 0, 0, 0);
     auto stateMachine = player->AddComponent<StateBehavior>();
-    auto playerMove = player->AddComponent<PlayerMoveState>();
+
+    PlayerMoveState::Parameter move{
+        AnimationInfo{ AnimationID::PlayerIdle, 0.1f, 0.0f, true },
+        AnimationInfo{ AnimationID::PlayerMove, 0.1f, 0.0f, true },
+    };
+
+    auto playerMove = player->AddComponent<PlayerMoveState>(move);
+    playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.1f, 0.0f, true });
     stateMachine->AddState(playerMove, PlayerState::Moving);
 
     PlayerAttackState::Parameter attack1{
         PlayerState::Attack2,
-        AnimationID::PlayerAttack1,
-        false,
         AudioID::PlayerSwing,
         5,
         0.09f,
@@ -86,12 +92,11 @@ void Player::Create()
     };
 
     auto playerAtk1 = player->AddComponent<PlayerAttackState>(attack1, slashEfk);
+    playerAtk1->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack1 });
     stateMachine->AddState(playerAtk1, PlayerState::Attack1);
 
     PlayerAttackState::Parameter attack2{
         PlayerState::Attack3,
-        AnimationID::PlayerAttack2,
-        false,
         AudioID::PlayerSwing,
         5,
         0.2f,
@@ -100,13 +105,13 @@ void Player::Create()
         ReceptionTimer{ 0.2f, 0.4f },
         0.1f,
     };
+
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
+    playerAtk2->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack2 });
     stateMachine->AddState(playerAtk2, PlayerState::Attack2);
 
     PlayerAttackState::Parameter attack3{
         PlayerState::Attack4,
-        AnimationID::PlayerAttack3,
-        false,
         AudioID::PlayerSwing,
         5,
         0.125f,
@@ -116,12 +121,11 @@ void Player::Create()
         0.1f,
     };
     auto playerAtk3 = player->AddComponent<PlayerAttackState>(attack3, slashEfk);
+    playerAtk3->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack3 });
     stateMachine->AddState(playerAtk3, PlayerState::Attack3);
 
     PlayerAttackState::Parameter attack4{
         PlayerState::Moving,
-        AnimationID::PlayerAttack4,
-        false,
         AudioID::PlayerSwing,
         5,
         0.2f,
@@ -131,25 +135,26 @@ void Player::Create()
         0.8f,
     };
     auto playerAtk4 = player->AddComponent<PlayerAttackState>(attack4, slashEfk);
+    playerAtk4->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack4 });
     stateMachine->AddState(playerAtk4, PlayerState::Attack4);
 
     PlayerRollingState::Parameter rolling{
-        AnimationID::PlayerRolling,
         0.5f,
         ReceptionTimer{ 0.4f, 0.05f },
         6.0f,
         20.0f,
     };
     auto playerRolling = player->AddComponent<PlayerRollingState>(rolling);
+    playerRolling->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerRolling });
     stateMachine->AddState(playerRolling, PlayerState::Rolling);
 
     PlayerDamageState::Parameter damage{
-        AnimationID::PlayerDamage,
         0.2f,
         3.0f,
         20.0f,
     };
     auto playerDamage = player->AddComponent<PlayerDamageState>(damage);
+    playerDamage->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDamage });
     stateMachine->AddState(playerDamage, PlayerState::Damage);
 
     auto playerDead = player->AddComponent<PlayerDeadState>();

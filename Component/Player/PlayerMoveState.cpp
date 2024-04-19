@@ -14,7 +14,7 @@
 #include <GLGUI.h>
 #include <vector>
 
-#include "../../Enum/Player/PlayerState.h"
+#include "../../Enum/State/PlayerState.h"
 #include "../../Enum/AnimationID.h"
 #include "../../Input/Input.h"
 #include "../../Utility/Enum.h"
@@ -23,17 +23,16 @@
 
 using namespace Glib;
 
-void PlayerMoveState::OnEnter()
-{
-    animator_->Loop(true);
-}
+PlayerMoveState::PlayerMoveState(const Parameter& parameter) :
+    parameter_{ parameter }
+{}
 
 void PlayerMoveState::OnInitialize()
 {
     const auto& camera = GameObjectManager::Find("Camera Parent");
     camera_ = camera->Transform();
-    rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     animator_ = GameObject()->GetComponent<Animator>();
+    rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     rotator_ = GameObject()->GetComponent<Rotator>();
 }
 
@@ -77,37 +76,33 @@ void PlayerMoveState::Move()
 
     // 操作方向へ回転
     rotator_->Direction(moveInput_);
+    Vector3 velocity = moveInput_ * parameter_.moveSpeed;
+    ChangeAnimation(velocity.SqrMagnitude() > Mathf::EPSILON);
 
-    unsigned int animationID{ AnimationID::PlayerIdle };
-    if (moveInput_.SqrMagnitude() > Mathf::EPSILON) animationID = AnimationID::PlayerMove;
-    ChangeAnimation(animationID);
-
-    const Vector3 velocity{
-        RigidbodyUtility::GetMoveVelocity(
-        rigidbody_, moveForceMultiplier_,
-        moveInput_ * moveSpeed_)
-    };
+    velocity = RigidbodyUtility::GetMoveVelocity(rigidbody_, parameter_.moveForceMultiplier, velocity);
     rigidbody_->AddForce(velocity);
 }
 
-void PlayerMoveState::ChangeAnimation(unsigned int ID)
+void PlayerMoveState::ChangeAnimation(bool moving)
 {
-    if (ID == animator_->AnimationID()) return;
-    animator_->AnimationID(ID);
+    const auto& info = moving ? parameter_.walkInfo : parameter_.idleInfo;
+    if (animator_->AnimationID() == info.AnimationID) return;
+    SetAnimationInfo(info);
+    SetAnimation(animator_);
 }
 
 void PlayerMoveState::OnGUI()
 {
     Component::OnGUI();
-    float moveSpeed{ moveSpeed_ };
+    float moveSpeed{ parameter_.moveSpeed };
     if (GLGUI::DragFloat("MoveSpeed", &moveSpeed, 0.1f))
     {
-        moveSpeed_ = moveSpeed;
+        parameter_.moveSpeed = moveSpeed;
     }
 
-    float moveForceMultiplier{ moveForceMultiplier_ };
+    float moveForceMultiplier{ parameter_.moveForceMultiplier };
     if (GLGUI::DragFloat("MoveForce", &moveForceMultiplier, 0.1f))
     {
-        moveForceMultiplier_ = moveForceMultiplier;
+        parameter_.moveForceMultiplier = moveForceMultiplier;
     }
 }
