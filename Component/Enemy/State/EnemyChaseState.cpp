@@ -9,6 +9,11 @@
 
 using namespace Glib;
 
+void EnemyChaseState::AddNextState(unsigned int id)
+{
+    stateIDs_.push_back(id);
+}
+
 void EnemyChaseState::OnInitialize()
 {
     rigibody_ = GameObject()->GetComponent<Rigidbody>();

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../../StateMachine/State.h"
+#include <vector>
 
 namespace Glib
 {
@@ -22,6 +23,7 @@ public:
     };
 
 public:
+    void AddNextState(unsigned int id);
     void OnInitialize() override;
     int OnFixedUpdate(float eplasedTime) override;
 
@@ -35,5 +37,6 @@ private:
     Glib::WeakPtr<Glib::Rigidbody> rigibody_{};
     Glib::WeakPtr<CharacterSearcher> searcher_{};
     Glib::WeakPtr<Rotator> rotator_{};
+    std::vector<unsigned int> stateIDs_;
     Parameter parameter_{};
 };

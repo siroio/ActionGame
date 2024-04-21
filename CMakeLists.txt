@@ -71,6 +71,8 @@ set(Component
     Component/Enemy/State/EnemyChaseState.cpp
     Component/Enemy/State/EnemySearchState.h
     Component/Enemy/State/EnemySearchState.cpp
+    Component/Enemy/State/EnemySelectorState.h
+    Component/Enemy/State/EnemySelectorState.cpp
     Component/Player/PlayerMoveState.h
     Component/Player/PlayerMoveState.cpp
     Component/Player/PlayerAttackState.h

@@ -22,10 +22,13 @@ public:
 
 public:
     EnemyAttackState(const Parameter& parameter);
-
+    void OnInitialize() override;
     void OnEnter() override;
     int OnUpdate(float elapsedTime) override;
     void OnExit() override;
+
+private:
+    void OnGUI() override;
 
 private:
     Glib::WeakPtr<AttackColliderController> attackCollider{};

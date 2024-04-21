@@ -21,7 +21,7 @@ int EnemySearchState::OnUpdate(float elapsedTime)
     // 一定時間ごとに探索をする
     if (Mathf::Mod(elapsedTime, parameter_.searchCoolDown))
     {
-        // プレイヤーを見つけたら追いかける
+        // プレイヤーを見つけたら追跡ステートへ推移
         const bool isFound{ OnSearch() };
         return isFound ? EnemyState::Chase : STATE_MAINTAIN;
     }
@@ -31,5 +31,6 @@ int EnemySearchState::OnUpdate(float elapsedTime)
 
 bool EnemySearchState::OnSearch()
 {
-    return searcher_.expired() ? false : searcher_->TargetInView();
+    if (searcher_.expired()) return false;
+    return searcher_->TargetInView();
 }

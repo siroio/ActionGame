@@ -35,7 +35,7 @@ private:
     int OnFixedUpdate(float elapsedTime) override;
 
 private:
-    void Move(bool moving);
+    void Move();
     Vector3 GetFlinchVelocity() const;
     void OnGUI() override;
 

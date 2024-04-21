@@ -36,10 +36,10 @@ private:
     void OnGUI() override;
 
 private:
-    Vector3 moveInput_{ Vector3::Zero() };
-    Parameter parameter_{};
-    Glib::WeakPtr<Glib::Transform> camera_;
-    Glib::WeakPtr<Glib::Rigidbody> rigidbody_;
+    Glib::WeakPtr<Glib::Transform> camera_{};
+    Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Rotator> rotator_;
+    Vector3 moveInput_{ Vector3::Zero() };
+    Parameter parameter_;
 };

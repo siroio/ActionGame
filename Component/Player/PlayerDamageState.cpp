@@ -36,11 +36,11 @@ int PlayerDamageState::OnUpdate(float elapsedTime)
 
 int PlayerDamageState::OnFixedUpdate(float elapsedTime)
 {
-    Move(elapsedTime <= parameter_.damageDuration);
+    Move();
     return STATE_MAINTAIN;
 }
 
-void PlayerDamageState::Move(bool moving)
+void PlayerDamageState::Move()
 {
     const Vector3 velocity = RigidbodyUtility::GetMoveVelocity(rigidbody_, parameter_.moveForceMultiplier, GetFlinchVelocity());
     rigidbody_->AddForce(velocity);

@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include <Component.h>
 #include <WeakPtr.h>
+#include <Component.h>
 
 class StateBehavior;
 
