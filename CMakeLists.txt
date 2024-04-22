@@ -27,10 +27,10 @@ set(App
 
 set(Scene
     Scene/TitleScene.h
-    Scene/PlayScene.h
-    Scene/ResultScene.h
     Scene/TitleScene.cpp
+    Scene/PlayScene.h
     Scene/PlayScene.cpp
+    Scene/ResultScene.h
     Scene/ResultScene.cpp
 )
 
@@ -44,6 +44,8 @@ set(Character
     Character/Camera/MainCamera.cpp
     Character/Player/Player.h
     Character/Player/Player.cpp
+    Character/Enemy/EnemyRat.h
+    Character/Enemy/EnemyRat.cpp
 )
 
 set(Component
