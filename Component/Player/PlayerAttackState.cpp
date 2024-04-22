@@ -9,6 +9,7 @@
 #include <GLGUI.h>
 
 #include "../Common/Rotator.h"
+#include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
@@ -28,7 +29,7 @@ PlayerAttackState::PlayerAttackState(const Parameter& parameter, const WeakPtr<E
 
 void PlayerAttackState::OnInitialize()
 {
-    const auto& camera = GameObjectManager::Find("Camera Parent");
+    const auto& camera = GameObjectManager::Find(ObjectName::Camera);
     camera_ = camera->Transform();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();

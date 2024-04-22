@@ -14,6 +14,7 @@
 #include <GLGUI.h>
 #include <vector>
 
+#include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Enum/AnimationID.h"
 #include "../../Input/Input.h"
@@ -29,7 +30,7 @@ PlayerMoveState::PlayerMoveState(const Parameter& parameter) :
 
 void PlayerMoveState::OnInitialize()
 {
-    const auto& camera = GameObjectManager::Find("Camera Parent");
+    const auto& camera = GameObjectManager::Find(ObjectName::Camera);
     camera_ = camera->Transform();
     animator_ = GameObject()->GetComponent<Animator>();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();

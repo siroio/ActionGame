@@ -8,6 +8,7 @@
 
 #include "../Common/Rotator.h"
 #include "../Common/Damageable.h"
+#include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
@@ -21,7 +22,7 @@ PlayerRollingState::PlayerRollingState(const Parameter& parameter) :
 
 void PlayerRollingState::OnInitialize()
 {
-    const auto& camera = GameObjectManager::Find("Camera Parent");
+    const auto& camera = GameObjectManager::Find(ObjectName::Camera);
     camera_ = camera->Transform();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
