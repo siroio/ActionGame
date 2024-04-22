@@ -7,7 +7,7 @@ struct Player
      * @brief プレイヤーの生成
      * @return 生成できたか
      */
-    static void Create();
+    static GameObjectPtr Spawn();
 
 private:
     static void SetMesh(const GameObjectPtr& player);

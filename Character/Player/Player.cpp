@@ -32,6 +32,8 @@ using namespace Glib;
 
 namespace
 {
+    /* === コライダー関連 ===  */
+
     const Vector3 BODY_COLLIDER_CENTER{ 0.0f, 0.76f, 0.0f };
     constexpr float BODY_COLLIDER_HEIGHT{ 0.43f };
     constexpr float BODY_COLLIDER_RADIUS{ 0.34f };
@@ -39,13 +41,19 @@ namespace
     const Vector3 ATK_COLLIDER_POSITION{ 0.08f, -0.03f, 0.63f };
     const Vector3 ATK_COLLIDER_SIZE{ 0.15f, 0.06f, 1.04f };
 
+    /* === エフェクト関連 === */
+
     const Vector3 EFK_OFFSET_POSITION{ 0.0f, 0.0f, 0.6f };
     const Vector3 EFK_OFFSET_LOCALANGLES{ 90.0f, 0.0f, 0.0f };
     constexpr float EFK_PLAY_SPEED{ 5.0f };
     constexpr char ATK_COLLIDER_PARENT[]{ "Bip001 R Hand_WeaponBone" };
+
+    /* === アニメーション関連 === */
+
+    constexpr float ANIM_DEFAULT_BLEND_TIME{ 0.1f };
 }
 
-void Player::Create()
+GameObjectPtr Player::Spawn()
 {
     auto player = GameObjectManager::Instantiate(ObjectName::Player);
     auto playerAtk = GameObjectManager::Instantiate("PlayerATKCollider");
@@ -72,12 +80,14 @@ void Player::Create()
     auto stateMachine = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
-        AnimationInfo{ AnimationID::PlayerIdle, 0.1f, 0.0f, true },
-        AnimationInfo{ AnimationID::PlayerMove, 0.1f, 0.0f, true },
+        AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true },
+        AnimationInfo{ AnimationID::PlayerMove, 0.0f, ANIM_DEFAULT_BLEND_TIME, true },
+        4.0f,
+        20.0f,
     };
 
     auto playerMove = player->AddComponent<PlayerMoveState>(move);
-    playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.1f, 0.0f, true });
+    playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true });
     stateMachine->AddState(playerMove, PlayerState::Moving);
 
     PlayerAttackState::Parameter attack1{
@@ -159,6 +169,8 @@ void Player::Create()
 
     auto playerDead = player->AddComponent<PlayerDeadState>();
     stateMachine->AddState(playerDead, PlayerState::Dead);
+
+    return player;
 }
 
 void Player::SetMesh(const GameObjectPtr& player)

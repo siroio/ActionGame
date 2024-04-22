@@ -29,26 +29,23 @@ namespace
 
 void PlayScene::Start()
 {
-    auto light = GameObjectManager::Instantiate(ObjectName::Light)
-        ->AddComponent<DirectionalLight>();
+    auto light = GameObjectManager::Instantiate(ObjectName::Light)->AddComponent<DirectionalLight>();
     light->Ambient(LIGHT_AMBIENT);
     light->Diffuse(LIGHT_DIFFUSE);
     light->GameObject()->Transform()->EulerAngles(LIGHT_DIRECTION);
 
     SkyboxManager::SetSkybox(DEFAULT_SKYBOX);
-    MainCamera::Create(MAIN_CAMERA_OFFSET, MAIN_CAMERA_DISTANCE);
-    Player::Create();
+    GameObjectPtr camera = MainCamera::Spawn(MAIN_CAMERA_OFFSET, MAIN_CAMERA_DISTANCE);
+    GameObjectPtr player = Player::Spawn();
 
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
 
-    auto player = GameObjectManager::Find(ObjectName::Player);
     if (!player.expired())
     {
-        auto camera =
-            GameObjectManager::Find(ObjectName::Camera)->GetComponentInParent<CameraController>();
-        camera->SetTarget(player->Transform());
+        auto controller = camera->GetComponent<CameraController>();
+        controller->SetTarget(player->Transform()); // カメラにPlayerを注目するように設定
     }
 
     auto stage = GameObjectManager::Instantiate("Stage");

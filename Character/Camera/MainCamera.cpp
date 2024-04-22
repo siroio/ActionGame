@@ -10,11 +10,11 @@
 
 using namespace Glib;
 
-void MainCamera::Create(const Vector3& offset, const float distance)
+GameObjectPtr MainCamera::Spawn(const Vector3& offset, const float distance)
 {
-    auto cameraParent = GameObjectManager::Instantiate("Camera Parent");
+    auto cameraParent = GameObjectManager::Instantiate(ObjectName::Camera);
     auto cameraChild = GameObjectManager::Instantiate("Camera Child");
-    auto camera = GameObjectManager::Instantiate(ObjectName::Camera);
+    auto camera = GameObjectManager::Instantiate("Camera");
     camera->AddComponent<AudioListener>();
     camera->Transform()->Parent(cameraChild->Transform());
     cameraChild->Transform()->Parent(cameraParent->Transform());
@@ -24,4 +24,5 @@ void MainCamera::Create(const Vector3& offset, const float distance)
     param.Offset = offset;
     param.Distance = distance;
     cameraParent->AddComponent<CameraController>(param);
+    return cameraParent;
 }
