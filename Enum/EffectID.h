@@ -5,5 +5,6 @@ struct EffectID
     enum : unsigned int
     {
         SwordSlash,
+        EnemyDead,
     };
 };

@@ -46,6 +46,8 @@ set(Character
     Character/Player/Player.cpp
     Character/Enemy/EnemyRat.h
     Character/Enemy/EnemyRat.cpp
+    Character/DeadEffect/EnemyDeadEffect.h
+    Character/DeadEffect/EnemyDeadEffect.cpp
 )
 
 set(Component
@@ -61,6 +63,8 @@ set(Component
     Component/Common/ElapsedTimer.cpp
     Component/Common/Rotator.h
     Component/Common/Rotator.cpp
+    Component/Effect/DelayedEffectPlayer.h
+    Component/Effect/DelayedEffectPlayer.cpp
     Component/Enemy/CharacterSearcher.h
     Component/Enemy/CharacterSearcher.cpp
     Component/Enemy/State/EnemyAttackState.h
