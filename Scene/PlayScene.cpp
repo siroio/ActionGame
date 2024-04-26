@@ -11,6 +11,7 @@
 
 #include "../Character/Camera/MainCamera.h"
 #include "../Character/Player/Player.h"
+#include "../Character/Enemy/Skeleton/Skeleton.h"
 #include "../Constant/GameObjectName.h"
 #include "../Component/Camera/CameraController.h"
 #include "../Enum/CollisionLayer.h"
@@ -37,6 +38,7 @@ void PlayScene::Start()
     SkyboxManager::SetSkybox(DEFAULT_SKYBOX);
     GameObjectPtr camera = MainCamera::Spawn(MAIN_CAMERA_OFFSET, MAIN_CAMERA_DISTANCE);
     GameObjectPtr player = Player::Spawn();
+    Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
 
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
@@ -44,16 +46,17 @@ void PlayScene::Start()
 
     if (!player.expired())
     {
-        auto controller = camera->GetComponent<CameraController>();
+        auto controller = camera->GetComponentInParent<CameraController>();
         controller->SetTarget(player->Transform()); // カメラにPlayerを注目するように設定
     }
 
     auto stage = GameObjectManager::Instantiate("Stage");
     stage->Layer(CollisionLayer::Stage);
+    stage->Tag("Obstacle");
     auto mr = stage->AddComponent<MeshRenderer>();
-    mr->MeshID(1);
+    mr->MeshID(2);
     auto mc = stage->AddComponent<MeshCollider>();
-    mc->MeshID(1);
+    mc->MeshID(2);
     mc->FlipNormals(true);
 }
 

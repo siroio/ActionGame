@@ -17,7 +17,7 @@ GameObjectPtr EnemyDeadEffect::Spawn(const Vector3& position)
 {
     auto deadEfk = GameObjectManager::Instantiate(EFFECT_OBJECT_NAME);
     auto efkSystem = deadEfk->AddComponent<EffectSystem>();
-
+    deadEfk->Transform()->Position(position);
     efkSystem->EffectID(EffectID::EnemyDead);
     efkSystem->DestoryOnFinish(true);
     efkSystem->PlayOnStart(true);

@@ -9,11 +9,13 @@
 #include <GLGUI.h>
 
 #include "../Common/Rotator.h"
+#include "../Common/AttackColliderController.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
+
 
 
 using namespace Glib;
@@ -34,6 +36,7 @@ void PlayerAttackState::OnInitialize()
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
     rotator_ = GameObject()->GetComponent<Rotator>();
+    attackCollider_ = GameObject()->GetComponentInChildren<AttackColliderController>();
 }
 
 void PlayerAttackState::OnEnter()
@@ -43,17 +46,20 @@ void PlayerAttackState::OnEnter()
     audio_->Pitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
     audio_->Play();
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    attackCollider_->SetAttackPower(parameter_.power);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
 void PlayerAttackState::OnExit()
 {
     if (!slashEfk_.expired()) slashEfk_->Stop();
+    attackCollider_->SetAttackActive(false);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
 int PlayerAttackState::OnUpdate(float elapsedTime)
 {
+    attackCollider_->SetAttackActive(true);
     if (IsAtacck(elapsedTime))
     {
         return parameter_.nextAttackState;

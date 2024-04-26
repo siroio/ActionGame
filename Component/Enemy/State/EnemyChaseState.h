@@ -16,16 +16,17 @@ class EnemyChaseState : public State
 public:
     struct Parameter
     {
-        int nextStateID{ -1 };
         float completeDistance{ 0.2f };
         float moveSpeed{ 4.0f };
         float moveForceMultiplier{ 20.0f };
     };
 
 public:
+    EnemyChaseState(const Parameter& parameter);
     void AddNextState(unsigned int id);
     void OnInitialize() override;
-    int OnFixedUpdate(float eplasedTime) override;
+    int OnUpdate(float) override;
+    int OnFixedUpdate(float) override;
 
 private:
     void Move();

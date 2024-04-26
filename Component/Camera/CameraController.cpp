@@ -39,11 +39,9 @@ CameraController::Parameter CameraController::Lerp(const Parameter& a, const Par
 
 void CameraController::Start()
 {
-    auto child = GameObjectManager::Find("Camera Child");
-    auto camera = GameObjectManager::Find(ObjectName::Camera);
     parent_ = GameObject()->Transform();
-    child_ = child->Transform();
-    camera_ = camera->Transform();
+    child_ = parent_->Find("Camera Child");
+    camera_ = parent_->Find("Camera");
 }
 
 void CameraController::FixedUpdate()

@@ -12,13 +12,7 @@ class Damageable;
 class EnemySearchState : public State
 {
 public:
-    struct Parameter
-    {
-        float searchCoolDown;
-    };
-
-public:
-    EnemySearchState(const Parameter& parameter);
+    EnemySearchState(float searchCoolDown);
     void OnInitialize() override;
     int OnUpdate(float elapsedTime) override;
 
@@ -27,5 +21,5 @@ private:
 
 private:
     Glib::WeakPtr<CharacterSearcher> searcher_{};
-    Parameter parameter_{};
+    float searchCoolDown_{};
 };

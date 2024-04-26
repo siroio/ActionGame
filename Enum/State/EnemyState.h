@@ -4,6 +4,9 @@ struct EnemyState
 {
     enum
     {
+        // 共通ステート
+
+        Selector,
         Search,
         Moving,
         Chase,

@@ -12,11 +12,11 @@ void EnemySelectorState::OnInitialize()
 void EnemySelectorState::OnEnter()
 {
     // ステートが追加されていなかったら何もしない
-    if (0 <= stateIDs_.size()) return;
+    if (stateIDs_.size() <= 0) return;
 
     // TODO: Fuzzy理論使いたい
-    const int idx = Glib::Random::Range(0, stateIDs_.size());
-    stateBehavior_->ChangeState(stateIDs_[idx]);
+    const int idx = Glib::Random::Range(0, static_cast<int>(stateIDs_.size()));
+    stateBehavior_->ChangeState(stateIDs_.at(idx));
 }
 
 void EnemySelectorState::AddNextState(unsigned int id)

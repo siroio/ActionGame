@@ -31,6 +31,6 @@ private:
     void OnGUI() override;
 
 private:
-    Glib::WeakPtr<AttackColliderController> attackCollider{};
+    Glib::WeakPtr<AttackColliderController> attackCollider_{};
     Parameter parameter_{};
 };

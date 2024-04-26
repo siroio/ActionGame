@@ -9,5 +9,6 @@ namespace Glib
 
 class PlayerDeadState : public State
 {
-
+private:
+    void OnEnter() override;
 };

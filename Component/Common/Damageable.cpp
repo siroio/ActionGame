@@ -3,6 +3,7 @@
 #include <Mathf.h>
 
 #include "../StateMachine/StateBehavior.h"
+#include <Debugger.h>
 
 Damageable::Damageable(int health, int maxHealth, int poise, int damageStateID, int deadStateID) :
     health_{ health }, maxHealth_{ maxHealth }, poise_{ poise },
@@ -49,14 +50,12 @@ bool Damageable::TakeDamage(int power)
     if (invincible_ || IsDead()) return false;
 
     // ダメージを与える
-    // マイナス値の攻撃を与えられないようにMinで0に丸める
-    health_ -= Mathf::Min(power, 0);
-
+    // マイナス値の攻撃を与えられないようにMaxで0に丸める
+    health_ -= Mathf::Max(power, 0);
+    Glib::Debug::Log(GameObject()->Name() + ": HP :" + std::to_string(Health()));
     // ステートマシンを持っている場合
     // 死亡かダメージのステートへ推移
-    if (!stateBehavior_.expired()) return true;
-    if (poise_ >= power) return true;
-    stateBehavior_->ChangeState(IsDead() ? deadStateID_ : damageStateID_);
-
+    if (poise_ <= power) stateBehavior_->ChangeState(damageStateID_);
+    if (IsDead()) stateBehavior_->ChangeState(deadStateID_);
     return true;
 }

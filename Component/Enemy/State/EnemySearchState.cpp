@@ -6,9 +6,8 @@
 #include "../CharacterSearcher.h"
 #include "../../Common/Damageable.h"
 
-
-EnemySearchState::EnemySearchState(const Parameter& parameter) :
-    parameter_{ parameter }
+EnemySearchState::EnemySearchState(float searchCoolDown) :
+    searchCoolDown_{ searchCoolDown }
 {}
 
 void EnemySearchState::OnInitialize()
@@ -19,7 +18,9 @@ void EnemySearchState::OnInitialize()
 int EnemySearchState::OnUpdate(float elapsedTime)
 {
     // 一定時間ごとに探索をする
-    if (Mathf::Mod(elapsedTime, parameter_.searchCoolDown))
+    float eT = searchCoolDown_ <= 0.0f ?
+        0.0f : Mathf::Mod(elapsedTime, searchCoolDown_);
+    if (eT <= 0.01f)
     {
         // プレイヤーを見つけたら追跡ステートへ推移
         const bool isFound{ OnSearch() };

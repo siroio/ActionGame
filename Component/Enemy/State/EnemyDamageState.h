@@ -7,6 +7,7 @@ namespace Glib
 }
 
 struct Vector3;
+class Damageable;
 
 class EnemyDamageState : public State
 {
@@ -25,6 +26,7 @@ public:
 public:
     void OnInitialize() override;
     void OnEnter() override;
+    void OnExit() override;
     int OnUpdate(float elapsedTime) override;
     int OnFixedUpdate(float elapsedTime) override;
 
@@ -35,5 +37,6 @@ private:
 
 private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
+    Glib::WeakPtr<Damageable> damageable_{};
     Parameter parameter_;
 };

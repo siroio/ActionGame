@@ -8,10 +8,16 @@ struct AnimationID
         PlayerMove,
         PlayerRolling,
         PlayerDamage,
-        PlayerDeadth,
+        PlayerDeath,
         PlayerAttack1,
         PlayerAttack2,
         PlayerAttack3,
         PlayerAttack4,
+
+        SkeletonAttack = 9,
+        SkeletonDeath,
+        SkeletonDamage,
+        SkeletonMove,
+        SkeletonIdle,
     };
 };

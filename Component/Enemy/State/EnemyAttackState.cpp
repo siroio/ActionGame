@@ -11,20 +11,20 @@ EnemyAttackState::EnemyAttackState(const Parameter& parameter) :
 
 void EnemyAttackState::OnInitialize()
 {
-    attackCollider = GameObject()->GetComponent<AttackColliderController>();
+    attackCollider_ = GameObject()->GetComponentInChildren<AttackColliderController>();
 }
 
 void EnemyAttackState::OnEnter()
 {
     // 攻撃力を設定
-    attackCollider->SetAttackPower(parameter_.power);
+    attackCollider_->SetAttackPower(parameter_.power);
 }
 
 int EnemyAttackState::OnUpdate(float elapsedTime)
 {
     const bool& isAttack = parameter_.attackTime.Reception(elapsedTime);
-    attackCollider->SetAttackActive(isAttack);
-    if (parameter_.duration >= elapsedTime)
+    attackCollider_->SetAttackActive(isAttack);
+    if (elapsedTime >= parameter_.duration)
     {
         return parameter_.nextStateID;
     }
@@ -33,7 +33,7 @@ int EnemyAttackState::OnUpdate(float elapsedTime)
 
 void EnemyAttackState::OnExit()
 {
-    attackCollider->SetAttackActive(false);
+    attackCollider_->SetAttackActive(false);
 }
 
 void EnemyAttackState::OnGUI()

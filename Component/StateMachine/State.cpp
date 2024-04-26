@@ -10,7 +10,7 @@ void State::SetAnimationInfo(const AnimationInfo& info)
 void State::SetAnimation(Glib::WeakPtr<Glib::Animator>& animator) const
 {
     if (animator.expired()) return;
-    animator->AnimationID(animationInfo_.AnimationID, animationInfo_.StartFrameOffset);
+    animator->AnimationID(animationInfo_.AnimationID, animationInfo_.FrameOffset);
     animator->BlendTime(animationInfo_.BlendTime);
     animator->Loop(animationInfo_.Loop);
 }

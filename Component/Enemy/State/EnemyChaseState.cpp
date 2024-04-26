@@ -6,8 +6,13 @@
 #include "../../../Utility/RigidbodyUility.h"
 #include "../../Common/Rotator.h"
 #include "../CharacterSearcher.h"
+#include <Random.h>
 
 using namespace Glib;
+
+EnemyChaseState::EnemyChaseState(const Parameter& parameter) :
+    parameter_{ parameter }
+{}
 
 void EnemyChaseState::AddNextState(unsigned int id)
 {
@@ -21,7 +26,17 @@ void EnemyChaseState::OnInitialize()
     rotator_ = GameObject()->GetComponent<Rotator>();
 }
 
-int EnemyChaseState::OnFixedUpdate(float eplasedTime)
+int EnemyChaseState::OnUpdate(float)
+{
+    if (CompleteMove())
+    {
+        const int idx = Random::Range(0, static_cast<unsigned int>(stateIDs_.size()));
+        return stateIDs_.at(idx);
+    }
+    return STATE_MAINTAIN;
+}
+
+int EnemyChaseState::OnFixedUpdate(float)
 {
     Move();
     return STATE_MAINTAIN;
@@ -37,7 +52,8 @@ void EnemyChaseState::Move()
 bool EnemyChaseState::CompleteMove()
 {
     const auto& distance = ToTargetDistance();
-    return distance.Magnitude() <= parameter_.completeDistance;
+    const float sqrComplete = parameter_.completeDistance * parameter_.completeDistance;
+    return distance.SqrMagnitude() <= sqrComplete;
 }
 
 Vector3 EnemyChaseState::ToTargetDistance()

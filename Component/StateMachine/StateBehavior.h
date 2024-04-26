@@ -25,6 +25,7 @@ private:
 private:
     float elapsedTime{ 0.0f };
     float elapsedFixedTime{ 0.0f };
+    unsigned int startStateID_{ 0U };
     Glib::WeakPtr<State> currentState_{};
     Glib::WeakPtr<Glib::Animator> animator_{};
     std::unordered_map<unsigned int, Glib::WeakPtr<State>> stateList_;

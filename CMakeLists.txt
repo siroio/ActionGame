@@ -37,6 +37,8 @@ set(Scene
 set(Constant
     Constant/CameraConstant.h
     Constant/GameObjectName.h
+    Constant/ObjectTag.h
+    Constant/SceneName.h
 )
 
 set(Character
@@ -44,17 +46,13 @@ set(Character
     Character/Camera/MainCamera.cpp
     Character/Player/Player.h
     Character/Player/Player.cpp
-    Character/Enemy/EnemyRat.h
-    Character/Enemy/EnemyRat.cpp
+    Character/Enemy/Skeleton/Skeleton.h
+    Character/Enemy/Skeleton/Skeleton.cpp
     Character/DeadEffect/EnemyDeadEffect.h
     Character/DeadEffect/EnemyDeadEffect.cpp
 )
 
 set(Component
-    Component/Camera/CameraController.h
-    Component/Camera/CameraController.cpp
-    Component/Camera/CameraRotator.h
-    Component/Camera/CameraRotator.cpp
     Component/Common/AttackColliderController.h
     Component/Common/AttackColliderController.cpp
     Component/Common/Damageable.h
@@ -63,6 +61,12 @@ set(Component
     Component/Common/ElapsedTimer.cpp
     Component/Common/Rotator.h
     Component/Common/Rotator.cpp
+    Component/Camera/CameraController.h
+    Component/Camera/CameraController.cpp
+    Component/Camera/CameraRotator.h
+    Component/Camera/CameraRotator.cpp
+    Component/Camera/CameraObstacleDetection.h
+    Component/Camera/CameraObstacleDetection.cpp
     Component/Effect/DelayedEffectPlayer.h
     Component/Effect/DelayedEffectPlayer.cpp
     Component/Enemy/CharacterSearcher.h

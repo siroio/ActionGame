@@ -12,7 +12,6 @@ using namespace Glib;
 
 void CameraRotator::Start()
 {
-    camera_ = GameObject()->Transform();
     controller_ = GameObject()->GetComponent<CameraController>();
 }
 

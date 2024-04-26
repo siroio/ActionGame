@@ -77,7 +77,7 @@ GameObjectPtr Player::Spawn()
 
     player->AddComponent<Rotator>();
     player->AddComponent<Damageable>(100, 100, 0, 0, 0);
-    auto stateMachine = player->AddComponent<StateBehavior>();
+    auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
         AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true },
@@ -88,7 +88,7 @@ GameObjectPtr Player::Spawn()
 
     auto playerMove = player->AddComponent<PlayerMoveState>(move);
     playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true });
-    stateMachine->AddState(playerMove, PlayerState::Moving);
+    stateBehavior->AddState(playerMove, PlayerState::Moving);
 
     PlayerAttackState::Parameter attack1{
         PlayerState::Attack2,
@@ -103,7 +103,7 @@ GameObjectPtr Player::Spawn()
 
     auto playerAtk1 = player->AddComponent<PlayerAttackState>(attack1, slashEfk);
     playerAtk1->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack1 });
-    stateMachine->AddState(playerAtk1, PlayerState::Attack1);
+    stateBehavior->AddState(playerAtk1, PlayerState::Attack1);
 
     PlayerAttackState::Parameter attack2{
         PlayerState::Attack3,
@@ -118,7 +118,7 @@ GameObjectPtr Player::Spawn()
 
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
     playerAtk2->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack2 });
-    stateMachine->AddState(playerAtk2, PlayerState::Attack2);
+    stateBehavior->AddState(playerAtk2, PlayerState::Attack2);
 
     PlayerAttackState::Parameter attack3{
         PlayerState::Attack4,
@@ -132,7 +132,7 @@ GameObjectPtr Player::Spawn()
     };
     auto playerAtk3 = player->AddComponent<PlayerAttackState>(attack3, slashEfk);
     playerAtk3->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack3 });
-    stateMachine->AddState(playerAtk3, PlayerState::Attack3);
+    stateBehavior->AddState(playerAtk3, PlayerState::Attack3);
 
     PlayerAttackState::Parameter attack4{
         PlayerState::Moving,
@@ -146,7 +146,7 @@ GameObjectPtr Player::Spawn()
     };
     auto playerAtk4 = player->AddComponent<PlayerAttackState>(attack4, slashEfk);
     playerAtk4->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack4 });
-    stateMachine->AddState(playerAtk4, PlayerState::Attack4);
+    stateBehavior->AddState(playerAtk4, PlayerState::Attack4);
 
     PlayerRollingState::Parameter rolling{
         0.5f,
@@ -156,7 +156,7 @@ GameObjectPtr Player::Spawn()
     };
     auto playerRolling = player->AddComponent<PlayerRollingState>(rolling);
     playerRolling->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerRolling });
-    stateMachine->AddState(playerRolling, PlayerState::Rolling);
+    stateBehavior->AddState(playerRolling, PlayerState::Rolling);
 
     PlayerDamageState::Parameter damage{
         0.2f,
@@ -165,10 +165,11 @@ GameObjectPtr Player::Spawn()
     };
     auto playerDamage = player->AddComponent<PlayerDamageState>(damage);
     playerDamage->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDamage });
-    stateMachine->AddState(playerDamage, PlayerState::Damage);
+    stateBehavior->AddState(playerDamage, PlayerState::Damage);
 
     auto playerDead = player->AddComponent<PlayerDeadState>();
-    stateMachine->AddState(playerDead, PlayerState::Dead);
+    playerDead->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDeath });
+    stateBehavior->AddState(playerDead, PlayerState::Dead);
 
     return player;
 }
@@ -199,10 +200,10 @@ void Player::SetBodyCollider(const GameObjectPtr& player)
 
 void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr& collider)
 {
-    auto parent = GameObjectManager::Find(ATK_COLLIDER_PARENT);
+    auto parent = player->Transform()->Find(ATK_COLLIDER_PARENT);
     auto rb = collider->AddComponent<Rigidbody>();
     auto boxCol = collider->AddComponent<BoxCollider>();
-    collider->Transform()->Parent(parent->Transform());
+    collider->Transform()->Parent(parent);
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
     collider->AddComponent<AttackColliderController>(boxCol);

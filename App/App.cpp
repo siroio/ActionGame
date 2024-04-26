@@ -1,6 +1,7 @@
 ﻿#include "App.h"
 #include <SceneManager.h>
 #include <AudioManager.h>
+#include "../Constant/SceneName.h"
 #include "../Enum/AudioGroupID.h"
 #include "../Scene/TitleScene.h"
 #include "../Scene/PlayScene.h"
@@ -26,7 +27,7 @@ void App::Start()
     LoadAssets();
     InitializeSound();
     ResiterScenes();
-    SceneManager::LoadScene("PlayScene");
+    SceneManager::LoadScene(SceneName::TITLE);
 }
 
 void App::End()

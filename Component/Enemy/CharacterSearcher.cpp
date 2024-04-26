@@ -53,7 +53,8 @@ bool CharacterSearcher::TargetInView() const
     if (toTarget.SqrMagnitude() > distance_ * distance_) return false;
 
     // fovの内側か？
-    return fov_ <= Vector3::Angle(forward, toTarget.Normalized());
+    float angle = Vector3::Angle(forward, toTarget.Normalized());
+    return angle <= fov_;
 }
 
 void CharacterSearcher::OnGUI()

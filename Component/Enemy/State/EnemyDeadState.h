@@ -7,6 +7,7 @@ public:
     EnemyDeadState(float duration);
 
 public:
+    void OnEnter() override;
     int OnUpdate(float elapsedTime) override;
 
 private:
