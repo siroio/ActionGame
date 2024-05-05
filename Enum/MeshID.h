@@ -6,5 +6,6 @@ struct MeshID
     {
         Player,
         Skeleton,
+        Mage,
     };
 };

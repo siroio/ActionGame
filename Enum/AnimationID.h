@@ -4,7 +4,7 @@ struct AnimationID
 {
     enum : unsigned int
     {
-        PlayerIdle,
+        PlayerIdle = 0,
         PlayerMove,
         PlayerRolling,
         PlayerDamage,
@@ -14,10 +14,16 @@ struct AnimationID
         PlayerAttack3,
         PlayerAttack4,
 
-        SkeletonAttack = 9,
+        SkeletonAttack = 10,
         SkeletonDeath,
         SkeletonDamage,
         SkeletonMove,
         SkeletonIdle,
+
+        MageAttack = 20,
+        MageDeath,
+        MageDamage,
+        MageMove,
+        MageIdle,
     };
 };
