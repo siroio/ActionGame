@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "../Common/Rotator.h"
-#include "../StateMachine/State.h"
+#include "../../Common/Rotator.h"
+#include "../../StateMachine/State.h"
 #include <WeakPtr.h>
 #include <Quaternion.h>
 

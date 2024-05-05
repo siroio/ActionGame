@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <WeakPtr.h>
-#include "../StateMachine/State.h"
-#include "../../Utility/ReceptionTimer.h"
+#include "../../StateMachine/State.h"
+#include "../../../Utility/ValidityTimer.h"
 
 namespace Glib
 {
@@ -35,13 +35,15 @@ public:
         // 攻撃のパラメータ
         int power{ 0 };
 
+        ValidityTimer colliderTimer;
+
         // 攻撃時移動用パラメータ
         float moveDuration{ 0.0f };
         float moveSpeed{ 4.0f };
         float moveForceMultiplier{ 20.0f };
 
         // 時間系のパラメータ
-        ReceptionTimer inputTimer;
+        ValidityTimer inputTimer;
         float stateEndTime{ 0 };
     };
 
@@ -54,7 +56,9 @@ private:
     void OnExit() override;
     int OnUpdate(float elapsedTime) override;
     int OnFixedUpdate(float elapsedTime) override;
-    bool IsAtacck(float elapsedTime);
+
+    bool IsAttack(float elapsedTime);
+    bool EnableAttack(float elapsedTime);
     bool IsTimeOver(float elapsedTime) const;
     void Move(float elapsedTime);
     Vector3 MoveSpeed(bool moving);

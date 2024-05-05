@@ -6,8 +6,8 @@
 #include <Components/Transform.h>
 #include <GLGUI.h>
 
-#include "../Common/Rotator.h"
-#include "../Common/Damageable.h"
+#include "../../Common/Rotator.h"
+#include "../../Common/Damageable.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"

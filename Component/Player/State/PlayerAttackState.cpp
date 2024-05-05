@@ -8,8 +8,8 @@
 #include <Random.h>
 #include <GLGUI.h>
 
-#include "../Common/Rotator.h"
-#include "../Common/AttackColliderController.h"
+#include "../../Common/Rotator.h"
+#include "../../Common/AttackColliderController.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
@@ -53,14 +53,14 @@ void PlayerAttackState::OnEnter()
 void PlayerAttackState::OnExit()
 {
     if (!slashEfk_.expired()) slashEfk_->Stop();
+    attackCollider_->SetAttackPower(0);
     attackCollider_->SetAttackActive(false);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
 int PlayerAttackState::OnUpdate(float elapsedTime)
 {
-    attackCollider_->SetAttackActive(true);
-    if (IsAtacck(elapsedTime))
+    if (IsAttack(elapsedTime))
     {
         return parameter_.nextAttackState;
     }
@@ -69,6 +69,8 @@ int PlayerAttackState::OnUpdate(float elapsedTime)
     {
         return PlayerState::Moving;
     }
+
+    attackCollider_->SetAttackActive(EnableAttack(elapsedTime));
 
     return STATE_MAINTAIN;
 }
@@ -79,9 +81,14 @@ int PlayerAttackState::OnFixedUpdate(float elapsedTime)
     return STATE_MAINTAIN;
 }
 
-bool PlayerAttackState::IsAtacck(float elapsedTime)
+bool PlayerAttackState::IsAttack(float elapsedTime)
 {
     return parameter_.inputTimer.Reception(elapsedTime) && Input::Attack();
+}
+
+bool PlayerAttackState::EnableAttack(float elapsedTime)
+{
+    return parameter_.colliderTimer.Reception(elapsedTime);
 }
 
 bool PlayerAttackState::IsTimeOver(float elapsedTime) const
@@ -96,7 +103,7 @@ bool PlayerAttackState::IsTimeOver(float elapsedTime) const
 
 void PlayerAttackState::Move(float elapsedTime)
 {
-    const bool isMove = elapsedTime <= parameter_.moveDuration;
+    bool isMove = elapsedTime <= parameter_.moveDuration;
     Vector3 velocity = RigidbodyUtility::GetMoveVelocity(rigidbody_, parameter_.moveForceMultiplier, MoveSpeed(isMove));
     rigidbody_->AddForce(velocity);
 }
@@ -135,7 +142,7 @@ void PlayerAttackState::OnGUI()
         GLGUI::InputInt("AttackPower", &parameter_.power);
         GLGUI::DragFloat("AttackEndTime", &parameter_.stateEndTime, 0.01f);
 
-        ReceptionTimer& timer = parameter_.inputTimer;
+        ValidityTimer& timer = parameter_.inputTimer;
 
         float startTime = timer.StartTime();
         if (GLGUI::DragFloat("StartTime", &startTime, 0.01f))

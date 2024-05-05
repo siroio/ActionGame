@@ -1,46 +1,52 @@
 ﻿#pragma once
 #include <WeakPtr.h>
-#include "../StateMachine/State.h"
+#include "../../StateMachine/State.h"
+#include "../../../Utility/ValidityTimer.h"
 
 namespace Glib
 {
     class Animator;
     class AudioSource;
     class Rigidbody;
+    class Transform;
 }
 
+class Rotator;
 class Damageable;
-struct Vector3;
 
-class PlayerDamageState : public State
+class PlayerRollingState : public State
 {
 public:
     struct Parameter
     {
-        // 長さ
-        float damageDuration{ 0.0f };
+        // 回避パラメータ
+
+        float dodgeDuration{ 0.0f };
+
+        ValidityTimer invincibleTimer{ 0.0f, 0.0f };
 
         // 移動パラメータ
-        float moveSpeed{ 5.0f };
+        float moveSpeed{ 4.0f };
         float moveForceMultiplier{ 20.0f };
     };
 
 public:
-    PlayerDamageState(const Parameter& parameter);
+    PlayerRollingState(const Parameter& parameter);
 
 private:
     void OnInitialize() override;
     void OnEnter() override;
-    int OnUpdate(float elapsedTime) override;
     int OnFixedUpdate(float elapsedTime) override;
 
 private:
-    void Move();
-    Vector3 GetFlinchVelocity() const;
+    void Move(bool moving);
     void OnGUI() override;
 
 private:
+    Glib::WeakPtr<Glib::Transform> camera_{};
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Glib::WeakPtr<Glib::AudioSource> audio_{};
+    Glib::WeakPtr<Rotator> rotator_{};
+    Glib::WeakPtr<Damageable> damageable_{};
     Parameter parameter_;
 };
