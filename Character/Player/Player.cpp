@@ -16,17 +16,19 @@
 #include "../../Enum/CollisionLayer.h"
 #include "../../Enum/EffectID.h"
 #include "../../Enum/MeshID.h"
+#include "../../Enum/MessageID.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Component/Common/AttackColliderController.h"
 #include "../../Component/Common/Damageable.h"
 #include "../../Component/Common/Rotator.h"
 #include "../../Component/StateMachine/StateBehavior.h"
 #include "../../Component/StateMachine/AnimationInfo.h"
-#include "../../Component/Player/PlayerMoveState.h"
-#include "../../Component/Player/PlayerAttackState.h"
-#include "../../Component/Player/PlayerRollingState.h"
-#include "../../Component/Player/PlayerDamageState.h"
-#include "../../Component/Player/PlayerDeadState.h"
+#include "../../Component/Player/State/PlayerMoveState.h"
+#include "../../Component/Player/State/PlayerAttackState.h"
+#include "../../Component/Player/State/PlayerRollingState.h"
+#include "../../Component/Player/State/PlayerDamageState.h"
+#include "../../Component/Player/State/PlayerDeadState.h"
+#include "../../Component/Player/HitStop.h"
 
 using namespace Glib;
 
@@ -51,6 +53,12 @@ namespace
     /* === アニメーション関連 === */
 
     constexpr float ANIM_DEFAULT_BLEND_TIME{ 0.1f };
+
+    /* === ヒットストップ === */
+
+    constexpr unsigned int HITSTOP_MSG{ MessageID::Attacked };
+    constexpr float HITSTOP_DURATION{ 0.1f };
+    constexpr float HITSTOP_TIMESCALE{ 0.1f };
 }
 
 GameObjectPtr Player::Spawn()
@@ -72,11 +80,11 @@ GameObjectPtr Player::Spawn()
     playerEfk->Transform()->Parent(playerAtk->Transform()->Parent());
     playerEfk->Transform()->LocalPosition(EFK_OFFSET_POSITION);
     playerEfk->Transform()->LocalEulerAngles(EFK_OFFSET_LOCALANGLES);
-    slashEfk->EffectID(EffectID::SwordSlash);
+    slashEfk->EffectID(EffectID::SwordSwing);
     slashEfk->Speed(EFK_PLAY_SPEED);
 
     player->AddComponent<Rotator>();
-    player->AddComponent<Damageable>(100, 100, 0, 0, 0);
+    player->AddComponent<Damageable>(100, 100, 5, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
@@ -90,67 +98,74 @@ GameObjectPtr Player::Spawn()
     playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true });
     stateBehavior->AddState(playerMove, PlayerState::Moving);
 
+    // 攻撃１
     PlayerAttackState::Parameter attack1{
         PlayerState::Attack2,
         AudioID::PlayerSwing,
         5,
+        ValidityTimer{ 0.25f, 0.15f },
         0.09f,
         5.0f,
         20.0f,
-        ReceptionTimer{ 0.2f, 0.25f },
+        ValidityTimer{ 0.3f, 0.2f },
         0.1f,
     };
-
     auto playerAtk1 = player->AddComponent<PlayerAttackState>(attack1, slashEfk);
     playerAtk1->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack1 });
     stateBehavior->AddState(playerAtk1, PlayerState::Attack1);
 
+    // 攻撃２
     PlayerAttackState::Parameter attack2{
         PlayerState::Attack3,
         AudioID::PlayerSwing,
         5,
+        ValidityTimer{ 0.3f, 0.1f },
         0.2f,
         3.0f,
         20.0f,
-        ReceptionTimer{ 0.2f, 0.4f },
+        ValidityTimer{ 0.2f, 0.4f },
         0.1f,
     };
-
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
     playerAtk2->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack2 });
     stateBehavior->AddState(playerAtk2, PlayerState::Attack2);
 
+    // 攻撃３
     PlayerAttackState::Parameter attack3{
         PlayerState::Attack4,
         AudioID::PlayerSwing,
         5,
+        ValidityTimer{ 0.4f, 0.25f },
         0.125f,
         7.0f,
         20.0f,
-        ReceptionTimer{ 0.3f, 0.5f },
+        ValidityTimer{ 0.3f, 0.5f },
         0.1f,
     };
     auto playerAtk3 = player->AddComponent<PlayerAttackState>(attack3, slashEfk);
     playerAtk3->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack3 });
     stateBehavior->AddState(playerAtk3, PlayerState::Attack3);
 
+    // 攻撃４
     PlayerAttackState::Parameter attack4{
         PlayerState::Moving,
         AudioID::PlayerSwing,
         5,
+        ValidityTimer{ 0.7f },
         0.2f,
         5.0f,
         20.0f,
-        ReceptionTimer{ 0.0f, 0.0f },
+        ValidityTimer{ 0.0f, 0.0f },
         0.8f,
     };
     auto playerAtk4 = player->AddComponent<PlayerAttackState>(attack4, slashEfk);
     playerAtk4->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack4 });
     stateBehavior->AddState(playerAtk4, PlayerState::Attack4);
 
+    // 回避
     PlayerRollingState::Parameter rolling{
         0.5f,
-        ReceptionTimer{ 0.4f, 0.05f },
+        ValidityTimer{ 0.4f, 0.05f },
         6.0f,
         20.0f,
     };
@@ -158,6 +173,7 @@ GameObjectPtr Player::Spawn()
     playerRolling->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerRolling });
     stateBehavior->AddState(playerRolling, PlayerState::Rolling);
 
+    // ダメージ
     PlayerDamageState::Parameter damage{
         0.2f,
         3.0f,
@@ -167,6 +183,7 @@ GameObjectPtr Player::Spawn()
     playerDamage->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDamage });
     stateBehavior->AddState(playerDamage, PlayerState::Damage);
 
+    // 死亡
     auto playerDead = player->AddComponent<PlayerDeadState>();
     playerDead->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDeath });
     stateBehavior->AddState(playerDead, PlayerState::Dead);
@@ -206,8 +223,9 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     collider->Transform()->Parent(parent);
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
-    collider->AddComponent<AttackColliderController>(boxCol);
+    auto controller = collider->AddComponent<AttackColliderController>(boxCol);
     rb->IsKinematic(true);
     boxCol->IsTrigger(true);
     boxCol->Size(ATK_COLLIDER_SIZE);
+    collider->AddComponent<HitStop>(HITSTOP_MSG, HITSTOP_DURATION, HITSTOP_TIMESCALE);
 }
