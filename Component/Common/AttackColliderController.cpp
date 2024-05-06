@@ -1,6 +1,8 @@
 ﻿#include "AttackColliderController.h"
 #include <Components/Collider.h>
 #include <GameObject.h>
+
+#include "../../Enum/MessageID.h"
 #include "Damageable.h"
 
 using namespace Glib;
@@ -8,6 +10,11 @@ using namespace Glib;
 AttackColliderController::AttackColliderController(const WeakPtr<Collider>& collider) :
     collider_{ collider }
 {}
+
+void AttackColliderController::Start()
+{
+    collider_->Active(false);
+}
 
 void AttackColliderController::SetAttackActive(bool enable)
 {
@@ -25,5 +32,10 @@ void AttackColliderController::OnTriggerEnter(const GameObjectPtr& other)
     auto damageable = other->GetComponent<Damageable>();
 
     if (damageable.expired()) return;
-    damageable->TakeDamage(power_);
+    if (damageable->TakeDamage(power_))
+    {
+        // 攻撃成功時メッセージを送信
+        // ID, 攻撃相手
+        GameObject()->SendMsg(MessageID::Attacked, other);
+    }
 }

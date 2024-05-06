@@ -13,6 +13,11 @@ public:
     AttackColliderController(const Glib::WeakPtr<Glib::Collider>& collider);
 
     /**
+     * @brief 初期化
+     */
+    void Start();
+
+    /**
      * @brief 攻撃判定の有効切り替え
      * @param enable 有効
      */
@@ -24,6 +29,10 @@ public:
      */
     void SetAttackPower(int power);
 
+    /**
+     * @brief 攻撃したとき
+     * @param other 相手
+     */
     void OnTriggerEnter(const GameObjectPtr& other);
 
 private:
