@@ -18,15 +18,12 @@ void EnemySearchState::OnInitialize()
 int EnemySearchState::OnUpdate(float elapsedTime)
 {
     // 一定時間ごとに探索をする
-    float eT = searchCoolDown_ <= 0.0f ?
-        0.0f : Mathf::Mod(elapsedTime, searchCoolDown_);
-    if (eT <= 0.01f)
+    float eT = searchCoolDown_ <= 0.0f ? 0.0f : Mathf::Mod(elapsedTime, searchCoolDown_);
+    if ((eT <= 0.0001f) && OnSearch()) // 計算誤差回避
     {
         // プレイヤーを見つけたら追跡ステートへ推移
-        const bool isFound{ OnSearch() };
-        return isFound ? EnemyState::Chase : STATE_MAINTAIN;
+        return EnemyState::Chase;
     }
-
     return STATE_MAINTAIN;
 }
 

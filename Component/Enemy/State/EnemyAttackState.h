@@ -1,10 +1,12 @@
 ﻿#pragma once
+#include <WeakPtr.h>
 #include "../../StateMachine/State.h"
-#include "../../Utility/ReceptionTimer.h"
+#include "../../Utility/ValidityTimer.h"
 
 namespace Glib
 {
     class Animator;
+    class Rigidbody;
 }
 
 class AttackColliderController;
@@ -17,7 +19,7 @@ public:
         int nextStateID{ -1 };
         int power{ 0 };
         float duration{ 0.0f };
-        ReceptionTimer attackTime{ 0.0f, 0.0f };
+        ValidityTimer attackTime{ 0.0f, 0.0f };
     };
 
 public:
@@ -32,5 +34,6 @@ private:
 
 private:
     Glib::WeakPtr<AttackColliderController> attackCollider_{};
+    Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Parameter parameter_{};
 };

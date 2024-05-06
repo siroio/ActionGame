@@ -12,7 +12,7 @@ class Damageable;
 class EnemySearchState : public State
 {
 public:
-    EnemySearchState(float searchCoolDown);
+    EnemySearchState(float searchCoolDown = 0.0f);
     void OnInitialize() override;
     int OnUpdate(float elapsedTime) override;
 

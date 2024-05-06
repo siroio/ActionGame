@@ -1,4 +1,5 @@
-﻿#include "../../StateMachine/State.h"
+﻿#pragma once
+#include "../../StateMachine/State.h"
 #include <WeakPtr.h>
 #include <deque>
 

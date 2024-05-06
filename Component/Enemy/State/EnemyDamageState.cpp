@@ -15,19 +15,15 @@ EnemyDamageState::EnemyDamageState(const Parameter& parameter) :
 void EnemyDamageState::OnInitialize()
 {
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
-    damageable_ = GameObject()->GetComponent<Damageable>();
 }
 
 void EnemyDamageState::OnEnter()
 {
-    damageable_->Invincible(true);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 
 void EnemyDamageState::OnExit()
-{
-    damageable_->Invincible(false);
-}
+{}
 
 int EnemyDamageState::OnUpdate(float elapsedTime)
 {
