@@ -17,6 +17,7 @@ if(MSVC)
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif()
 
 # ソースの追加
@@ -44,12 +45,22 @@ set(Constant
 set(Character
     Character/Camera/MainCamera.h
     Character/Camera/MainCamera.cpp
-    Character/Player/Player.h
-    Character/Player/Player.cpp
-    Character/Enemy/Skeleton/Skeleton.h
-    Character/Enemy/Skeleton/Skeleton.cpp
     Character/DeadEffect/EnemyDeadEffect.h
     Character/DeadEffect/EnemyDeadEffect.cpp
+    Character/Enemy/Mage/Mage.h
+    Character/Enemy/Mage/Mage.cpp
+    Character/Enemy/Skeleton/Skeleton.h
+    Character/Enemy/Skeleton/Skeleton.cpp
+    Character/Light/Light.h
+    Character/Light/Light.cpp
+    Character/Menu/SafeArea/SafeArea.h
+    Character/Menu/SafeArea/SafeArea.cpp
+    Character/Player/Player.h
+    Character/Player/Player.cpp
+    Character/Projectile/MagicArrow.h
+    Character/Projectile/MagicArrow.cpp
+    Character/UI/HPGauge/HPGauge.h
+    Character/UI/HPGauge/HPGauge.cpp
 )
 
 set(Component
@@ -57,8 +68,12 @@ set(Component
     Component/Common/AttackColliderController.cpp
     Component/Common/Damageable.h
     Component/Common/Damageable.cpp
+    Component/Common/DelayedAudioPlayer.h
+    Component/Common/DelayedAudioPlayer.cpp
     Component/Common/ElapsedTimer.h
     Component/Common/ElapsedTimer.cpp
+    Component/Common/GaugeController.h
+    Component/Common/GaugeController.cpp
     Component/Common/Rotator.h
     Component/Common/Rotator.cpp
     Component/Camera/CameraController.h
@@ -67,8 +82,6 @@ set(Component
     Component/Camera/CameraRotator.cpp
     Component/Camera/CameraObstacleDetection.h
     Component/Camera/CameraObstacleDetection.cpp
-    Component/Effect/DelayedEffectPlayer.h
-    Component/Effect/DelayedEffectPlayer.cpp
     Component/Enemy/CharacterSearcher.h
     Component/Enemy/CharacterSearcher.cpp
     Component/Enemy/State/EnemyAttackState.h
@@ -77,22 +90,28 @@ set(Component
     Component/Enemy/State/EnemyDamageState.cpp
     Component/Enemy/State/EnemyDeadState.h
     Component/Enemy/State/EnemyDeadState.cpp
+    Component/Enemy/State/EnemyProjectileAttackState.h
+    Component/Enemy/State/EnemyProjectileAttackState.cpp
     Component/Enemy/State/EnemyChaseState.h
     Component/Enemy/State/EnemyChaseState.cpp
     Component/Enemy/State/EnemySearchState.h
     Component/Enemy/State/EnemySearchState.cpp
     Component/Enemy/State/EnemySelectorState.h
     Component/Enemy/State/EnemySelectorState.cpp
-    Component/Player/PlayerMoveState.h
-    Component/Player/PlayerMoveState.cpp
-    Component/Player/PlayerAttackState.h
-    Component/Player/PlayerAttackState.cpp
-    Component/Player/PlayerDamageState.h
-    Component/Player/PlayerDamageState.cpp
-    Component/Player/PlayerDeadState.h
-    Component/Player/PlayerDeadState.cpp
-    Component/Player/PlayerRollingState.h
-    Component/Player/PlayerRollingState.cpp
+    Component/Player/State/PlayerMoveState.h
+    Component/Player/State/PlayerMoveState.cpp
+    Component/Player/State/PlayerAttackState.h
+    Component/Player/State/PlayerAttackState.cpp
+    Component/Player/State/PlayerDamageState.h
+    Component/Player/State/PlayerDamageState.cpp
+    Component/Player/State/PlayerDeadState.h
+    Component/Player/State/PlayerDeadState.cpp
+    Component/Player/State/PlayerRollingState.h
+    Component/Player/State/PlayerRollingState.cpp
+    Component/Player/HitStop.h
+    Component/Player/HitStop.cpp
+    Component/Projectile/Projectile.h
+    Component/Projectile/Projectile.cpp
     Component/StateMachine/State.h
     Component/StateMachine/State.cpp
     Component/StateMachine/AnimationInfo.h
@@ -109,6 +128,7 @@ set(Enum
     Enum/CollisionLayer.h
     Enum/EffectID.h
     Enum/MeshID.h
+    Enum/MessageID.h
     Enum/TextureID.h
 )
 
@@ -122,11 +142,10 @@ set(Utility
     Utility/AssetLoader.cpp
     Utility/CameraUtility.h
     Utility/CameraUtility.cpp
-    Utility/Enum.h
     Utility/Fuzzy.h
     Utility/Fuzzy.cpp
-    Utility/ReceptionTimer.h
-    Utility/ReceptionTimer.cpp
+    Utility/ValidityTimer.h
+    Utility/ValidityTimer.cpp
     Utility/RigidbodyUility.h
     Utility/RigidbodyUility.cpp
 )
