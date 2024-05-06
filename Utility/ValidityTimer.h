@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-class ReceptionTimer
+class ValidityTimer
 {
 public:
     /**
      * @param receptionTime 受付時間
      * @param startTime     受付開始までの時間
      */
-    ReceptionTimer(float receptionTime, float startTime = 0.0f);
+    ValidityTimer(float receptionTime, float startTime = 0.0f);
 
     /**
      * @brief 経過した時間が受付時間か確認
