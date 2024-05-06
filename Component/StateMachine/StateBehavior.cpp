@@ -13,6 +13,7 @@ void StateBehavior::Start()
 {
     if (currentState_.expired()) return;
     animator_ = GameObject()->GetComponent<Animator>();
+    currentState_->SetAnimation(animator_);
 }
 
 void StateBehavior::FixedUpdate()
