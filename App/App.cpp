@@ -1,6 +1,9 @@
 ﻿#include "App.h"
 #include <SceneManager.h>
 #include <AudioManager.h>
+#include <InputSystem.h>
+#include <Window.h>
+#include <Vector2.h>
 #include "../Constant/SceneName.h"
 #include "../Enum/AudioGroupID.h"
 #include "../Scene/TitleScene.h"
@@ -17,9 +20,16 @@ namespace
     constexpr char EFFECT[]{ "Assets/List/Effect.csv" };
     constexpr char MODEL[]{ "Assets/List/Model.csv" };
     constexpr char SKYBOX[]{ "Assets/List/Skybox.csv" };
+    constexpr char TEXTURE[]{ "Assets/List/Texture.csv" };
 
     constexpr float BGM_VOLIME{ 0.1f };
     constexpr float SE_VOLUME{ 0.1f };
+}
+
+App::App()
+{
+    Window::BorderlessWindow(true);
+    Window::WindowSize(Vector2{ 1920.0f, 1080.0f });
 }
 
 void App::Start()
@@ -40,6 +50,7 @@ void App::LoadAssets()
     AssetLoader::Load(EFFECT, AssetType::Effect);
     AssetLoader::Load(MODEL, AssetType::Mesh);
     AssetLoader::Load(SKYBOX, AssetType::Skybox);
+    AssetLoader::Load(TEXTURE, AssetType::Texture);
 }
 
 void App::InitializeSound()

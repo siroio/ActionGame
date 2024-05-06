@@ -5,7 +5,7 @@
 class App : public Glib::Game
 {
 public:
-    App() = default;
+    App();
     void Start() override;
     void End() override;
 
