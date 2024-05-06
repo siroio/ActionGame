@@ -16,6 +16,7 @@ public:
 
 public:
     ElapsedTimer(const Mode& mode = Mode::Scaled);
+    void Start();
     void Update();
 
     /**
