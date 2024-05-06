@@ -18,7 +18,6 @@
 #include "../../Enum/State/PlayerState.h"
 #include "../../Enum/AnimationID.h"
 #include "../../Input/Input.h"
-#include "../../Utility/Enum.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
 
