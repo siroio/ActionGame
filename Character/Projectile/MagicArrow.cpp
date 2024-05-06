@@ -1,0 +1,41 @@
+﻿#include "MagicArrow.h"
+#include <Components/Rigidbody.h>
+#include <Components/CapsuleCollider.h>
+#include <Components/EffectSystem.h>
+#include <GameObject.h>
+#include <GameObjectManager.h>
+
+#include "../../Component/Projectile/Projectile.h"
+#include "../../Enum/EffectID.h"
+
+using namespace Glib;
+
+namespace
+{
+    const Vector3 EFFECT_ANGLE{ 0.0f, 180.0f, 0.0f };
+}
+
+void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr& target)
+{
+    auto arrow = GameObjectManager::Instantiate("MagicArrow");
+    arrow->Transform()->Position(position);
+
+    auto rb = arrow->AddComponent<Rigidbody>();
+    rb->Constraints(RigidbodyConstraints::FreezeRotation);
+    rb->UseGravity(false);
+
+    auto collider = arrow->AddComponent<CapsuleCollider>();
+    collider->IsTrigger(true);
+
+    auto arrowEffect = GameObjectManager::Instantiate("ArrowEffect");
+    auto effect = arrowEffect->AddComponent<EffectSystem>();
+    effect->EffectID(EffectID::MagicArrow);
+    effect->PlayOnStart(true);
+    effect->Loop(true);
+    arrowEffect->Transform()->Parent(arrow->Transform());
+    arrowEffect->Transform()->LocalEulerAngles(EFFECT_ANGLE);
+
+    auto projectile = arrow->AddComponent<Projectile>(target->Transform());
+    projectile->MoveSpeed(speed);
+    projectile->RotateSpeed(10.0f);
+}
