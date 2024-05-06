@@ -21,6 +21,5 @@ GameObjectPtr EnemyDeadEffect::Spawn(const Vector3& position)
     efkSystem->EffectID(EffectID::EnemyDead);
     efkSystem->DestoryOnFinish(true);
     efkSystem->PlayOnStart(true);
-
     return deadEfk;
 }
