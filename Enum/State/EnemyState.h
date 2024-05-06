@@ -15,5 +15,8 @@ struct EnemyState
 
         // 近接攻撃
         MeleeAttack,
+
+        // 遠距離攻撃
+        ProjectileAttack,
     };
 };
