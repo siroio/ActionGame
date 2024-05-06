@@ -27,7 +27,7 @@ void Damageable::Health(int add)
 
 float Damageable::HealthRate() const
 {
-    return health_ <= 0.0f ? 0.0f : health_ / maxHealth_;
+    return health_ > 0.0f ? static_cast<float>(health_) / maxHealth_ : 0.0f;
 }
 
 bool Damageable::Invincible() const
