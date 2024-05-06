@@ -1,4 +1,4 @@
-﻿#include "Skeleton.h"
+﻿#include "Mage.h"
 #include <GameObject.h>
 #include <GameObjectManager.h>
 #include <Components/Transform.h>
@@ -15,7 +15,7 @@
 #include "../../../Component/Common/Damageable.h"
 #include "../../../Component/StateMachine/StateBehavior.h"
 #include "../../../Component/Enemy/CharacterSearcher.h"
-#include "../../../Component/Enemy/State/EnemyAttackState.h"
+#include "../../../Component/Enemy/State/EnemyProjectileAttackState.h"
 #include "../../../Component/Enemy/State/EnemyChaseState.h"
 #include "../../../Component/Enemy/State/EnemyDamageState.h"
 #include "../../../Component/Enemy/State/EnemyDeadState.h"
@@ -26,7 +26,7 @@
 #include "../../../Enum/AnimationID.h"
 #include "../../../Enum/MeshID.h"
 #include "../../../Enum/CollisionLayer.h"
-#include "../../../Utility/ValidityTimer.h"
+#include "../../Projectile/MagicArrow.h"
 
 using namespace Glib;
 
@@ -42,15 +42,15 @@ namespace
     constexpr char ATK_COLLIDER_PARENT[]{ "Weapon" };
 }
 
-GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, const Vector3& scale)
+GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const Vector3& scale)
 {
-    auto skeleton = GameObjectManager::Instantiate("EnemySkeleton");
+    auto skeleton = GameObjectManager::Instantiate("EnemyMage");
     skeleton->Layer(CollisionLayer::Enemy);
     skeleton->Transform()->Position(position);
     skeleton->Transform()->EulerAngles(euler);
     skeleton->Transform()->Scale(scale);
     auto skinned = skeleton->AddComponent<SkinnedMeshRenderer>();
-    skinned->MeshID(MeshID::Skeleton);
+    skinned->MeshID(MeshID::Mage);
     skeleton->AddComponent<Animator>();
     skeleton->AddComponent<AudioSource>();
     auto rigidbody = skeleton->AddComponent<Rigidbody>();
@@ -81,28 +81,30 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
 
     auto stateBehavior = skeleton->AddComponent<StateBehavior>();
 
-    EnemyAttackState::Parameter attackParam{
+    EnemyProjectileAttackState::Parameter attackParam{
         EnemyState::Selector,
-        3,
+        MagicArrow::Spawn,
+        Vector3{ 0.0f, 2.3f, -0.2f },
+        10.0f,
+        2.0f,
         1.0f,
-        ValidityTimer{ 0.5f, 0.3f },
     };
-    auto skAttack = skeleton->AddComponent<EnemyAttackState>(attackParam);
-    skAttack->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonAttack });
-    stateBehavior->AddState(skAttack, EnemyState::MeleeAttack);
+    auto skAttack = skeleton->AddComponent<EnemyProjectileAttackState>(attackParam);
+    skAttack->SetAnimationInfo(AnimationInfo{ AnimationID::MageAttack });
+    stateBehavior->AddState(skAttack, EnemyState::ProjectileAttack);
 
     auto skSearch = skeleton->AddComponent<EnemySearchState>(0.016f);
-    skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
+    skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
     stateBehavior->AddState(skSearch, EnemyState::Search);
 
     EnemyChaseState::Parameter chaseParam{
-        2.0f,
+        10.0f,
         3.0f,
         20.0f,
     };
     auto skChase = skeleton->AddComponent<EnemyChaseState>(chaseParam);
     skChase->AddNextState(EnemyState::MeleeAttack);
-    skChase->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonMove, 0.0f, 0.1f, true });
+    skChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, true });
     stateBehavior->AddState(skChase, EnemyState::Chase);
 
     EnemyDamageState::Parameter damageParam{
@@ -112,11 +114,11 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
         20.0f,
     };
     auto skDamage = skeleton->AddComponent<EnemyDamageState>(damageParam);
-    skDamage->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonDamage });
+    skDamage->SetAnimationInfo(AnimationInfo{ AnimationID::MageDamage });
     stateBehavior->AddState(skDamage, EnemyState::Damage);
 
     auto skDead = skeleton->AddComponent<EnemyDeadState>(1.12f);
-    skDead->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonDeath });
+    skDead->SetAnimationInfo(AnimationInfo{ AnimationID::MageDeath });
     stateBehavior->AddState(skDead, EnemyState::Dead);
 
     auto skSelector = skeleton->AddComponent<EnemySelectorState>();
