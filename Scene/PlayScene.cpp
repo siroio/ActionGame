@@ -7,6 +7,7 @@
 #include <SkyboxManager.h>
 #include <Physics.h>
 #include <Color.h>
+#include <GameTimer.h>
 
 #include "../Character/Light/Light.h"
 #include "../Character/Camera/MainCamera.h"
@@ -16,8 +17,8 @@
 #include "../Character/UI/HPGauge/HPGauge.h"
 #include "../Component/Camera/CameraController.h"
 #include "../Enum/CollisionLayer.h"
-#include <GameTimer.h>
 #include "../Character/Projectile/MagicArrow.h"
+#include "../Character/Enemy/Mage/Mage.h"
 
 
 using namespace Glib;
@@ -42,8 +43,8 @@ void PlayScene::Start()
     auto hpCanvas = GameObjectManager::Instantiate("HPCanvas");
     hpCanvas->AddComponent<Canvas>();
     HPGauge::Spawn(hpCanvas);
-    Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-
+    //Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
     Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
@@ -55,7 +56,7 @@ void PlayScene::Start()
         controller->SetTarget(player->Transform());
     }
 
-    MagicArrow::Spawn(Vector3{ 0.0f, 2.0f, 5.0f }, 0.0f, player);
+    //MagicArrow::Spawn(Vector3{ 0.0f, 2.0f, 5.0f }, 0.0f, player);
 
     // debug stage
     auto stage = GameObjectManager::Instantiate("Stage");

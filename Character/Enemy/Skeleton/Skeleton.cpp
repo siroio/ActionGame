@@ -32,7 +32,7 @@ using namespace Glib;
 
 namespace
 {
-    constexpr float SEARCH_FOV{ 80.0f };
+    constexpr float SEARCH_FOV{ 120.0f };
     const Vector3 BODY_COLLIDER_CENTER{ 0.0f, 0.87f, 0.0f };
     constexpr float BODY_COLLIDER_HEIGHT{ 0.23f };
     constexpr float BODY_COLLIDER_RADIUS{ 0.65f };
@@ -108,7 +108,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     EnemyDamageState::Parameter damageParam{
         EnemyState::Selector,
         0.7f,
-        0.3f,
+        3.0f,
         20.0f,
     };
     auto skDamage = skeleton->AddComponent<EnemyDamageState>(damageParam);

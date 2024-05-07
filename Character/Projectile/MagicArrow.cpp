@@ -6,6 +6,7 @@
 #include <GameObjectManager.h>
 
 #include "../../Component/Projectile/Projectile.h"
+#include "../../Component/Common/AttackColliderController.h"
 #include "../../Enum/EffectID.h"
 
 using namespace Glib;
@@ -13,6 +14,7 @@ using namespace Glib;
 namespace
 {
     const Vector3 EFFECT_ANGLE{ 0.0f, 180.0f, 0.0f };
+    constexpr float ROTATE_SPEED{ 10.0f };
 }
 
 void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr& target)
@@ -27,6 +29,8 @@ void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr
     auto collider = arrow->AddComponent<CapsuleCollider>();
     collider->IsTrigger(true);
 
+    auto controller = arrow->AddComponent<AttackColliderController>(collider);
+
     auto arrowEffect = GameObjectManager::Instantiate("ArrowEffect");
     auto effect = arrowEffect->AddComponent<EffectSystem>();
     effect->EffectID(EffectID::MagicArrow);
@@ -37,5 +41,5 @@ void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr
 
     auto projectile = arrow->AddComponent<Projectile>(target->Transform());
     projectile->MoveSpeed(speed);
-    projectile->RotateSpeed(10.0f);
+    projectile->RotateSpeed(ROTATE_SPEED);
 }

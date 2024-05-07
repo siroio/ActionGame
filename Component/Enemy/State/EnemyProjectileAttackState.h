@@ -3,10 +3,10 @@
 #include <GameObjectPtr.h>
 #include <WeakPtr.h>
 #include <functional>
+#include <Vector3.h>
 
 class StateBehavior;
 class CharacterSearcher;
-struct Vector3;
 
 class EnemyProjectileAttackState : public State
 {
@@ -25,6 +25,8 @@ public:
     };
 
 public:
+    EnemyProjectileAttackState(const Parameter& parameter);
+    void OnEnter() override;
     void OnInitialize() override;
     int OnUpdate(float elapsedTime) override;
 

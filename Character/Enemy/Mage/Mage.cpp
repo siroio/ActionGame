@@ -44,88 +44,71 @@ namespace
 
 GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const Vector3& scale)
 {
-    auto skeleton = GameObjectManager::Instantiate("EnemyMage");
-    skeleton->Layer(CollisionLayer::Enemy);
-    skeleton->Transform()->Position(position);
-    skeleton->Transform()->EulerAngles(euler);
-    skeleton->Transform()->Scale(scale);
-    auto skinned = skeleton->AddComponent<SkinnedMeshRenderer>();
+    auto mage = GameObjectManager::Instantiate("EnemyMage");
+    mage->Layer(CollisionLayer::Enemy);
+    mage->Transform()->Position(position);
+    mage->Transform()->EulerAngles(euler);
+    mage->Transform()->Scale(scale);
+    auto skinned = mage->AddComponent<SkinnedMeshRenderer>();
     skinned->MeshID(MeshID::Mage);
-    skeleton->AddComponent<Animator>();
-    skeleton->AddComponent<AudioSource>();
-    auto rigidbody = skeleton->AddComponent<Rigidbody>();
+    mage->AddComponent<Animator>();
+    mage->AddComponent<AudioSource>();
+    auto rigidbody = mage->AddComponent<Rigidbody>();
     rigidbody->Constraints(RigidbodyConstraints::FreezeRotation);
-    auto collider = skeleton->AddComponent<CapsuleCollider>();
+    auto collider = mage->AddComponent<CapsuleCollider>();
     collider->Center(BODY_COLLIDER_CENTER);
     collider->Height(BODY_COLLIDER_HEIGHT);
     collider->Radius(BODY_COLLIDER_RADIUS);
 
-    auto enemyAtk = GameObjectManager::Instantiate("EnemyATKCollider");
-    enemyAtk->Layer(CollisionLayer::EnemyAttack);
-    auto parent = skeleton->Transform()->Find(ATK_COLLIDER_PARENT);
-    enemyAtk->Transform()->Parent(parent);
-    auto atkRb = enemyAtk->AddComponent<Rigidbody>();
-    auto atkc = enemyAtk->AddComponent<BoxCollider>();
-    atkRb->IsKinematic(true);
-    atkc->IsTrigger(true);
-    atkc->IsVisible(true);
-    enemyAtk->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
-    enemyAtk->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
-    enemyAtk->Transform()->LocalScale(ATK_COLLIDER_SIZE);
-    enemyAtk->AddComponent<AttackColliderController>(atkc);
-
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
-    skeleton->AddComponent<Rotator>();
-    skeleton->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, player);
-    skeleton->AddComponent<Damageable>(30, 30, 3, EnemyState::Damage, EnemyState::Dead);
+    mage->AddComponent<Rotator>();
+    mage->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, player);
+    mage->AddComponent<Damageable>(15, 15, 0, EnemyState::Damage, EnemyState::Dead);
 
-    auto stateBehavior = skeleton->AddComponent<StateBehavior>();
+    auto stateBehavior = mage->AddComponent<StateBehavior>();
 
-    EnemyProjectileAttackState::Parameter attackParam{
-        EnemyState::Selector,
-        MagicArrow::Spawn,
-        Vector3{ 0.0f, 2.3f, -0.2f },
-        10.0f,
-        2.0f,
-        1.0f,
-    };
-    auto skAttack = skeleton->AddComponent<EnemyProjectileAttackState>(attackParam);
-    skAttack->SetAnimationInfo(AnimationInfo{ AnimationID::MageAttack });
-    stateBehavior->AddState(skAttack, EnemyState::ProjectileAttack);
+    EnemyProjectileAttackState::Parameter attackParam{};
+    attackParam.nextStateID = EnemyState::Selector;
+    attackParam.spawn = MagicArrow::Spawn;
+    attackParam.spawnPoint = Vector3{ 0.0f, 2.3f, -0.2f };
+    attackParam.flySpeed = 10.0f;
+    attackParam.duration = 2.0f;
+    attackParam.delay = 1.0f;
+    auto mgAttack = mage->AddComponent<EnemyProjectileAttackState>(attackParam);
+    mgAttack->SetAnimationInfo(AnimationInfo{ AnimationID::MageAttack });
+    stateBehavior->AddState(mgAttack, EnemyState::ProjectileAttack);
 
-    auto skSearch = skeleton->AddComponent<EnemySearchState>(0.016f);
-    skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
-    stateBehavior->AddState(skSearch, EnemyState::Search);
+    auto mgSearch = mage->AddComponent<EnemySearchState>(0.016f);
+    mgSearch->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
+    stateBehavior->AddState(mgSearch, EnemyState::Search);
 
-    EnemyChaseState::Parameter chaseParam{
-        10.0f,
-        3.0f,
-        20.0f,
-    };
-    auto skChase = skeleton->AddComponent<EnemyChaseState>(chaseParam);
-    skChase->AddNextState(EnemyState::MeleeAttack);
-    skChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, true });
-    stateBehavior->AddState(skChase, EnemyState::Chase);
+    EnemyChaseState::Parameter chaseParam{};
+    chaseParam.completeDistance = 10.0f;
+    chaseParam.moveForceMultiplier = 3.0f;
+    chaseParam.moveSpeed = 20.0f;
+    auto mgChase = mage->AddComponent<EnemyChaseState>(chaseParam);
+    mgChase->AddNextState(EnemyState::ProjectileAttack);
+    mgChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, true });
+    stateBehavior->AddState(mgChase, EnemyState::Chase);
 
-    EnemyDamageState::Parameter damageParam{
-        EnemyState::Selector,
-        0.7f,
-        0.3f,
-        20.0f,
-    };
-    auto skDamage = skeleton->AddComponent<EnemyDamageState>(damageParam);
-    skDamage->SetAnimationInfo(AnimationInfo{ AnimationID::MageDamage });
-    stateBehavior->AddState(skDamage, EnemyState::Damage);
+    EnemyDamageState::Parameter damageParam{};
+    damageParam.nextStateID = EnemyState::Selector;
+    damageParam.duration = 0.3f;
+    damageParam.moveSpeed = 3.0f;
+    damageParam.moveForceMultiplier = 20.0f;
+    auto mgDamage = mage->AddComponent<EnemyDamageState>(damageParam);
+    mgDamage->SetAnimationInfo(AnimationInfo{ AnimationID::MageDamage });
+    stateBehavior->AddState(mgDamage, EnemyState::Damage);
 
-    auto skDead = skeleton->AddComponent<EnemyDeadState>(1.12f);
-    skDead->SetAnimationInfo(AnimationInfo{ AnimationID::MageDeath });
-    stateBehavior->AddState(skDead, EnemyState::Dead);
+    auto mgDead = mage->AddComponent<EnemyDeadState>(1.12f);
+    mgDead->SetAnimationInfo(AnimationInfo{ AnimationID::MageDeath });
+    stateBehavior->AddState(mgDead, EnemyState::Dead);
 
-    auto skSelector = skeleton->AddComponent<EnemySelectorState>();
-    skSelector->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
-    skSelector->AddNextState(EnemyState::Search);
-    stateBehavior->AddState(skSelector, EnemyState::Selector);
+    auto mgSelector = mage->AddComponent<EnemySelectorState>();
+    mgSelector->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
+    mgSelector->AddNextState(EnemyState::Search);
+    stateBehavior->AddState(mgSelector, EnemyState::Selector);
 
     stateBehavior->ChangeState(EnemyState::Selector);
-    return skeleton;
+    return mage;
 }

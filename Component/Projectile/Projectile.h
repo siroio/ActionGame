@@ -7,6 +7,8 @@ namespace Glib
     class Rigidbody;
 }
 
+class Rotator;
+
 class Projectile : public Component
 {
 public:

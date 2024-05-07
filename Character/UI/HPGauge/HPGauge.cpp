@@ -14,8 +14,11 @@ using namespace Glib;
 
 namespace
 {
-    Color GAUGE_COLOR{ 0.0f, 1.0f, 0.1f };
-    Color GAUGE_BG_COLOR{ 0.2f, 0.2f, 0.2f };
+    const Vector3 GAUGE_POSITION{ 120.0f, 70.0f, 0.0f };
+    const Color GAUGE_COLOR{ 0.0f, 1.0f, 0.0f };
+    const Color GAUGE_BG_COLOR{ 0.2f, 0.2f, 0.2f };
+    const Color GAUGE_FRAME_COLOR{ 0.1f, 0.1f, 0.1f };
+    constexpr float GAUGE_SPEED{ 20.0f };
 }
 
 void HPGauge::Spawn(const GameObjectPtr& canvas)
@@ -25,7 +28,7 @@ void HPGauge::Spawn(const GameObjectPtr& canvas)
     auto hpFrame = GameObjectManager::Instantiate("HPGaugeFrame");
 
     hpBG->Transform()->Parent(canvas->Transform());
-    hpBG->Transform()->LocalPosition(Vector3{ 120.0f, 70.0f, 0.0f });
+    hpBG->Transform()->LocalPosition(GAUGE_POSITION);
     auto hpImageBG = hpBG->AddComponent<Image>();
     hpImageBG->TextureID(TextureID::HP_BG);
     hpImageBG->Center(Vector2::Zero());
@@ -37,7 +40,7 @@ void HPGauge::Spawn(const GameObjectPtr& canvas)
     hpGauge->Transform()->Parent(hpBG->Transform());
     auto hpImageGauge = hpGauge->AddComponent<Image>();
     auto controller = hpGauge->AddComponent<GaugeController>(damageable);
-    controller->Speed(2.0f);
+    controller->Speed(GAUGE_SPEED);
     hpImageGauge->TextureID(TextureID::HP_Gauge);
     hpImageGauge->Center(Vector2::Zero());
     hpImageGauge->Color(GAUGE_COLOR);
@@ -46,5 +49,5 @@ void HPGauge::Spawn(const GameObjectPtr& canvas)
     auto hpImageFrame = hpFrame->AddComponent<Image>();
     hpImageFrame->TextureID(TextureID::HP_Frame);
     hpImageFrame->Center(Vector2::Zero());
-    hpImageFrame->Color(Color::Black());
+    hpImageFrame->Color(GAUGE_FRAME_COLOR);
 }
