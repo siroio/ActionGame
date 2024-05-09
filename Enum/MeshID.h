@@ -7,5 +7,6 @@ struct MeshID
         Player,
         Skeleton,
         Mage,
+        Golem,
     };
 };

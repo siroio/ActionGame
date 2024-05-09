@@ -6,7 +6,9 @@ struct MessageID
     {
         Attacked,
         Dead,
+        BattleStart,
         BattleClear,
-        GameClear
+        GameClear,
+        GameOver,
     };
 };
