@@ -1,4 +1,4 @@
-﻿#include "Mage.h"
+﻿#include "Golem.h"
 #include <GameObject.h>
 #include <GameObjectManager.h>
 #include <Components/Transform.h>
@@ -42,7 +42,7 @@ namespace
     constexpr char ATK_COLLIDER_PARENT[]{ "Weapon" };
 }
 
-GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const Vector3& scale)
+GameObjectPtr Golem::Spawn(const Vector3& position, const Vector3& euler, const Vector3& scale)
 {
     auto mage = GameObjectManager::Instantiate("EnemyMage");
     mage->Layer(CollisionLayer::Enemy);
@@ -94,7 +94,7 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
     EnemyDamageState::Parameter damageParam{};
     damageParam.nextStateID = EnemyState::Selector;
     damageParam.duration = 0.3f;
-    damageParam.moveSpeed = 1.0f;
+    damageParam.moveSpeed = 3.0f;
     damageParam.moveForceMultiplier = 20.0f;
     auto mgDamage = mage->AddComponent<EnemyDamageState>(damageParam);
     mgDamage->SetAnimationInfo(AnimationInfo{ AnimationID::MageDamage });

@@ -107,8 +107,8 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
 
     EnemyDamageState::Parameter damageParam{
         EnemyState::Selector,
-        0.7f,
-        3.0f,
+        0.45f,
+        1.0f,
         20.0f,
     };
     auto skDamage = skeleton->AddComponent<EnemyDamageState>(damageParam);
