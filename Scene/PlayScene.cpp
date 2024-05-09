@@ -28,7 +28,7 @@ namespace
     const Vector3 LIGHT_DIRECTION{ 50.0f, -30.0f, 0.0f };
     const Color LIGHT_AMBIENT{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_DIFFUSE{ 0.7f, 0.7f, 0.7f, 1.0f };
-    const Color LIGHT_SPECULAR{ 0.1f, 0.1f, 0.1f, 0.1f };
+    const Color LIGHT_SPECULAR{ 1.0f, 1.0f, 1.0f, 1.0f };
     const unsigned int DEFAULT_SKYBOX{ 0 };
     const Vector3 MAIN_CAMERA_OFFSET{ 0.0f, 1.6f, 0.0f };
     const float MAIN_CAMERA_DISTANCE{ 2.5f };
@@ -36,27 +36,36 @@ namespace
 
 void PlayScene::Start()
 {
+    // オブジェクト生成
     Light::Spawn(LIGHT_DIRECTION, LIGHT_AMBIENT, LIGHT_DIFFUSE, LIGHT_SPECULAR);
     SkyboxManager::SetSkybox(DEFAULT_SKYBOX);
     GameObjectPtr camera = MainCamera::Spawn(MAIN_CAMERA_OFFSET, MAIN_CAMERA_DISTANCE);
     GameObjectPtr player = Player::Spawn();
-    auto hpCanvas = GameObjectManager::Instantiate("HPCanvas");
-    hpCanvas->AddComponent<Canvas>();
-    HPGauge::Spawn(hpCanvas);
-    //Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-    Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-    Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
-    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
-    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
 
+    // カメラのターゲットにプレイヤーを設定
     if (!player.expired())
     {
         auto controller = camera->GetComponentInParent<CameraController>();
-        // カメラのターゲットにプレイヤーを設定
         controller->SetTarget(player->Transform());
     }
 
-    //MagicArrow::Spawn(Vector3{ 0.0f, 2.0f, 5.0f }, 0.0f, player);
+    // UI生成
+    auto hpCanvas = GameObjectManager::Instantiate("HPCanvas");
+    hpCanvas->AddComponent<Canvas>();
+    HPGauge::Spawn(hpCanvas);
+
+#ifdef _DEBUG
+    // デバッグ時のみ
+    SafeArea::Spawn(); //UI調整用
+#endif
+
+    Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    //Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+
+    // 当たり判定のレイヤー設定
+    Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
 
     // debug stage
     auto stage = GameObjectManager::Instantiate("Stage");
@@ -67,8 +76,6 @@ void PlayScene::Start()
     auto mc = stage->AddComponent<MeshCollider>();
     mc->MeshID(4);
     mc->FlipNormals(true);
-
-    SafeArea::Spawn();
 }
 
 void PlayScene::End()
