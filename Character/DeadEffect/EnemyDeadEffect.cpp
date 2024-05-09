@@ -1,25 +1,36 @@
 ﻿#include "EnemyDeadEffect.h"
+#include <Components/AudioSource.h>
 #include <Components/EffectSystem.h>
 #include <GameObjectManager.h>
 #include <GameObject.h>
 #include <Vector3.h>
 
 #include "../../Enum/EffectID.h"
+#include "../../Enum/AudioID.h"
+#include "../../Enum/AudioGroupID.h"
 
 using namespace Glib;
 
 namespace
 {
-    const char* const EFFECT_OBJECT_NAME{ "EnemyDeadEffect" };
+    const char EFFECT_OBJECT_NAME[]{ "EnemyDeadEffect" };
+    constexpr float SE_PITCH{ 0.8f };
 }
 
 GameObjectPtr EnemyDeadEffect::Spawn(const Vector3& position)
 {
     auto deadEfk = GameObjectManager::Instantiate(EFFECT_OBJECT_NAME);
-    auto efkSystem = deadEfk->AddComponent<EffectSystem>();
-    deadEfk->Transform()->Position(position);
-    efkSystem->EffectID(EffectID::EnemyDead);
-    efkSystem->DestoryOnFinish(true);
-    efkSystem->PlayOnStart(true);
+    deadEfk->Transform()->LocalPosition(position);
+    auto effect = deadEfk->AddComponent<EffectSystem>();
+    effect->EffectID(EffectID::EnemyDead);
+    effect->DestoryOnFinish(true);
+    effect->PlayOnStart(true);
+
+    auto sound = deadEfk->AddComponent<AudioSource>();
+    sound->AudioID(AudioID::EnemyDead);
+    sound->PlayOnStart(true);
+    sound->Pitch(SE_PITCH);
+    sound->SetGroup(AudioGroupID::SE);
+
     return deadEfk;
 }
