@@ -55,7 +55,7 @@ bool Damageable::TakeDamage(int power)
     Glib::Debug::Log(GameObject()->Name() + ": HP :" + std::to_string(Health()));
     // ステートマシンを持っている場合
     // 死亡かダメージのステートへ推移
-    if (poise_ <= power) stateBehavior_->ChangeState(damageStateID_);
+    if (power >= poise_) stateBehavior_->ChangeState(damageStateID_);
     if (IsDead()) stateBehavior_->ChangeState(deadStateID_);
     return true;
 }
