@@ -7,7 +7,7 @@ namespace Glib
 }
 
 struct Vector3;
-class Damageable;
+class CharacterSearcher;
 
 class EnemyDamageState : public State
 {
@@ -37,6 +37,6 @@ private:
 
 private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Damageable> damageable_{};
+    Glib::WeakPtr<CharacterSearcher> searcher_{};
     Parameter parameter_;
 };

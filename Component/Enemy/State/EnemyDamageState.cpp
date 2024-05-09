@@ -3,7 +3,7 @@
 #include <GameObject.h>
 #include <Vector3.h>
 
-#include "../../Common/Damageable.h"
+#include "../../Enemy/CharacterSearcher.h"
 #include "../../../Utility/RigidbodyUility.h"
 
 using namespace Glib;
@@ -15,6 +15,7 @@ EnemyDamageState::EnemyDamageState(const Parameter& parameter) :
 void EnemyDamageState::OnInitialize()
 {
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
+    searcher_ = GameObject()->GetComponent<CharacterSearcher>();
 }
 
 void EnemyDamageState::OnEnter()
@@ -23,7 +24,9 @@ void EnemyDamageState::OnEnter()
 }
 
 void EnemyDamageState::OnExit()
-{}
+{
+    RigidbodyUtility::KillXZVelocity(rigidbody_);
+}
 
 int EnemyDamageState::OnUpdate(float elapsedTime)
 {
@@ -48,7 +51,18 @@ void EnemyDamageState::Move()
 
 Vector3 EnemyDamageState::GetFlinchVelocity() const
 {
-    return parameter_.moveSpeed * (GameObject()->Transform()->Rotation() * Vector3::Back());
+    Vector3 direction;
+    if (!searcher_->Target().expired())
+    {
+        // ターゲットがいたらターゲットと逆方向へ移動
+        direction = GameObject()->Transform()->Position() - searcher_->Target()->Transform()->Position();
+    }
+    else
+    {
+        // ターゲットがいなかったら後ろ方向へ移動
+        direction = -GameObject()->Transform()->Forward();
+    }
+    return parameter_.moveSpeed * direction;
 }
 
 void EnemyDamageState::OnGUI()
