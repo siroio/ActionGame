@@ -47,6 +47,8 @@ set(Character
     Character/Camera/MainCamera.cpp
     Character/DeadEffect/EnemyDeadEffect.h
     Character/DeadEffect/EnemyDeadEffect.cpp
+    Character/Enemy/Golem/Golem.h
+    Character/Enemy/Golem/Golem.cpp
     Character/Enemy/Mage/Mage.h
     Character/Enemy/Mage/Mage.cpp
     Character/Enemy/Skeleton/Skeleton.h
@@ -61,6 +63,8 @@ set(Character
     Character/Projectile/MagicArrow.cpp
     Character/UI/HPGauge/HPGauge.h
     Character/UI/HPGauge/HPGauge.cpp
+    Character/Spawner/BattelAreaSpawner.h
+    Character/Spawner/BattelAreaSpawner.cpp
 )
 
 set(Component
@@ -117,6 +121,16 @@ set(Component
     Component/StateMachine/AnimationInfo.h
     Component/StateMachine/StateBehavior.h
     Component/StateMachine/StateBehavior.cpp
+    Component/Fade/AudioFader.h
+    Component/Fade/AudioFader.cpp
+    Component/Fade/UIFader.h
+    Component/Fade/UIFader.cpp
+    Component/Battle/Area/BattleArea.h
+    Component/Battle/Area/BattleArea.cpp
+    Component/Battle/Wave/Wave.h
+    Component/Battle/Wave/Wave.cpp
+    Component/Audio/BGMController.h
+    Component/Audio/BGMController.cpp
 )
 
 set(Enum
