@@ -1,19 +1,22 @@
 ﻿#include "CameraController.h"
-
-#include "../../Constant/CameraConstant.h"
-#include "../../Constant/GameObjectName.h"
 #include <GameObjectManager.h>
 #include <GameObject.h>
 #include <GameTimer.h>
 #include <Mathf.h>
 #include <Easing.h>
+#include <Physics.h>
+#include <RaycastHit.h>
 #include <GLGUI.h>
+#include <Debugger.h>
+
+#include "../../Constant/CameraConstant.h"
+#include "../../Constant/GameObjectName.h"
+#include "../../Constant/ObjectTag.h"
 
 using namespace Glib;
 
-
 CameraController::CameraController(const CameraController::Parameter& parameter) :
-    params_{ parameter }
+    parameter_{ parameter }
 {}
 
 Vector3 CameraController::LerpAngle(const Vector3& a, const Vector3& b, float t)
@@ -48,84 +51,113 @@ void CameraController::FixedUpdate()
 {
     if (parent_.expired() || child_.expired() || camera_.expired()) return;
 
-    if (!params_.Target.expired())
+    //ObstacleDetection();
+
+    if (!parameter_.Target.expired())
     {
-        params_.Position = Vector3::Lerp(
-            params_.Position,
-            params_.Target->Position(),
-            params_.FollowSpeed * GameTimer::FixedDeltaTime()
+        const float speed = parameter_.FollowSpeed * GameTimer::FixedDeltaTime();
+        parameter_.Position = Vector3::Lerp(
+            parameter_.Position,
+            parameter_.Target->Position(),
+            Easing::Evaluate(Ease::OutQuart, speed)
         );
     }
 
-    parent_->Position(params_.Position);
-    parent_->EulerAngles(params_.Angle);
+    parent_->Position(parameter_.Position);
+    parent_->EulerAngles(parameter_.Angle);
 
     Vector3 childPoition = child_->LocalPosition();
-    childPoition.z = -params_.Distance;
+    childPoition.z = -parameter_.Distance;
     child_->LocalPosition(childPoition);
 
-    camera_->LocalPosition(params_.Offset);
-    camera_->LocalEulerAngles(params_.OffsetAngle);
+    camera_->LocalPosition(parameter_.Offset);
+    camera_->LocalEulerAngles(parameter_.OffsetAngle);
 }
 
 void CameraController::SetTarget(const WeakPtr<Transform>& target)
 {
-    params_.Target = target;
+    parameter_.Target = target;
 }
 
 CameraController::Parameter CameraController::GetParameter() const
 {
-    return params_;
+    return parameter_;
 }
 
 void CameraController::SetParameter(const Parameter& parameter)
 {
-    params_ = parameter;
+    parameter_ = parameter;
+}
+
+void CameraController::ObstacleDetection()
+{
+    const auto& target = parameter_.Target;
+    const auto& transform = GameObject()->Transform();
+    if (target.expired()) return;
+
+    // 注目対象からの方向
+    std::vector<RaycastHit> hits{};
+    bool isHit = Physics::RaycastAll(target->Position(), -target->Forward(), hits, parameter_.Distance);
+    if (!isHit) return;
+
+    float shortestPath = parameter_.Distance * parameter_.Distance;
+    for (const auto& hit : hits)
+    {
+        if (hit.gameObject.expired()) continue;
+        if (hit.gameObject->Tag() != GameTag::OBSTACLE) continue;
+        Vector3 nearestPoint = target->InverseTransformPoint(hit.point);
+        const float& distSqr = nearestPoint.SqrMagnitude();
+        if (distSqr < shortestPath)
+        {
+            shortestPath = distSqr;
+            parameter_.Position = nearestPoint;
+        }
+    }
 }
 
 void CameraController::OnGUI()
 {
     Component::OnGUI();
 
-    Vector3 position{ params_.Position };
+    Vector3 position{ parameter_.Position };
     if (GLGUI::DragVector3("Position", &position, 0.1f, 0.0f))
     {
-        params_.Position = position;
+        parameter_.Position = position;
     }
 
-    Vector3 angle{ params_.Angle };
+    Vector3 angle{ parameter_.Angle };
     if (GLGUI::DragVector3("Angle", &angle, 0.1f, 0.0f))
     {
-        params_.Angle = angle;
+        parameter_.Angle = angle;
     }
 
-    Vector3 offset{ params_.Offset };
+    Vector3 offset{ parameter_.Offset };
     if (GLGUI::DragVector3("Offset", &offset, 0.1f))
     {
-        params_.Offset = offset;
+        parameter_.Offset = offset;
     }
 
-    Vector3 offsetAngle{ params_.OffsetAngle };
+    Vector3 offsetAngle{ parameter_.OffsetAngle };
     if (GLGUI::DragVector3("OffsetAngle", &offsetAngle, 0.1f))
     {
-        params_.OffsetAngle = offsetAngle;
+        parameter_.OffsetAngle = offsetAngle;
     }
 
-    float distance{ params_.Distance };
+    float distance{ parameter_.Distance };
     if (GLGUI::DragFloat("Distance", &distance, 0.1f))
     {
-        params_.Distance = distance;
+        parameter_.Distance = distance;
     }
 
-    float followSpeed{ params_.FollowSpeed };
+    float followSpeed{ parameter_.FollowSpeed };
     if (GLGUI::DragFloat("FollowSpeed", &followSpeed, 0.1f))
     {
-        params_.FollowSpeed = followSpeed;
+        parameter_.FollowSpeed = followSpeed;
     }
 
-    float rotateSpeed{ params_.RotateSpeed };
+    float rotateSpeed{ parameter_.RotateSpeed };
     if (GLGUI::DragFloat("RotateSpeed", &rotateSpeed, 0.1f))
     {
-        params_.RotateSpeed = rotateSpeed;
+        parameter_.RotateSpeed = rotateSpeed;
     }
 }

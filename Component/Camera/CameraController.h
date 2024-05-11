@@ -33,6 +33,7 @@ public:
     void SetParameter(const Parameter& parameter);
 
 private:
+    void ObstacleDetection();
     void OnGUI() override;
 
 private:
@@ -41,5 +42,5 @@ private:
     Glib::WeakPtr<Glib::Transform> camera_{};
 
 private:
-    Parameter params_{};
+    Parameter parameter_{};
 };
