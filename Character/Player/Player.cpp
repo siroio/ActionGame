@@ -123,7 +123,7 @@ GameObjectPtr Player::Spawn()
         0.2f,
         3.0f,
         20.0f,
-        ValidityTimer{ 0.2f, 0.4f },
+        ValidityTimer{ 0.2f, 0.3f },
         0.1f,
     };
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
