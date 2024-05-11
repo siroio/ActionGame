@@ -63,8 +63,6 @@ set(Character
     Character/Projectile/MagicArrow.cpp
     Character/UI/HPGauge/HPGauge.h
     Character/UI/HPGauge/HPGauge.cpp
-    Character/Spawner/BattelAreaSpawner.h
-    Character/Spawner/BattelAreaSpawner.cpp
 )
 
 set(Component
@@ -146,6 +144,11 @@ set(Enum
     Enum/TextureID.h
 )
 
+set(Generator
+    Generator/BattleAreaGenerator.h
+    Generator/BattleAreaGenerator.cpp
+)
+
 set(Input
     Input/Input.h
     Input/Input.cpp
@@ -171,8 +174,8 @@ list(APPEND MODULES
     ${Constant}
     ${Character}
     ${Component} 
-    ${Enum} 
-    ${Context} 
+    ${Enum}  
+    ${Generator}  
     ${Input}
     ${Utility}
 )
