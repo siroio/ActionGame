@@ -1,8 +1,9 @@
 ﻿#include "Wave.h"
 #include <GameObject.h>
 
-#include "../../Common/ElapsedTimer.h"
 #include "../../../Enum/MessageID.h"
+#include "../../Common/ElapsedTimer.h"
+#include "../Area/BattleArea.h"
 
 Wave::Wave(float duration) :
     duration_{ duration }
@@ -11,6 +12,7 @@ Wave::Wave(float duration) :
 void Wave::Start()
 {
     timer_ = GameObject()->GetComponent<ElapsedTimer>();
+    battleArea_ = GameObject()->GetComponent<BattleArea>();
 }
 
 void Wave::Update()
@@ -18,25 +20,13 @@ void Wave::Update()
     if (timer_->Elapsed() <= duration_) return;
     if (!IsWaveEnd()) return;
 
-    if (HasNextWave())
-    {
-        nextWave_->GameObject()->Active(true);
-    }
-    else
-    {
-        const auto& battleArea = GameObject()->Transform()->Parent();
-        GameObject()->SendMsg(MessageID::BattleClear, nullptr, battleArea->GameObject());
-    }
-}
+    // 次のウェーブがある場合ウェーブクリアメッセージ
+    // ない場合はバトルクリアを送信
+    auto clearMsg = battleArea_->HasNextWave() ? MessageID::WaveClear : MessageID::BattleClear;
 
-void Wave::SetNextWave(const Glib::WeakPtr<Wave>& wave)
-{
-    nextWave_ = wave;
-}
-
-bool Wave::HasNextWave() const
-{
-    return !nextWave_.expired();
+    // クリアのメッセージを送信
+    const auto& battleArea = GameObject()->Transform()->Parent();
+    GameObject()->SendMsg(clearMsg, nullptr, battleArea->GameObject());
 }
 
 void Wave::WaveStart()

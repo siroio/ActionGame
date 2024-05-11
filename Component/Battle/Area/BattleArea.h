@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Component.h>
-#include <queue>
+#include <list>
 
 namespace Glib
 {
@@ -12,17 +12,31 @@ class Wave;
 
 class BattleArea : public Component
 {
+private:
+    using WavePtr = Glib::WeakPtr<Wave>;
+
 public:
     void Start();
+    void Update();
 
     /**
-     * @brief 開始ウェーブを設定
+     * @brief ウェーブを追加
      */
-    void SetStartWave(const Glib::WeakPtr<Wave>& wave);
+    void AddtWave(const WavePtr& wave);
+
+    /**
+     * @brief ウェーブを開始
+     */
+    void StartNextWave();
+
+    /**
+     * @brief 次ウェーブを確認
+     */
+    bool HasNextWave() const;
 
     void OnTriggerEnter(const GameObjectPtr& other);
 
-    void ReceiveEvent(const Glib::EventMsg& msg);
+    void ReceiveMsg(const Glib::EventMsg& msg);
 
 private:
     void StartBattle();
@@ -31,5 +45,6 @@ private:
 private:
     float range_{ 0.0f };
     Glib::WeakPtr<Glib::SphereCollider> collider_{};
-    Glib::WeakPtr<Wave> startWave_{};
+    WavePtr currentWave_{};
+    std::list<WavePtr> waves_{};
 };

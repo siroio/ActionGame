@@ -2,10 +2,10 @@
 #include <Components/SphereCollider.h>
 #include <GameObject.h>
 #include <EventMsg.h>
+#include <Debugger.h>
 
 #include "../../../Enum/MessageID.h"
 #include "../Wave/Wave.h"
-#include <Debugger.h>
 
 using namespace Glib;
 
@@ -17,9 +17,20 @@ void BattleArea::Start()
     collider_->IsVisible(true); // デバッグのみ表示
 }
 
-void BattleArea::SetStartWave(const Glib::WeakPtr<Wave>& wave)
+void BattleArea::AddtWave(const WavePtr& wave)
 {
-    startWave_ = wave;
+    waves_.push_back(wave);
+}
+
+void BattleArea::StartNextWave()
+{
+    currentWave_ = waves_.front();
+    waves_.pop_front();
+}
+
+bool BattleArea::HasNextWave() const
+{
+    return !waves_.empty();
 }
 
 void BattleArea::OnTriggerEnter(const GameObjectPtr& other)
@@ -28,23 +39,33 @@ void BattleArea::OnTriggerEnter(const GameObjectPtr& other)
     StartBattle();
 }
 
-void BattleArea::ReceiveEvent(const Glib::EventMsg& msg)
+void BattleArea::ReceiveMsg(const Glib::EventMsg& msg)
 {
-    if (msg.MsgID() != MessageID::BattleClear) return;
-    // 戦闘終了
-    EndBattle();
+    switch (msg.MsgID())
+    {
+        case MessageID::WaveClear:
+            StartNextWave();
+            return;
+        case MessageID::BattleClear:
+            EndBattle();
+            return;
+    }
 }
 
 void BattleArea::StartBattle()
 {
     Debug::Log("=== BattleStart ===");
-    if (startWave_.expired())
+
+    StartNextWave(); // ウェーブを開始
+
+    if (currentWave_.expired())
     {
         Debug::Log("BattleStart failed. \nInvalid Wave.");
         return;
     }
+
     GameObject()->SendMsg(MessageID::BattleStart, nullptr);
-    startWave_->WaveStart();
+    currentWave_->WaveStart();
 }
 
 void BattleArea::EndBattle()
