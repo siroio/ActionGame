@@ -25,10 +25,10 @@ using namespace Glib;
 
 namespace
 {
-    const Vector3 LIGHT_DIRECTION{ 50.0f, -30.0f, 0.0f };
+    const Vector3 LIGHT_DIRECTION{ 70.0f, 0.0f, 0.0f };
     const Color LIGHT_AMBIENT{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_DIFFUSE{ 0.7f, 0.7f, 0.7f, 1.0f };
-    const Color LIGHT_SPECULAR{ 1.0f, 1.0f, 1.0f, 1.0f };
+    const Color LIGHT_SPECULAR{ 0.4f, 0.4f, 0.4f, 1.0f };
     const unsigned int DEFAULT_SKYBOX{ 0 };
     const Vector3 MAIN_CAMERA_OFFSET{ 0.0f, 1.6f, 0.0f };
     const float MAIN_CAMERA_DISTANCE{ 2.5f };
