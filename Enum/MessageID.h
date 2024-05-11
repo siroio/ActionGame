@@ -8,6 +8,7 @@ struct MessageID
         Dead,
         BattleStart,
         BattleClear,
+        WaveClear,
         GameClear,
         GameOver,
     };
