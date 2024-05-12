@@ -7,8 +7,8 @@
 
 using namespace Glib;
 
-Projectile::Projectile(const Glib::WeakPtr<Glib::Transform>& target) :
-    target_{ target }
+Projectile::Projectile(const Glib::WeakPtr<Glib::Transform>& target, float hitThreshold) :
+    target_{ target }, hitThreshold_{ hitThreshold }
 {}
 
 void Projectile::Start()
@@ -18,8 +18,11 @@ void Projectile::Start()
 
 void Projectile::FixedUpdate()
 {
+    if (!isChase_) return;
+
     if (!target_.expired())
     {
+        CheckHit();
         // ターゲットの方向へ向ける
         Rotation();
     }
@@ -51,6 +54,15 @@ void Projectile::RotateSpeed(float speed)
     rotateSpeed_ = speed;
 }
 
+void Projectile::CheckHit()
+{
+    const float distance = (target_->Position() - GameObject()->Transform()->Position()).SqrMagnitude();
+    if (distance <= hitThreshold_ * hitThreshold_)
+    {
+        isChase_ = false;
+    }
+}
+
 void Projectile::Rotation()
 {
     const auto& transform = GameObject()->Transform();
@@ -71,4 +83,5 @@ void Projectile::OnGUI()
 {
     GLGUI::DragFloat("MoveSpeed", &moveSpeed_, 0.1f, 0.0f);
     GLGUI::DragFloat("RotationSpeed", &rotateSpeed_, 0.1f, 0.0f);
+    GLGUI::DragFloat("HitThreshold", &hitThreshold_, 0.1f, 0.0f);
 }
