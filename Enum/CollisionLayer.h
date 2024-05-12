@@ -10,5 +10,6 @@ struct CollisionLayer
         PlayerAttack,       // プレイヤー攻撃
         Enemy,              // 敵
         EnemyAttack,        // 敵攻撃
+        BattleArea,         // 戦闘エリア
     };
 };

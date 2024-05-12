@@ -7,5 +7,6 @@ struct AudioID
         PlayerSwing,
         EnemyDead,
         Field = 10,
+        Battle,
     };
 };
