@@ -12,11 +12,6 @@ ElapsedTimer::ElapsedTimer(const Mode& mode) :
     mode_{ mode }
 {}
 
-void ElapsedTimer::Start()
-{
-    Active(false);
-}
-
 void ElapsedTimer::Update()
 {
     float deltaTime = mode_ == Mode::Scaled ?
