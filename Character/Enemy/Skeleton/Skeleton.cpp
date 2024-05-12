@@ -65,14 +65,14 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     auto parent = skeleton->Transform()->Find(ATK_COLLIDER_PARENT);
     enemyAtk->Transform()->Parent(parent);
     auto atkRb = enemyAtk->AddComponent<Rigidbody>();
-    auto atkc = enemyAtk->AddComponent<BoxCollider>();
+    auto atkCollider = enemyAtk->AddComponent<BoxCollider>();
     atkRb->IsKinematic(true);
-    atkc->IsTrigger(true);
-    atkc->IsVisible(true);
+    atkCollider->IsTrigger(true);
+    atkCollider->IsVisible(true);
     enemyAtk->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     enemyAtk->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
     enemyAtk->Transform()->LocalScale(ATK_COLLIDER_SIZE);
-    enemyAtk->AddComponent<AttackColliderController>(atkc);
+    enemyAtk->AddComponent<AttackColliderController>(atkCollider);
 
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     skeleton->AddComponent<Rotator>();
@@ -81,12 +81,11 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
 
     auto stateBehavior = skeleton->AddComponent<StateBehavior>();
 
-    EnemyAttackState::Parameter attackParam{
-        EnemyState::Selector,
-        3,
-        1.0f,
-        ValidityTimer{ 0.5f, 0.3f },
-    };
+    EnemyAttackState::Parameter attackParam;
+    attackParam.nextStateID = EnemyState::Selector;
+    attackParam.power = 3;
+    attackParam.duration = 1.0f;
+    attackParam.attackTime = ValidityTimer{ 0.5f, 0.3f };
     auto skAttack = skeleton->AddComponent<EnemyAttackState>(attackParam);
     skAttack->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonAttack });
     stateBehavior->AddState(skAttack, EnemyState::MeleeAttack);
@@ -95,22 +94,20 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
     stateBehavior->AddState(skSearch, EnemyState::Search);
 
-    EnemyChaseState::Parameter chaseParam{
-        2.0f,
-        3.0f,
-        20.0f,
-    };
+    EnemyChaseState::Parameter chaseParam;
+    chaseParam.completeDistance = 2.0f;
+    chaseParam.moveSpeed = 3.0f;
+    chaseParam.moveForceMultiplier = 20.0f;
     auto skChase = skeleton->AddComponent<EnemyChaseState>(chaseParam);
     skChase->AddNextState(EnemyState::MeleeAttack);
     skChase->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonMove, 0.0f, 0.1f, true });
     stateBehavior->AddState(skChase, EnemyState::Chase);
 
-    EnemyDamageState::Parameter damageParam{
-        EnemyState::Selector,
-        0.45f,
-        1.0f,
-        20.0f,
-    };
+    EnemyDamageState::Parameter damageParam;
+    damageParam.nextStateID = EnemyState::Selector;
+    damageParam.duration = 0.45f;
+    damageParam.moveSpeed = 1.0f;
+    damageParam.moveForceMultiplier = 20.0f;
     auto skDamage = skeleton->AddComponent<EnemyDamageState>(damageParam);
     skDamage->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonDamage });
     stateBehavior->AddState(skDamage, EnemyState::Damage);

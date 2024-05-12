@@ -224,6 +224,7 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
     auto controller = collider->AddComponent<AttackColliderController>(boxCol);
+    boxCol->Active(false);
     rb->IsKinematic(true);
     boxCol->IsTrigger(true);
     boxCol->Size(ATK_COLLIDER_SIZE);

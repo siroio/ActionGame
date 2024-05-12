@@ -84,8 +84,8 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
 
     EnemyChaseState::Parameter chaseParam{};
     chaseParam.completeDistance = 10.0f;
-    chaseParam.moveForceMultiplier = 3.0f;
-    chaseParam.moveSpeed = 20.0f;
+    chaseParam.moveSpeed = 3.0f;
+    chaseParam.moveForceMultiplier = 20.0f;
     auto mgChase = mage->AddComponent<EnemyChaseState>(chaseParam);
     mgChase->AddNextState(EnemyState::ProjectileAttack);
     mgChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, true });
