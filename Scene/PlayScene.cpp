@@ -1,4 +1,5 @@
 ﻿#include "PlayScene.h"
+#include <Components/AudioSource.h>
 #include <Components/Canvas.h>
 #include <Components/MeshRenderer.h>
 #include <Components/MeshCollider.h>
@@ -16,16 +17,22 @@
 #include "../Character/Menu/SafeArea/SafeArea.h"
 #include "../Character/UI/HPGauge/HPGauge.h"
 #include "../Component/Camera/CameraController.h"
+#include "../Component/Audio/BGMController.h"
+#include "../Component/Fade/AudioFader.h"
+#include "../Component/Common/ElapsedTimer.h"
 #include "../Enum/CollisionLayer.h"
 #include "../Character/Projectile/MagicArrow.h"
 #include "../Character/Enemy/Mage/Mage.h"
+#include "../Generator/BattleAreaGenerator.h"
+#include "../Enum/AudioGroupID.h"
+#include "../Enum/AudioID.h"
 
 
 using namespace Glib;
 
 namespace
 {
-    const Vector3 LIGHT_DIRECTION{ 70.0f, 0.0f, 0.0f };
+    const Vector3 LIGHT_DIRECTION{ 60.0f, 290.0f, 0.0f };
     const Color LIGHT_AMBIENT{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_DIFFUSE{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_SPECULAR{ 0.4f, 0.4f, 0.4f, 1.0f };
@@ -59,13 +66,37 @@ void PlayScene::Start()
     SafeArea::Spawn(); //UI調整用
 #endif
 
-    Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-    //Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    // Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+
+    auto bgmController = GameObjectManager::Instantiate("BGMController");
+    auto bgmSource = bgmController->AddComponent<AudioSource>();
+    bgmSource->SetGroup(AudioGroupID::BGM);
+    bgmSource->AudioID(AudioID::Field);
+    bgmSource->PlayOnStart(true);
+    bgmSource->Loop(true);
+    bgmSource->Volume(0.0f);
+    auto controller = bgmController->AddComponent<BGMController>();
+    auto fader = bgmController->AddComponent<AudioFader>();
+    fader->SetVolume(1.0f);
+    fader->StartFade(5.0f);
+    bgmController->AddComponent<ElapsedTimer>();
 
     // 当たり判定のレイヤー設定
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::Stage, false);
+
     Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::BattleArea, false);
+
     Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::Stage, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::Stage, false);
 
     // debug stage
     auto stage = GameObjectManager::Instantiate("Stage");
@@ -76,6 +107,8 @@ void PlayScene::Start()
     auto mc = stage->AddComponent<MeshCollider>();
     mc->MeshID(4);
     mc->FlipNormals(true);
+
+    BattleAreaGenerator::Generate("Assets/Area");
 }
 
 void PlayScene::End()
