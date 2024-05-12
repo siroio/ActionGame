@@ -1,9 +1,10 @@
 ﻿#include "Wave.h"
 #include <GameObject.h>
+#include <GameTimer.h>
 
 #include "../../../Enum/MessageID.h"
-#include "../../Common/ElapsedTimer.h"
 #include "../Area/BattleArea.h"
+
 
 Wave::Wave(float duration) :
     duration_{ duration }
@@ -11,13 +12,16 @@ Wave::Wave(float duration) :
 
 void Wave::Start()
 {
-    timer_ = GameObject()->GetComponent<ElapsedTimer>();
-    battleArea_ = GameObject()->GetComponent<BattleArea>();
+    battleArea_ = GameObject()->GetComponentInParent<BattleArea>();
 }
 
 void Wave::Update()
 {
-    if (timer_->Elapsed() <= duration_) return;
+    if (elapsedTime_ <= duration_)
+    {
+        elapsedTime_ += Glib::GameTimer::DeltaTime();
+        return;
+    }
     if (!IsWaveEnd()) return;
 
     // 次のウェーブがある場合ウェーブクリアメッセージ
@@ -27,12 +31,12 @@ void Wave::Update()
     // クリアのメッセージを送信
     const auto& battleArea = GameObject()->Transform()->Parent();
     GameObject()->SendMsg(clearMsg, nullptr, battleArea->GameObject());
+    GameObject()->Destroy();
 }
 
 void Wave::WaveStart()
 {
-    timer_->Reset();
-    timer_->Active(true);
+    elapsedTime_ = 0.0f;
 }
 
 bool Wave::IsWaveEnd() const

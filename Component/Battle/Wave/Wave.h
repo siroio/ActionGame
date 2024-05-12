@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <Component.h>
 
-class ElapsedTimer;
 class BattleArea;
 
 class Wave : public Component
@@ -23,6 +22,6 @@ public:
 
 private:
     float duration_{ 0.0f };
-    Glib::WeakPtr<ElapsedTimer> timer_{};
+    float elapsedTime_{ 0.0f };
     Glib::WeakPtr<BattleArea> battleArea_{};
 };
