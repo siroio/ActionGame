@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <string_view>
 
-class BattleAreaGenerator
+struct BattleAreaGenerator
 {
     static void Generate(std::string_view filePath);
 };
