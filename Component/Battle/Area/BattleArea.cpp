@@ -5,24 +5,25 @@
 #include <Debugger.h>
 
 #include "../../../Enum/MessageID.h"
+#include "../../Audio/BGMController.h"
 #include "../Wave/Wave.h"
+#include "../../../Enum/AudioID.h"
 
 using namespace Glib;
 
 void BattleArea::Start()
 {
     collider_ = GameObject()->GetComponent<SphereCollider>();
-    collider_->Radius(range_);
-    collider_->IsTrigger(true);
-    collider_->IsVisible(true); // デバッグのみ表示
+    bgmController = GameObjectManager::Find("BGMController")->GetComponent<BGMController>();
 }
 
 void BattleArea::AddtWave(const WavePtr& wave)
 {
+    wave->GameObject()->Active(false);
     waves_.push_back(wave);
 }
 
-void BattleArea::StartNextWave()
+void BattleArea::SetNextWave()
 {
     currentWave_ = waves_.front();
     waves_.pop_front();
@@ -44,7 +45,8 @@ void BattleArea::ReceiveMsg(const Glib::EventMsg& msg)
     switch (msg.MsgID())
     {
         case MessageID::WaveClear:
-            StartNextWave();
+            SetNextWave();
+            StartWave();
             return;
         case MessageID::BattleClear:
             EndBattle();
@@ -56,7 +58,10 @@ void BattleArea::StartBattle()
 {
     Debug::Log("=== BattleStart ===");
 
-    StartNextWave(); // ウェーブを開始
+    // 連続して開始が呼ばれないようにオフにする
+    collider_->Active(false);
+
+    SetNextWave(); // ウェーブを設定
 
     if (currentWave_.expired())
     {
@@ -65,11 +70,20 @@ void BattleArea::StartBattle()
     }
 
     GameObject()->SendMsg(MessageID::BattleStart, nullptr);
+    bgmController->Change(AudioID::Battle);
+    StartWave();
+}
+
+void BattleArea::StartWave()
+{
+    if (currentWave_.expired()) return;
+    currentWave_->GameObject()->Active(true);
     currentWave_->WaveStart();
 }
 
 void BattleArea::EndBattle()
 {
     Debug::Log("=== BattleEnd ===");
+    bgmController->Change(AudioID::Field);
     GameObject()->Destroy();
 }

@@ -4,11 +4,12 @@
 
 namespace Glib
 {
-    class SphereCollider;
+    class Collider;
     class EventMsg;
 }
 
 class Wave;
+class BGMController;
 
 class BattleArea : public Component
 {
@@ -17,7 +18,6 @@ private:
 
 public:
     void Start();
-    void Update();
 
     /**
      * @brief ウェーブを追加
@@ -27,7 +27,7 @@ public:
     /**
      * @brief ウェーブを開始
      */
-    void StartNextWave();
+    void SetNextWave();
 
     /**
      * @brief 次ウェーブを確認
@@ -40,11 +40,12 @@ public:
 
 private:
     void StartBattle();
+    void StartWave();
     void EndBattle();
 
 private:
-    float range_{ 0.0f };
-    Glib::WeakPtr<Glib::SphereCollider> collider_{};
+    Glib::WeakPtr<Glib::Collider> collider_{};
+    Glib::WeakPtr<BGMController> bgmController{};
     WavePtr currentWave_{};
     std::list<WavePtr> waves_{};
 };
