@@ -4,6 +4,7 @@
 namespace Glib
 {
     class AudioSource;
+    class EventMsg;
 }
 class AudioFader;
 
@@ -15,7 +16,12 @@ public:
     void Change(unsigned int id);
 
 private:
+    void OnGUI() override;
+
+private:
     Glib::WeakPtr<Glib::AudioSource> audioSource_{};
     Glib::WeakPtr<AudioFader> fader_{};
-    int nextBGMID{ -1 };
+    float fadeDuration_{ 0.5f };
+    bool onChange_{ false };
+    int nextBGMID_{ -1 };
 };
