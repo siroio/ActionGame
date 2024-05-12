@@ -7,14 +7,9 @@
 
 using namespace Glib;
 
-AttackColliderController::AttackColliderController(const WeakPtr<Collider>& collider) :
-    collider_{ collider }
+AttackColliderController::AttackColliderController(const WeakPtr<Collider>& collider, bool onHitDestroy) :
+    collider_{ collider }, onHitDestroy_{ onHitDestroy }
 {}
-
-void AttackColliderController::Start()
-{
-    collider_->Active(false);
-}
 
 void AttackColliderController::SetAttackActive(bool enable)
 {
@@ -37,5 +32,10 @@ void AttackColliderController::OnTriggerEnter(const GameObjectPtr& other)
         // 攻撃成功時メッセージを送信
         // ID, 攻撃相手
         GameObject()->SendMsg(MessageID::Attacked, other);
+    }
+
+    if (onHitDestroy_)
+    {
+        GameObject()->Destroy();
     }
 }

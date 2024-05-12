@@ -10,12 +10,7 @@ namespace Glib
 class AttackColliderController : public Component
 {
 public:
-    AttackColliderController(const Glib::WeakPtr<Glib::Collider>& collider);
-
-    /**
-     * @brief 初期化
-     */
-    void Start();
+    AttackColliderController(const Glib::WeakPtr<Glib::Collider>& collider, bool onHitDestroy = false);
 
     /**
      * @brief 攻撃判定の有効切り替え
@@ -38,4 +33,5 @@ public:
 private:
     Glib::WeakPtr<Glib::Collider> collider_;
     int power_{ 0 };
+    bool onHitDestroy_{ false };
 };
