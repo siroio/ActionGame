@@ -17,17 +17,22 @@ void AudioFader::Start()
 
 void AudioFader::Update()
 {
-    if (InvalidFader() || !isCrossFade_) return;
+    if (InvalidFader() || !isFade_) return;
     UpdateFade();
 }
 
 void AudioFader::StartFade(float duration)
 {
-    isCrossFade_ = true;
-    elapsedTimer_->Reset();
-    elapsedTimer_->Active(true);
+    isFade_ = true;
     duration_ = duration;
-    startVolume_ = audioSource_->Volume();
+    if (!elapsedTimer_.expired())
+    {
+        elapsedTimer_->Reset();
+    }
+    if (!audioSource_.expired())
+    {
+        startVolume_ = audioSource_->Volume();
+    }
 }
 
 bool AudioFader::IsEndFade()
@@ -45,11 +50,7 @@ void AudioFader::UpdateFade()
     float t = Mathf::Min(elapsedTimer_->Elapsed() / duration_, 1.0f);
     float volume = Mathf::Lerp(startVolume_, endVolume_, t);
     audioSource_->Volume(volume);
-    if (t >= 1.0f)
-    {
-        isCrossFade_ = false;
-        elapsedTimer_->Active(false);
-    }
+    if (t >= 1.0f) isFade_ = false;
 }
 
 bool AudioFader::InvalidFader()

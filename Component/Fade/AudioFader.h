@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <Component.h>
+#include <functional>
 
 namespace Glib
 {
@@ -32,5 +33,5 @@ private:
     float duration_{ 0.0f };
     float startVolume_{ 0.0f };
     float endVolume_{ 0.0f };
-    bool isCrossFade_{ false };
+    bool isFade_{ false };
 };
