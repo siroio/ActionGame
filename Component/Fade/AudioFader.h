@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Component.h>
 #include <functional>
+#include <Easing.h>
 
 namespace Glib
 {
@@ -23,6 +24,12 @@ public:
      */
     void SetVolume(float endVolume);
 
+    /**
+     * @brief 補完方法を設定
+     * @param type
+     */
+    void SetEase(Ease type);
+
 private:
     void UpdateFade();
     bool InvalidFader();
@@ -34,4 +41,5 @@ private:
     float startVolume_{ 0.0f };
     float endVolume_{ 0.0f };
     bool isFade_{ false };
+    Ease easeType_{ Ease::Linear };
 };

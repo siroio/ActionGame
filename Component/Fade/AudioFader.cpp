@@ -45,9 +45,14 @@ void AudioFader::SetVolume(float endVolume)
     endVolume_ = endVolume;
 }
 
+void AudioFader::SetEase(Ease type)
+{
+    easeType_ = type;
+}
+
 void AudioFader::UpdateFade()
 {
-    float t = Mathf::Min(elapsedTimer_->Elapsed() / duration_, 1.0f);
+    float t = Easing::Evaluate(easeType_, elapsedTimer_->Elapsed(), duration_);
     float volume = Mathf::Lerp(startVolume_, endVolume_, t);
     audioSource_->Volume(volume);
     if (t >= 1.0f) isFade_ = false;
