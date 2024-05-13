@@ -72,6 +72,8 @@ set(Component
     Component/Common/Damageable.cpp
     Component/Common/DelayedAudioPlayer.h
     Component/Common/DelayedAudioPlayer.cpp
+    Component/Common/EffectSpawner.h
+    Component/Common/EffectSpawner.cpp
     Component/Common/ElapsedTimer.h
     Component/Common/ElapsedTimer.cpp
     Component/Common/GaugeController.h
