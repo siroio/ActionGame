@@ -6,13 +6,13 @@
 #include "../Fade/AudioFader.h"
 #include "../../Enum/MessageID.h"
 
-
 using namespace Glib;
 
 void BGMController::Start()
 {
     audioSource_ = GameObject()->GetComponent<AudioSource>();
     fader_ = GameObject()->GetComponent<AudioFader>();
+    fader_->SetEase(Ease::OutQuart);
 }
 
 void BGMController::Update()

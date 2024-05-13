@@ -21,7 +21,7 @@ private:
 private:
     Glib::WeakPtr<Glib::AudioSource> audioSource_{};
     Glib::WeakPtr<AudioFader> fader_{};
-    float fadeDuration_{ 0.5f };
+    float fadeDuration_{ 2.0f };
     bool onChange_{ false };
     int nextBGMID_{ -1 };
 };
