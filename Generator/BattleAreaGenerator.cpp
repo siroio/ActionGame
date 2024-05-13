@@ -126,11 +126,11 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
                     enemy.position = Vector3{ position["X"], position["Y"], position["Z"] };
                     enemy.euler = Vector3{ euler["X"], euler["Y"], euler["Z"] };
                     enemy.scale = Vector3{ scale["X"], scale["Y"], scale["Z"] };
-                    wave.enemies.push_back(enemy);
+                    wave.enemies.push_back(std::move(enemy));
                 }
-                area.waves.push_back(wave);
+                area.waves.push_back(std::move(wave));
             }
-            areas.push_back(area);
+            areas.push_back(std::move(area));
         }
     }
     catch (const std::exception& ex)
@@ -141,7 +141,7 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
 
     for (const auto& area : areas)
     {
-        auto areaObject = GameObjectManager::Instantiate(area.name);
+        GameObjectPtr areaObject = GameObjectManager::Instantiate(area.name);
         areaObject->Transform()->Position(area.position);
         areaObject->Layer(CollisionLayer::BattleArea);
         areaObject->AddComponent<ElapsedTimer>();
@@ -152,7 +152,7 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
         areaRigidbody->IsKinematic(true);
         areaCollider->IsTrigger(true);
         areaCollider->IsVisible(true);
-        areaCollider->Radius(10.0f);
+        areaCollider->Radius(area.range);
 
         for (const auto& wave : area.waves)
         {
@@ -163,8 +163,9 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
 
             for (const auto& enemy : wave.enemies)
             {
-                if (!createFunctions.contains(enemy.type)) return;
-                auto enemyObject = createFunctions.at(enemy.type)(enemy.position, enemy.euler, enemy.scale);
+                const auto& createFunction = createFunctions.find(enemy.type);
+                if (createFunction == createFunctions.end()) return;
+                GameObjectPtr enemyObject = createFunction->second(enemy.position, enemy.euler, enemy.scale);
                 enemyObject->Transform()->Parent(waveObject->Transform());
             }
             waveObject->Active(false);
