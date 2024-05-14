@@ -11,7 +11,7 @@ namespace Glib
 class CharacterSearcher : public Component
 {
 public:
-    CharacterSearcher(float fov, float distance = Mathf::POSITIVE_INFINITY, GameObjectPtr target = nullptr);
+    CharacterSearcher(float fov, float distance = Mathf::POSITIVE_INFINITY, float noticeRange = 1.0f, GameObjectPtr target = nullptr);
 
     /**
      * @brief 視界の距離を取得
@@ -58,4 +58,5 @@ private:
     GameObjectPtr target_{};
     float distance_{ };
     float fov_{ 0.0f };
+    float noticeRange_{ 0.0f };
 };

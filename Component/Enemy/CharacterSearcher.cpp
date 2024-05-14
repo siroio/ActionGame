@@ -3,8 +3,8 @@
 #include <GameObject.h>
 #include <GLGUI.h>
 
-CharacterSearcher::CharacterSearcher(float fov, float distance, GameObjectPtr target) :
-    fov_{ fov }, distance_{ distance }, target_{ target }
+CharacterSearcher::CharacterSearcher(float fov, float distance, float noticeRange, GameObjectPtr target) :
+    fov_{ fov }, distance_{ distance }, target_{ target }, noticeRange_{ noticeRange }
 {}
 
 float CharacterSearcher::Distance() const
@@ -49,8 +49,12 @@ bool CharacterSearcher::TargetInView() const
     forward.y = 0.0f;
     toTarget.y = 0.0f;
 
+    // プレイヤーまでの距離の2乗
+    float distanceSqr = toTarget.SqrMagnitude();
+
     // 一定距離離れているか？
-    if (toTarget.SqrMagnitude() > distance_ * distance_) return false;
+    if (distanceSqr > distance_ * distance_) return false;
+    if (distanceSqr <= noticeRange_ * noticeRange_) return true;
 
     // fovの内側か？
     float angle = Vector3::Angle(forward, toTarget.Normalized());
@@ -60,4 +64,5 @@ bool CharacterSearcher::TargetInView() const
 void CharacterSearcher::OnGUI()
 {
     Glib::GLGUI::DragFloat("Fov", &fov_, 0.1f, 0.0f, 90.0f);
+    Glib::GLGUI::DragFloat("NoticeRange", &noticeRange_, 0.1f, 0.0f);
 }
