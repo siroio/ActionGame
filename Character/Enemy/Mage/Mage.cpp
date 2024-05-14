@@ -62,7 +62,7 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
 
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     mage->AddComponent<Rotator>();
-    mage->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, player);
+    mage->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, 2.0f, player);
     mage->AddComponent<Damageable>(15, 15, 0, EnemyState::Damage, EnemyState::Dead);
 
     auto stateBehavior = mage->AddComponent<StateBehavior>();
