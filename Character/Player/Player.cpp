@@ -68,7 +68,7 @@ GameObjectPtr Player::Spawn()
     auto playerEfk = GameObjectManager::Instantiate("PlayerSlashEffect");
     player->Layer(CollisionLayer::Player);
     playerAtk->Layer(CollisionLayer::PlayerAttack);
-
+    player->Transform()->Position(Vector3{ 0, 0, 3 });
     SetMesh(player);
     SetDefaultAnimation(player);
     SetBodyCollider(player);
