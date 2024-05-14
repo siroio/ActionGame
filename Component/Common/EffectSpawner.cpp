@@ -4,7 +4,7 @@
 #include <Vector3.h>
 
 EffectSpawner::EffectSpawner(const SpawnFunction& function, unsigned int id) :
-    function_{ function }, messageID_{ id }
+    function_{ function }, messageID_{ static_cast<int>(id) }
 {}
 
 void EffectSpawner::Spawn(const Vector3& position)
