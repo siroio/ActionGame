@@ -67,7 +67,7 @@ void PlayScene::Start()
 #endif
 
     // Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-    Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    // Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
 
     auto bgmController = GameObjectManager::Instantiate("BGMController");
     auto bgmSource = bgmController->AddComponent<AudioSource>();
