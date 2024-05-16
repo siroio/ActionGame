@@ -37,7 +37,7 @@ private:
     Glib::WeakPtr<Glib::Image> image_{};
     Glib::WeakPtr<ElapsedTimer> elapsedTimer_{};
     float duration_{ 0.0f };
-    float startAlpha_{ 0.0f };
+    float startAlpha_{ 1.0f };
     float endAlpha_{ 0.0f };
     bool isCrossFade_{ false };
     Ease easeType_{ Ease::Linear };
