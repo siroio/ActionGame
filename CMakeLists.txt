@@ -47,6 +47,8 @@ set(Character
     Character/Camera/MainCamera.cpp
     Character/DeadEffect/EnemyDeadEffect.h
     Character/DeadEffect/EnemyDeadEffect.cpp
+    Character/HitEffect/HitEffect.h
+    Character/HitEffect/HitEffect.cpp
     Character/Enemy/Golem/Golem.h
     Character/Enemy/Golem/Golem.cpp
     Character/Enemy/Mage/Mage.h
@@ -63,6 +65,8 @@ set(Character
     Character/Projectile/MagicArrow.cpp
     Character/UI/HPGauge/HPGauge.h
     Character/UI/HPGauge/HPGauge.cpp
+    Character/UI/ScreenFader/ScreenFader.h
+    Character/UI/ScreenFader/ScreenFader.cpp
 )
 
 set(Component
@@ -74,6 +78,8 @@ set(Component
     Component/Common/DelayedAudioPlayer.cpp
     Component/Common/EffectSpawner.h
     Component/Common/EffectSpawner.cpp
+    Component/Common/ElapsedDestroyObject.h
+    Component/Common/ElapsedDestroyObject.cpp
     Component/Common/ElapsedTimer.h
     Component/Common/ElapsedTimer.cpp
     Component/Common/GaugeController.h
