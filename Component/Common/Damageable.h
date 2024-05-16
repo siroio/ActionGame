@@ -50,6 +50,9 @@ public:
     bool TakeDamage(int power);
 
 private:
+    void OnGUI() override;
+
+private:
     int health_{ 0 };
     int maxHealth_{ 0 };
     int poise_{ 0 };

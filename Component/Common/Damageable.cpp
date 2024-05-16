@@ -4,6 +4,9 @@
 
 #include "../StateMachine/StateBehavior.h"
 #include <Debugger.h>
+#include <GLGUI.h>
+
+using namespace Glib;
 
 Damageable::Damageable(int health, int maxHealth, int poise, int damageStateID, int deadStateID) :
     health_{ health }, maxHealth_{ maxHealth }, poise_{ poise },
@@ -52,10 +55,18 @@ bool Damageable::TakeDamage(int power)
     // ダメージを与える
     // マイナス値の攻撃を与えられないようにMaxで0に丸める
     health_ -= Mathf::Max(power, 0);
-    Glib::Debug::Log(GameObject()->Name() + ": HP :" + std::to_string(Health()));
+    Debug::Log(GameObject()->Name() + ": HP :" + std::to_string(Health()));
     // ステートマシンを持っている場合
     // 死亡かダメージのステートへ推移
     if (power >= poise_) stateBehavior_->ChangeState(damageStateID_);
     if (IsDead()) stateBehavior_->ChangeState(deadStateID_);
     return true;
+}
+
+void Damageable::OnGUI()
+{
+    GLGUI::InputInt("MaxHealth", &maxHealth_);
+    GLGUI::InputInt("Health", &health_);
+    GLGUI::InputInt("Poise", &poise_);
+    GLGUI::CheckBox("Invincible", &invincible_);
 }
