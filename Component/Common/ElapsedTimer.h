@@ -1,6 +1,12 @@
 ﻿#pragma once
 #include <Component.h>
 
+enum class TimerScale
+{
+    Scaled,
+    UnScaled,
+};
+
 /**
  * @brief タイマークラス
  * @brief コンポーネントがアクティブな時間を計測
@@ -8,14 +14,7 @@
 class ElapsedTimer : public Component
 {
 public:
-    enum class Mode
-    {
-        Scaled,
-        UnScaled,
-    };
-
-public:
-    ElapsedTimer(const Mode& mode = Mode::Scaled);
+    ElapsedTimer(const TimerScale& mode = TimerScale::Scaled);
     void Update();
 
     /**
@@ -33,6 +32,6 @@ private:
     void OnGUI() override;
 
 private:
-    Mode mode_{ Mode::Scaled };
+    TimerScale mode_{ TimerScale::Scaled };
     float elapsedTime_{ 0.0f };
 };

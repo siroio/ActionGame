@@ -8,13 +8,13 @@ namespace
     const char* const MEASURE_TYPE[2]{ "Scaled", "Unscaled" };
 }
 
-ElapsedTimer::ElapsedTimer(const Mode& mode) :
+ElapsedTimer::ElapsedTimer(const TimerScale& mode) :
     mode_{ mode }
 {}
 
 void ElapsedTimer::Update()
 {
-    float deltaTime = mode_ == Mode::Scaled ?
+    float deltaTime = mode_ == TimerScale::Scaled ?
         Glib::GameTimer::DeltaTime() :
         Glib::GameTimer::UnscaledDeltaTime();
 
