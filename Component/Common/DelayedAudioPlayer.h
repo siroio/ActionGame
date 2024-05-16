@@ -4,6 +4,7 @@
 namespace Glib
 {
     class AudioSource;
+    class EventMsg;
 }
 
 class ElapsedTimer;
@@ -24,6 +25,18 @@ public:
      * @brief 停止
      */
     void Stop();
+
+    /**
+     * @brief 再生するAudioClipのIDを設定
+     * @param id
+     */
+    void SetClip(unsigned int id);
+
+    /**
+     * @brief 再生するAudioClipのピッチを設定
+     * @param id
+     */
+    void SetPitch(float pitch);
 
 private:
     Glib::WeakPtr<Glib::AudioSource> audioSource_{};

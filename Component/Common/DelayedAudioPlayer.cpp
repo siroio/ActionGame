@@ -1,6 +1,7 @@
 ﻿#include "DelayedAudioPlayer.h"
 #include <Components/AudioSource.h>
 #include <GameObject.h>
+#include <EventMsg.h>
 
 #include "ElapsedTimer.h"
 
@@ -13,7 +14,7 @@ void DelayedAudioPlayer::Start()
 
 void DelayedAudioPlayer::Update()
 {
-    if (elapsedTimer_->Active()) return;
+    if (!elapsedTimer_->Active()) return;
     if (elapsedTimer_->Elapsed() < delayTime_) return;
 
     audioSource_->Play();
@@ -31,7 +32,21 @@ void DelayedAudioPlayer::Play(float delay)
 
 void DelayedAudioPlayer::Stop()
 {
-    // 再生と計測を停止
+    if (audioSource_.expired() || elapsedTimer_.expired()) return;
+    // 再生を停止
     audioSource_->Stop();
-    elapsedTimer_->Active(false);
+    elapsedTimer_->Reset();
+    elapsedTimer_->Active(true);
+}
+
+void DelayedAudioPlayer::SetClip(unsigned int id)
+{
+    if (audioSource_.expired()) return;
+    audioSource_->AudioID(id);
+}
+
+void DelayedAudioPlayer::SetPitch(float pitch)
+{
+    if (audioSource_.expired()) return;
+    audioSource_->Pitch(pitch);
 }
