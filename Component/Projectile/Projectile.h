@@ -30,6 +30,7 @@ private:
 private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Glib::WeakPtr<Glib::Transform> target_{};
+    Glib::WeakPtr<Rotator> rotator_{};
     float moveSpeed_{ 10.0f };
     float rotateSpeed_{ 5.0f };
     float hitThreshold_{ 1.2f };

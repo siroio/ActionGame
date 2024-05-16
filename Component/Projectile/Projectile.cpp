@@ -5,6 +5,8 @@
 #include <GameTimer.h>
 #include <GLGUI.h>
 
+#include "../../Common/Rotator.h"
+
 using namespace Glib;
 
 Projectile::Projectile(const Glib::WeakPtr<Glib::Transform>& target, float hitThreshold) :
@@ -14,17 +16,17 @@ Projectile::Projectile(const Glib::WeakPtr<Glib::Transform>& target, float hitTh
 void Projectile::Start()
 {
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
+    rotator_ = GameObject()->GetComponent<Rotator>();
 }
 
 void Projectile::FixedUpdate()
 {
-    if (!isChase_) return;
-
-    if (!target_.expired())
+    if (!target_.expired() && isChase_)
     {
-        CheckHit();
         // ターゲットの方向へ向ける
         Rotation();
+
+        CheckHit();
     }
 
     if (!rigidbody_.expired())
@@ -67,9 +69,7 @@ void Projectile::Rotation()
 {
     const auto& transform = GameObject()->Transform();
     Vector3 direction = (target_->Position() - transform->Position()).Normalized();
-    Quaternion rotation = Quaternion::LookRotation(direction);
-    float speed = rotateSpeed_ * GameTimer::FixedDeltaTime();
-    transform->Rotation(Quaternion::Slerp(transform->Rotation(), rotation, speed));
+    rotator_->Direction(direction);
 }
 
 void Projectile::Move()
