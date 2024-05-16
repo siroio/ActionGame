@@ -76,7 +76,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
 
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     skeleton->AddComponent<Rotator>();
-    skeleton->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, 2.0f, player);
+    skeleton->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, 7.0f, player);
     skeleton->AddComponent<Damageable>(30, 30, 3, EnemyState::Damage, EnemyState::Dead);
 
     auto stateBehavior = skeleton->AddComponent<StateBehavior>();
@@ -118,7 +118,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
 
     auto skSelector = skeleton->AddComponent<EnemySelectorState>();
     skSelector->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
-    skSelector->AddNextState(EnemyState::Search);
+    skSelector->AddNextState(EnemyState::Chase);
     stateBehavior->AddState(skSelector, EnemyState::Selector);
 
     stateBehavior->ChangeState(EnemyState::Selector);

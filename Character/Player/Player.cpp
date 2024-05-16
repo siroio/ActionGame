@@ -19,7 +19,10 @@
 #include "../../Enum/MessageID.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Component/Common/AttackColliderController.h"
+#include "../../Component/Common/DelayedAudioPlayer.h"
 #include "../../Component/Common/Damageable.h"
+#include "../../Component/Common/ElapsedTimer.h"
+#include "../../Component/Common/EffectSpawner.h"
 #include "../../Component/Common/Rotator.h"
 #include "../../Component/StateMachine/StateBehavior.h"
 #include "../../Component/StateMachine/AnimationInfo.h"
@@ -29,6 +32,7 @@
 #include "../../Component/Player/State/PlayerDamageState.h"
 #include "../../Component/Player/State/PlayerDeadState.h"
 #include "../../Component/Player/HitStop.h"
+#include "../HitEffect/HitEffect.h"
 
 using namespace Glib;
 
@@ -76,6 +80,7 @@ GameObjectPtr Player::Spawn()
 
     auto audio = player->AddComponent<AudioSource>();
     audio->SetGroup(AudioGroupID::SE);
+
     auto slashEfk = playerEfk->AddComponent<EffectSystem>();
     playerEfk->Transform()->Parent(playerAtk->Transform()->Parent());
     playerEfk->Transform()->LocalPosition(EFK_OFFSET_POSITION);
@@ -83,6 +88,8 @@ GameObjectPtr Player::Spawn()
     slashEfk->EffectID(EffectID::SwordSwing);
     slashEfk->Speed(EFK_PLAY_SPEED);
 
+    player->AddComponent<DelayedAudioPlayer>();
+    player->AddComponent<ElapsedTimer>();
     player->AddComponent<Rotator>();
     player->AddComponent<Damageable>(100, 100, 5, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
@@ -229,4 +236,5 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     boxCol->IsTrigger(true);
     boxCol->Size(ATK_COLLIDER_SIZE);
     collider->AddComponent<HitStop>(HITSTOP_MSG, HITSTOP_DURATION, HITSTOP_TIMESCALE);
+    collider->AddComponent<EffectSpawner>(HitEffect::Spawn, MessageID::Attacked);
 }
