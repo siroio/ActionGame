@@ -13,31 +13,37 @@ namespace
 
 void RigidbodyUtility::KillVelocity(const RigidbodyPtr& rigidbody)
 {
+    if (rigidbody.expired()) return;
     rigidbody->LinearVelocity(Vector3::Zero());
 }
 
 void RigidbodyUtility::KillXVelocity(const RigidbodyPtr& rigidbody)
 {
+    if (rigidbody.expired()) return;
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), XVECTOR));
 }
 
 void RigidbodyUtility::KillYVelocity(const RigidbodyPtr& rigidbody)
 {
+    if (rigidbody.expired()) return;
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), YVECTOR));
 }
 
 void RigidbodyUtility::KillZVelocity(const RigidbodyPtr& rigidbody)
 {
+    if (rigidbody.expired()) return;
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), ZVECTOR));
 }
 
 void RigidbodyUtility::KillXZVelocity(const RigidbodyPtr& rigidbody)
 {
+    if (rigidbody.expired()) return;
     rigidbody->LinearVelocity(Vector3::Scale(rigidbody->LinearVelocity(), XZVECTOR));
 }
 
 Vector3 RigidbodyUtility::GetMoveVelocity(const RigidbodyPtr& rigidbody, const float moveForceMultiplier, const Vector3& moveSpeed)
 {
+    if (rigidbody.expired()) return Vector3::Zero();
     // y軸方向を無視して重力を無効化しないようにする
     Vector3 ignoreYVelocity = rigidbody->LinearVelocity();
     ignoreYVelocity.y = 0.0f;
