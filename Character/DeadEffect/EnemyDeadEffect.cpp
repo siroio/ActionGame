@@ -28,6 +28,7 @@ GameObjectPtr EnemyDeadEffect::Spawn(const Vector3& position)
 
     auto sound = deadEfk->AddComponent<AudioSource>();
     sound->AudioID(AudioID::EnemyDead);
+    sound->Is3DSound(true);
     sound->PlayOnStart(true);
     sound->Pitch(SE_PITCH);
     sound->SetGroup(AudioGroupID::SE);
