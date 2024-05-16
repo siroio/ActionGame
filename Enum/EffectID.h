@@ -7,5 +7,6 @@ struct EffectID
         SwordSwing,
         EnemyDead,
         MagicArrow,
+        HitEffect,
     };
 };
