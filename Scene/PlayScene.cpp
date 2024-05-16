@@ -23,6 +23,7 @@
 #include "../Enum/CollisionLayer.h"
 #include "../Character/Projectile/MagicArrow.h"
 #include "../Character/Enemy/Mage/Mage.h"
+#include "../Character/UI/ScreenFader/ScreenFader.h"
 #include "../Generator/BattleAreaGenerator.h"
 #include "../Enum/AudioGroupID.h"
 #include "../Enum/AudioID.h"
@@ -66,8 +67,7 @@ void PlayScene::Start()
     SafeArea::Spawn(); //UI調整用
 #endif
 
-    // Skeleton::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
-    // Mage::Spawn(Vector3{ 0, 0, 5 }, Vector3::Zero(), Vector3::One());
+    ScreenFader::Create(2.0f, true, TimerScale::Scaled);
 
     auto bgmController = GameObjectManager::Instantiate("BGMController");
     auto bgmSource = bgmController->AddComponent<AudioSource>();
