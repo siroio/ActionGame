@@ -20,6 +20,13 @@ void Rotator::Update()
     transform_->LocalRotation(rotation);
 }
 
+bool Rotator::IsCompleteRotate() const
+{
+    Quaternion targetRotation = transform_->Rotation() * Quaternion::FromToRotation(transform_->Forward(), direction_);
+    float angle = Quaternion::Angle(transform_->Rotation(), targetRotation);
+    return angle < 0.1f;// ある程度小さい角度
+}
+
 void Rotator::Direction(const Vector3& direction)
 {
     direction_ = direction;

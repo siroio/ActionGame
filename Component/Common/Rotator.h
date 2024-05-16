@@ -13,6 +13,11 @@ class Rotator : public Component
 public:
     void Start();
     void Update();
+
+    /**
+     * @brief 回転が終了したのか
+     */
+    bool IsCompleteRotate() const;
     void Direction(const Vector3& direction);
     const Vector3& Direction() const;
 
@@ -21,7 +26,6 @@ private:
 
 private:
     Glib::WeakPtr<Glib::Transform> transform_;
-
-    float turnSpeed_{ 15.0f };
     Vector3 direction_{ Vector3::Forward() };
+    float turnSpeed_{ 15.0f };
 };
