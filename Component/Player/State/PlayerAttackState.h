@@ -14,6 +14,7 @@ namespace Glib
 struct Vector3;
 class Rotator;
 class AttackColliderController;
+class DelayedAudioPlayer;
 
 class PlayerAttackState : public State
 {
@@ -67,8 +68,8 @@ private:
 private:
     Glib::WeakPtr<Glib::Transform> camera_{};
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Glib::AudioSource> audio_{};
     Glib::WeakPtr<Glib::EffectSystem> slashEfk_{};
+    Glib::WeakPtr<DelayedAudioPlayer> audio_{};
     Glib::WeakPtr<Rotator> rotator_{};
     Glib::WeakPtr<AttackColliderController> attackCollider_{};
     Parameter parameter_;

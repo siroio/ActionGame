@@ -17,7 +17,6 @@ PlayerDamageState::PlayerDamageState(const Parameter& parameter) :
 void PlayerDamageState::OnInitialize()
 {
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
-    audio_ = GameObject()->GetComponent<AudioSource>();
 }
 
 void PlayerDamageState::OnEnter()

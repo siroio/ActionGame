@@ -10,6 +10,7 @@
 
 #include "../../Common/Rotator.h"
 #include "../../Common/AttackColliderController.h"
+#include "../../Common/DelayedAudioPlayer.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Input/Input.h"
@@ -23,6 +24,7 @@ using namespace Glib;
 namespace
 {
     const Vector2 SE_PITCH_RANGE{ 0.8f, 1.2f };
+    constexpr float SE_DELAY{ 0.15f };
 }
 
 PlayerAttackState::PlayerAttackState(const Parameter& parameter, const WeakPtr<EffectSystem>& slash) :
@@ -34,7 +36,7 @@ void PlayerAttackState::OnInitialize()
     const auto& camera = GameObjectManager::Find(ObjectName::Camera);
     camera_ = camera->Transform();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
-    audio_ = GameObject()->GetComponent<AudioSource>();
+    audio_ = GameObject()->GetComponent<DelayedAudioPlayer>();
     rotator_ = GameObject()->GetComponent<Rotator>();
     attackCollider_ = GameObject()->GetComponentInChildren<AttackColliderController>();
 }
@@ -42,9 +44,9 @@ void PlayerAttackState::OnInitialize()
 void PlayerAttackState::OnEnter()
 {
     if (!slashEfk_.expired()) slashEfk_->Play();
-    audio_->AudioID(parameter_.attackSEID);
-    audio_->Pitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
-    audio_->Play();
+    audio_->SetClip(parameter_.attackSEID);
+    audio_->SetPitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
+    audio_->Play(SE_DELAY);
     rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
     attackCollider_->SetAttackPower(parameter_.power);
     RigidbodyUtility::KillXZVelocity(rigidbody_);

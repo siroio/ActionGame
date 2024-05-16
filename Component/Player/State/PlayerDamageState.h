@@ -41,6 +41,5 @@ private:
 
 private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
-    Glib::WeakPtr<Glib::AudioSource> audio_{};
     Parameter parameter_;
 };
