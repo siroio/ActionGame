@@ -7,6 +7,7 @@
 #include "../../Common/Rotator.h"
 #include "../CharacterSearcher.h"
 #include "../../../Utility/RigidbodyUility.h"
+#include <GLGUI.h>
 
 using namespace Glib;
 
@@ -28,7 +29,7 @@ void EnemyChaseState::OnInitialize()
 
 int EnemyChaseState::OnUpdate(float)
 {
-    if (CompleteMove())
+    if (CompleteMove() && !stateIDs_.empty())
     {
         const int idx = Random::Range(0, static_cast<unsigned int>(stateIDs_.size()));
         return stateIDs_.at(idx);
@@ -71,4 +72,11 @@ Vector3 EnemyChaseState::ToTargetDistance()
 Vector3 EnemyChaseState::MoveSpeed(const Vector3& direction)
 {
     return RigidbodyUtility::GetMoveVelocity(rigibody_, parameter_.moveForceMultiplier, direction * parameter_.moveSpeed);
+}
+
+void EnemyChaseState::OnGUI()
+{
+    GLGUI::DragFloat("Distance", &parameter_.completeDistance, 0.1f);
+    GLGUI::DragFloat("MoveSpeed", &parameter_.moveSpeed, 0.1f);
+    GLGUI::DragFloat("MoveForce", &parameter_.moveForceMultiplier, 0.1f);
 }

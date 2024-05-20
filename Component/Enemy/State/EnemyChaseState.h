@@ -35,6 +35,9 @@ private:
     Vector3 MoveSpeed(const Vector3& direction);
 
 private:
+    void OnGUI() override;
+
+private:
     Glib::WeakPtr<Glib::Rigidbody> rigibody_{};
     Glib::WeakPtr<CharacterSearcher> searcher_{};
     Glib::WeakPtr<Rotator> rotator_{};

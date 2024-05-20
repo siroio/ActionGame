@@ -2,6 +2,7 @@
 #include <Components/Rigidbody.h>
 #include <GameObject.h>
 #include <Vector3.h>
+#include <GLGUI.h>
 
 #include "../../Enemy/CharacterSearcher.h"
 #include "../../../Utility/RigidbodyUility.h"
@@ -66,4 +67,8 @@ Vector3 EnemyDamageState::GetFlinchVelocity() const
 }
 
 void EnemyDamageState::OnGUI()
-{}
+{
+    GLGUI::DragFloat("Duration", &parameter_.duration, 0.01f);
+    GLGUI::DragFloat("MoveSpeed", &parameter_.moveSpeed, 0.1f);
+    GLGUI::DragFloat("MoveForce", &parameter_.moveForceMultiplier, 0.1f);
+}
