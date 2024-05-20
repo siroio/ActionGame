@@ -1,11 +1,15 @@
 ﻿#include "App.h"
+#include <Glib.h>
 #include <SceneManager.h>
 #include <AudioManager.h>
 #include <InputSystem.h>
+#include <Physics.h>
 #include <Window.h>
 #include <Vector2.h>
+
 #include "../Constant/SceneName.h"
 #include "../Enum/AudioGroupID.h"
+#include "../Enum/CollisionLayer.h"
 #include "../Scene/TitleScene.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/ResultScene.h"
@@ -30,6 +34,7 @@ App::App()
 {
     Window::BorderlessWindow(true);
     Window::WindowSize(Vector2{ 1920.0f, 1080.0f });
+    Window::WindowDebugSize(Vector2{ 1920.0f, 1080.0f });
 }
 
 void App::Start()
@@ -38,6 +43,22 @@ void App::Start()
     InitializeSound();
     ResiterScenes();
     SceneManager::LoadScene(SceneName::TITLE);
+
+    // 当たり判定のレイヤー設定
+    Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::Stage, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::BattleArea, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::Stage, false);
+
+    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::BattleArea, false);
+    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::Stage, false);
 }
 
 void App::End()

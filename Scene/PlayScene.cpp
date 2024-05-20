@@ -6,28 +6,27 @@
 #include <GameObject.h>
 #include <GameObjectManager.h>
 #include <SkyboxManager.h>
-#include <Physics.h>
 #include <Color.h>
 #include <GameTimer.h>
 
 #include "../Character/Light/Light.h"
 #include "../Character/Camera/MainCamera.h"
 #include "../Character/Player/Player.h"
-#include "../Character/Enemy/Skeleton/Skeleton.h"
+#include "../Character/Enemy/Golem/Golem.h"
 #include "../Character/Menu/SafeArea/SafeArea.h"
 #include "../Character/UI/HPGauge/HPGauge.h"
+#include "../Character/UI/Button/UIButton.h"
 #include "../Component/Camera/CameraController.h"
 #include "../Component/Audio/BGMController.h"
 #include "../Component/Fade/AudioFader.h"
 #include "../Component/Common/ElapsedTimer.h"
-#include "../Enum/CollisionLayer.h"
-#include "../Character/Projectile/MagicArrow.h"
-#include "../Character/Enemy/Mage/Mage.h"
 #include "../Character/UI/ScreenFader/ScreenFader.h"
 #include "../Generator/BattleAreaGenerator.h"
 #include "../Enum/AudioGroupID.h"
 #include "../Enum/AudioID.h"
-
+#include "../Enum/CollisionLayer.h"
+#include "../Enum/MeshID.h"
+#include "../Constant/ObjectTag.h"
 
 using namespace Glib;
 
@@ -37,9 +36,10 @@ namespace
     const Color LIGHT_AMBIENT{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_DIFFUSE{ 0.7f, 0.7f, 0.7f, 1.0f };
     const Color LIGHT_SPECULAR{ 0.4f, 0.4f, 0.4f, 1.0f };
-    const unsigned int DEFAULT_SKYBOX{ 0 };
+    constexpr unsigned int DEFAULT_SKYBOX{ 0 };
     const Vector3 MAIN_CAMERA_OFFSET{ 0.0f, 1.6f, 0.0f };
-    const float MAIN_CAMERA_DISTANCE{ 2.5f };
+    constexpr float MAIN_CAMERA_DISTANCE{ 2.5f };
+    constexpr char BATTLE_AREA[]{ "Assets/Area" };
 }
 
 void PlayScene::Start()
@@ -58,16 +58,20 @@ void PlayScene::Start()
     }
 
     // UI生成
-    auto hpCanvas = GameObjectManager::Instantiate("HPCanvas");
-    hpCanvas->AddComponent<Canvas>();
-    HPGauge::Spawn(hpCanvas);
+    auto uiCanvas = GameObjectManager::Instantiate("UICanvas");
+    uiCanvas->AddComponent<Canvas>();
+    HPGauge::Spawn(uiCanvas);
+    UIButton::Spawn(uiCanvas);
+
 
 #ifdef _DEBUG
     // デバッグ時のみ
-    SafeArea::Spawn(); //UI調整用
+    SafeArea::Spawn(); // UI調整用
 #endif
 
-    ScreenFader::Create(2.0f, true, TimerScale::Scaled);
+    Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+
+    ScreenFader::Create(1.5f, true, TimerScale::Scaled);
 
     auto bgmController = GameObjectManager::Instantiate("BGMController");
     auto bgmSource = bgmController->AddComponent<AudioSource>();
@@ -82,33 +86,18 @@ void PlayScene::Start()
     fader->StartFade(5.0f);
     bgmController->AddComponent<ElapsedTimer>();
 
-    // 当たり判定のレイヤー設定
-    Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
-
-    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::BattleArea, false);
-    Physics::SetCollisionFlag(CollisionLayer::PlayerAttack, CollisionLayer::Stage, false);
-
-    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::EnemyAttack, false);
-    Physics::SetCollisionFlag(CollisionLayer::Enemy, CollisionLayer::BattleArea, false);
-
-    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::PlayerAttack, false);
-    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::BattleArea, false);
-    Physics::SetCollisionFlag(CollisionLayer::EnemyAttack, CollisionLayer::Stage, false);
-
-    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::BattleArea, false);
-    Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::Stage, false);
-
     // debug stage
     auto stage = GameObjectManager::Instantiate("Stage");
     stage->Layer(CollisionLayer::Stage);
-    stage->Tag("Obstacle");
+    stage->Tag(GameTag::OBSTACLE);
     auto mr = stage->AddComponent<MeshRenderer>();
-    mr->MeshID(4);
+    mr->MeshID(MeshID::Stage);
     auto mc = stage->AddComponent<MeshCollider>();
-    mc->MeshID(4);
+    mc->MeshID(MeshID::Stage);
     mc->FlipNormals(true);
 
-    BattleAreaGenerator::Generate("Assets/Area");
+    // 戦闘エリアの生成
+    // BattleAreaGenerator::Generate(BATTLE_AREA);
 }
 
 void PlayScene::End()
