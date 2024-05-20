@@ -8,5 +8,6 @@ struct MeshID
         Skeleton,
         Mage,
         Golem,
+        Stage,
     };
 };

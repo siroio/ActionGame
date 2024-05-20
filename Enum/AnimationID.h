@@ -25,5 +25,11 @@ struct AnimationID
         MageDamage,
         MageMove,
         MageIdle,
+
+        GolemAttack1 = 30,
+        GolemAttack2,
+        GolemDamage,
+        GolemMove,
+        GolemIdle,
     };
 };

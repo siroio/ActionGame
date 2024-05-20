@@ -9,5 +9,6 @@ struct TextureID
         HP_Frame,
         HP_Gauge,
         Fade,
+        Button,
     };
 };
