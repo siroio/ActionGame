@@ -79,7 +79,7 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
     stateBehavior->AddState(mgAttack, EnemyState::ProjectileAttack);
 
     auto mgSearch = mage->AddComponent<EnemySearchState>(0.016f);
-    mgSearch->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
+    mgSearch->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, 1.0f, true });
     stateBehavior->AddState(mgSearch, EnemyState::Search);
 
     EnemyChaseState::Parameter chaseParam{};
@@ -88,7 +88,7 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
     chaseParam.moveForceMultiplier = 20.0f;
     auto mgChase = mage->AddComponent<EnemyChaseState>(chaseParam);
     mgChase->AddNextState(EnemyState::ProjectileAttack);
-    mgChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, true });
+    mgChase->SetAnimationInfo(AnimationInfo{ AnimationID::MageMove, 0.0f, 0.1f, 1.0f, true });
     stateBehavior->AddState(mgChase, EnemyState::Chase);
 
     EnemyDamageState::Parameter damageParam{};
@@ -105,7 +105,7 @@ GameObjectPtr Mage::Spawn(const Vector3& position, const Vector3& euler, const V
     stateBehavior->AddState(mgDead, EnemyState::Dead);
 
     auto mgSelector = mage->AddComponent<EnemySelectorState>();
-    mgSelector->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, true });
+    mgSelector->SetAnimationInfo(AnimationInfo{ AnimationID::MageIdle, 0.0f, 0.1f, 1.0f, true });
     mgSelector->AddNextState(EnemyState::Chase);
     stateBehavior->AddState(mgSelector, EnemyState::Selector);
 

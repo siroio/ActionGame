@@ -91,7 +91,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     stateBehavior->AddState(skAttack, EnemyState::MeleeAttack);
 
     auto skSearch = skeleton->AddComponent<EnemySearchState>(0.016f);
-    skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
+    skSearch->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, 1.0f, true });
     stateBehavior->AddState(skSearch, EnemyState::Search);
 
     EnemyChaseState::Parameter chaseParam;
@@ -100,7 +100,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     chaseParam.moveForceMultiplier = 20.0f;
     auto skChase = skeleton->AddComponent<EnemyChaseState>(chaseParam);
     skChase->AddNextState(EnemyState::MeleeAttack);
-    skChase->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonMove, 0.0f, 0.1f, true });
+    skChase->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonMove, 0.0f, 0.1f, 1.0f, true });
     stateBehavior->AddState(skChase, EnemyState::Chase);
 
     EnemyDamageState::Parameter damageParam;
@@ -117,7 +117,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     stateBehavior->AddState(skDead, EnemyState::Dead);
 
     auto skSelector = skeleton->AddComponent<EnemySelectorState>();
-    skSelector->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, true });
+    skSelector->SetAnimationInfo(AnimationInfo{ AnimationID::SkeletonIdle, 0.0f, 0.1f, 1.0f, true });
     skSelector->AddNextState(EnemyState::Chase);
     stateBehavior->AddState(skSelector, EnemyState::Selector);
 
