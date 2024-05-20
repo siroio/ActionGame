@@ -67,6 +67,8 @@ set(Character
     Character/UI/HPGauge/HPGauge.cpp
     Character/UI/ScreenFader/ScreenFader.h
     Character/UI/ScreenFader/ScreenFader.cpp
+    Character/UI/Button/UIButton.h
+    Character/UI/Button/UIButton.cpp
 )
 
 set(Component
