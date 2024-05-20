@@ -13,4 +13,5 @@ void State::SetAnimation(Glib::WeakPtr<Glib::Animator>& animator) const
     animator->AnimationID(animationInfo_.AnimationID, animationInfo_.FrameOffset);
     animator->BlendTime(animationInfo_.BlendTime);
     animator->Loop(animationInfo_.Loop);
+    animator->Speed(animationInfo_.Speed);
 }
