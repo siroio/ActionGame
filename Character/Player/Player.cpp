@@ -91,101 +91,95 @@ GameObjectPtr Player::Spawn()
     player->AddComponent<DelayedAudioPlayer>();
     player->AddComponent<ElapsedTimer>();
     player->AddComponent<Rotator>();
-    player->AddComponent<Damageable>(100, 100, 5, PlayerState::Damage, PlayerState::Dead);
+    player->AddComponent<Damageable>(100, 100, 0, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
-        AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true },
-        AnimationInfo{ AnimationID::PlayerMove, 0.0f, ANIM_DEFAULT_BLEND_TIME, true },
+        AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, 1.0f, true },
+        AnimationInfo{ AnimationID::PlayerMove, 0.0f, ANIM_DEFAULT_BLEND_TIME, 1.0f, true },
         4.0f,
         20.0f,
     };
 
     auto playerMove = player->AddComponent<PlayerMoveState>(move);
-    playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, true });
+    playerMove->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerIdle, 0.0f, ANIM_DEFAULT_BLEND_TIME, 1.0f, true });
     stateBehavior->AddState(playerMove, PlayerState::Moving);
 
     // 攻撃１
-    PlayerAttackState::Parameter attack1{
-        PlayerState::Attack2,
-        AudioID::PlayerSwing,
-        5,
-        ValidityTimer{ 0.25f, 0.15f },
-        0.09f,
-        5.0f,
-        20.0f,
-        ValidityTimer{ 0.3f, 0.2f },
-        0.1f,
-    };
+    PlayerAttackState::Parameter attack1{};
+    attack1.nextAttackState = PlayerState::Attack2;
+    attack1.attackSEID = AudioID::PlayerSwing;
+    attack1.power = 5;
+    attack1.colliderTimer = ValidityTimer{ 0.25f, 0.15f };
+    attack1.moveDuration = 0.09f;
+    attack1.moveSpeed = 5.0f;
+    attack1.moveForceMultiplier = 20.0f;
+    attack1.inputTimer = ValidityTimer{ 0.3f, 0.2f };
+    attack1.stateEndTime = 0.1f;
     auto playerAtk1 = player->AddComponent<PlayerAttackState>(attack1, slashEfk);
     playerAtk1->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack1 });
     stateBehavior->AddState(playerAtk1, PlayerState::Attack1);
 
     // 攻撃２
-    PlayerAttackState::Parameter attack2{
-        PlayerState::Attack3,
-        AudioID::PlayerSwing,
-        5,
-        ValidityTimer{ 0.3f, 0.1f },
-        0.2f,
-        3.0f,
-        20.0f,
-        ValidityTimer{ 0.2f, 0.3f },
-        0.1f,
-    };
+    PlayerAttackState::Parameter attack2{};
+    attack2.nextAttackState = PlayerState::Attack3;
+    attack2.attackSEID = AudioID::PlayerSwing;
+    attack2.power = 10;
+    attack2.colliderTimer = ValidityTimer{ 0.3f, 0.1f };
+    attack2.moveDuration = 0.2f;
+    attack2.moveSpeed = 3.0f;
+    attack2.moveForceMultiplier = 20.0f;
+    attack2.inputTimer = ValidityTimer{ 0.2f, 0.3f };
+    attack2.stateEndTime = 0.1f;
     auto playerAtk2 = player->AddComponent<PlayerAttackState>(attack2, slashEfk);
     playerAtk2->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack2 });
     stateBehavior->AddState(playerAtk2, PlayerState::Attack2);
 
     // 攻撃３
-    PlayerAttackState::Parameter attack3{
-        PlayerState::Attack4,
-        AudioID::PlayerSwing,
-        5,
-        ValidityTimer{ 0.4f, 0.25f },
-        0.125f,
-        7.0f,
-        20.0f,
-        ValidityTimer{ 0.3f, 0.5f },
-        0.1f,
-    };
+    PlayerAttackState::Parameter attack3{};
+    attack3.nextAttackState = PlayerState::Attack4;
+    attack3.attackSEID = AudioID::PlayerSwing;
+    attack3.power = 13;
+    attack3.colliderTimer = ValidityTimer{ 0.4f, 0.25f };
+    attack3.moveDuration = 0.125f;
+    attack3.moveSpeed = 7.0f;
+    attack3.moveForceMultiplier = 20.0f;
+    attack3.inputTimer = ValidityTimer{ 0.3f, 0.5f };
+    attack3.stateEndTime = 0.1f;
     auto playerAtk3 = player->AddComponent<PlayerAttackState>(attack3, slashEfk);
     playerAtk3->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack3 });
     stateBehavior->AddState(playerAtk3, PlayerState::Attack3);
 
     // 攻撃４
-    PlayerAttackState::Parameter attack4{
-        PlayerState::Moving,
-        AudioID::PlayerSwing,
-        5,
-        ValidityTimer{ 0.7f },
-        0.2f,
-        5.0f,
-        20.0f,
-        ValidityTimer{ 0.0f, 0.0f },
-        0.8f,
-    };
+    PlayerAttackState::Parameter attack4{};
+    attack4.nextAttackState = PlayerState::Moving;
+    attack4.attackSEID = AudioID::PlayerSwing;
+    attack4.power = 20;
+    attack4.colliderTimer = ValidityTimer{ 0.7f, 0.15f };
+    attack4.moveDuration = 0.2f;
+    attack4.moveSpeed = 5.0f;
+    attack4.moveForceMultiplier = 20.0f;
+    attack4.inputTimer = ValidityTimer{};
+    attack4.stateEndTime = 0.8f;
     auto playerAtk4 = player->AddComponent<PlayerAttackState>(attack4, slashEfk);
     playerAtk4->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerAttack4 });
     stateBehavior->AddState(playerAtk4, PlayerState::Attack4);
 
     // 回避
-    PlayerRollingState::Parameter rolling{
-        0.5f,
-        ValidityTimer{ 0.4f, 0.05f },
-        6.0f,
-        20.0f,
-    };
+    PlayerRollingState::Parameter rolling{};
+    rolling.dodgeDuration = 0.5f;
+    rolling.invincibleTimer = ValidityTimer{ 0.4f, 0.05f };
+    rolling.moveSpeed = 6.0f;
+    rolling.moveForceMultiplier = 20.0f;
     auto playerRolling = player->AddComponent<PlayerRollingState>(rolling);
     playerRolling->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerRolling });
     stateBehavior->AddState(playerRolling, PlayerState::Rolling);
 
     // ダメージ
-    PlayerDamageState::Parameter damage{
-        0.2f,
-        3.0f,
-        20.0f,
-    };
+    PlayerDamageState::Parameter damage{};
+    damage.damageDuration = 0.4f;
+    damage.moveSpeed = 1.0f;
+    damage.moveForceMultiplier = 20.0f;
     auto playerDamage = player->AddComponent<PlayerDamageState>(damage);
     playerDamage->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDamage });
     stateBehavior->AddState(playerDamage, PlayerState::Damage);
