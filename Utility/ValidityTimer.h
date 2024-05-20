@@ -3,6 +3,7 @@
 class ValidityTimer
 {
 public:
+    ValidityTimer() = default;
     /**
      * @param receptionTime 受付時間
      * @param startTime     受付開始までの時間
