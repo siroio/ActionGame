@@ -17,6 +17,7 @@ public:
         float Distance{ 0.0f };
         float FollowSpeed{ 5.0f };
         float RotateSpeed{ 5.0f };
+        bool ObstacleDetection{ true };
         Glib::WeakPtr<Glib::Transform> Target{};
     };
 

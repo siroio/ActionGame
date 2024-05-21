@@ -51,8 +51,6 @@ void CameraController::FixedUpdate()
 {
     if (parent_.expired() || child_.expired() || camera_.expired()) return;
 
-    //ObstacleDetection();
-
     if (!parameter_.Target.expired())
     {
         const float speed = parameter_.FollowSpeed * GameTimer::FixedDeltaTime();
@@ -72,6 +70,11 @@ void CameraController::FixedUpdate()
 
     camera_->LocalPosition(parameter_.Offset);
     camera_->LocalEulerAngles(parameter_.OffsetAngle);
+
+    if (parameter_.ObstacleDetection && !parameter_.Target.expired())
+    {
+        ObstacleDetection();
+    }
 }
 
 void CameraController::SetTarget(const WeakPtr<Transform>& target)
@@ -92,13 +95,11 @@ void CameraController::SetParameter(const Parameter& parameter)
 void CameraController::ObstacleDetection()
 {
     const auto& target = parameter_.Target;
-    const auto& transform = GameObject()->Transform();
-    if (target.expired()) return;
+    const Vector3& direction = camera_->Rotation() * Vector3::Back();
 
     // 注目対象からの方向
     std::vector<RaycastHit> hits{};
-    bool isHit = Physics::RaycastAll(target->Position(), -target->Forward(), hits, parameter_.Distance);
-    if (!isHit) return;
+    if (!Physics::RaycastAll(target->Position() + parameter_.Offset, direction, hits, parameter_.Distance)) return;
 
     float shortestPath = parameter_.Distance * parameter_.Distance;
     for (const auto& hit : hits)
@@ -110,9 +111,10 @@ void CameraController::ObstacleDetection()
         if (distSqr < shortestPath)
         {
             shortestPath = distSqr;
-            parameter_.Position = nearestPoint;
+            parameter_.Position = hit.point - (direction * 0.01f);
         }
     }
+
 }
 
 void CameraController::OnGUI()
