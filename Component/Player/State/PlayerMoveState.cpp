@@ -62,18 +62,6 @@ void PlayerMoveState::Move()
 {
     const auto& transform = GameObject()->Transform();
 
-    std::vector<RaycastHit> hits{};
-    if (Physics::RaycastAll(transform->Position(), Vector3::Down(), hits, 1.0f))
-    {
-        // 地面を検索
-        const auto& hit{ std::ranges::find_if(hits, [](const RaycastHit& hit)
-        {
-            return hit.gameObject->Tag() == "Ground";
-        }) };
-
-        if (hit != hits.end()) moveInput_ = Vector3::ProjectOnPlane(moveInput_, hit->normal).Normalized();
-    }
-
     // 操作方向へ回転
     rotator_->Direction(moveInput_);
     Vector3 velocity = moveInput_ * parameter_.moveSpeed;
