@@ -9,15 +9,6 @@
 #include <Components/CapsuleCollider.h>
 #include <Components/BoxCollider.h>
 
-#include "../../Enum/State/PlayerState.h"
-#include "../../Enum/AnimationID.h"
-#include "../../Enum/AudioID.h"
-#include "../../Enum/AudioGroupID.h"
-#include "../../Enum/CollisionLayer.h"
-#include "../../Enum/EffectID.h"
-#include "../../Enum/MeshID.h"
-#include "../../Enum/MessageID.h"
-#include "../../Constant/GameObjectName.h"
 #include "../../Component/Common/AttackColliderController.h"
 #include "../../Component/Common/DelayedAudioPlayer.h"
 #include "../../Component/Common/Damageable.h"
@@ -33,6 +24,15 @@
 #include "../../Component/Player/State/PlayerDeadState.h"
 #include "../../Component/Player/HitStop.h"
 #include "../HitEffect/HitEffect.h"
+#include "../../Enum/State/PlayerState.h"
+#include "../../Enum/AnimationID.h"
+#include "../../Enum/AudioID.h"
+#include "../../Enum/AudioGroupID.h"
+#include "../../Enum/CollisionLayer.h"
+#include "../../Enum/EffectID.h"
+#include "../../Enum/MeshID.h"
+#include "../../Enum/MessageID.h"
+#include "../../Constant/GameObjectName.h"
 
 using namespace Glib;
 
@@ -91,7 +91,7 @@ GameObjectPtr Player::Spawn()
     player->AddComponent<DelayedAudioPlayer>();
     player->AddComponent<ElapsedTimer>();
     player->AddComponent<Rotator>();
-    player->AddComponent<Damageable>(100, 100, 0, PlayerState::Damage, PlayerState::Dead);
+    player->AddComponent<Damageable>(200, 200, 0, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
@@ -179,7 +179,7 @@ GameObjectPtr Player::Spawn()
     PlayerDamageState::Parameter damage{};
     damage.damageDuration = 0.4f;
     damage.moveSpeed = 1.0f;
-    damage.moveForceMultiplier = 20.0f;
+    damage.moveForceMultiplier = 10.0f;
     auto playerDamage = player->AddComponent<PlayerDamageState>(damage);
     playerDamage->SetAnimationInfo(AnimationInfo{ AnimationID::PlayerDamage });
     stateBehavior->AddState(playerDamage, PlayerState::Damage);
@@ -209,7 +209,6 @@ void Player::SetBodyCollider(const GameObjectPtr& player)
 {
     auto rigidbody = player->AddComponent<Rigidbody>();
     rigidbody->Constraints(RigidbodyConstraints::FreezeRotation);
-
     auto collider = player->AddComponent<CapsuleCollider>();
     collider->Center(BODY_COLLIDER_CENTER);
     collider->Height(BODY_COLLIDER_HEIGHT);
@@ -224,7 +223,8 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     collider->Transform()->Parent(parent);
     collider->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     collider->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
-    auto controller = collider->AddComponent<AttackColliderController>(boxCol);
+    auto controller = collider->AddComponent<AttackColliderController>();
+    controller->AddCollider(boxCol);
     boxCol->Active(false);
     rb->IsKinematic(true);
     boxCol->IsTrigger(true);

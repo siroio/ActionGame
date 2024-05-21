@@ -35,7 +35,8 @@ void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr
     auto collider = arrow->AddComponent<SphereCollider>();
     collider->IsTrigger(true);
 
-    auto controller = arrow->AddComponent<AttackColliderController>(collider, true);
+    auto controller = arrow->AddComponent<AttackColliderController>(true);
+    controller->AddCollider(collider);
     controller->SetAttackActive(true);
     controller->SetAttackPower(10);
 
@@ -47,11 +48,11 @@ void MagicArrow::Spawn(const Vector3& position, float speed, const GameObjectPtr
     arrowEffect->Transform()->Parent(arrow->Transform());
     arrowEffect->Transform()->LocalEulerAngles(EFFECT_ANGLE);
 
-    auto projectile = arrow->AddComponent<Projectile>(target->Transform(), 3.5f);
+    auto projectile = arrow->AddComponent<Projectile>();
     projectile->MoveSpeed(speed);
-    projectile->RotateSpeed(ROTATE_SPEED);
 
-    arrow->AddComponent<Rotator>();
+    arrow->Transform()->LookAt(target->Transform()->Position());
+
     arrow->AddComponent<ElapsedTimer>();
     arrow->AddComponent<ElapsedDestroyObject>(DESTROY_TIME);
 }

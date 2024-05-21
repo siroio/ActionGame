@@ -72,7 +72,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     enemyAtk->Transform()->LocalPosition(ATK_COLLIDER_POSITION);
     enemyAtk->Transform()->LocalEulerAngles(ATK_COLLIDER_ANGLES);
     enemyAtk->Transform()->LocalScale(ATK_COLLIDER_SIZE);
-    enemyAtk->AddComponent<AttackColliderController>(atkCollider);
+    enemyAtk->AddComponent<AttackColliderController>()->AddCollider(atkCollider);
 
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     skeleton->AddComponent<Rotator>();
