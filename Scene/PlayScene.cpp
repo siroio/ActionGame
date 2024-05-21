@@ -83,7 +83,7 @@ void PlayScene::Start()
     auto controller = bgmController->AddComponent<BGMController>();
     auto fader = bgmController->AddComponent<AudioFader>();
     fader->SetVolume(1.0f);
-    fader->StartFade(5.0f);
+    fader->StartFade(2.0f);
     bgmController->AddComponent<ElapsedTimer>();
 
     // debug stage
@@ -97,7 +97,7 @@ void PlayScene::Start()
     mc->FlipNormals(true);
 
     // 戦闘エリアの生成
-    // BattleAreaGenerator::Generate(BATTLE_AREA);
+    BattleAreaGenerator::Generate(BATTLE_AREA);
 }
 
 void PlayScene::End()
