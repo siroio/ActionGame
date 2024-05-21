@@ -34,7 +34,7 @@ App::App()
 {
     Window::BorderlessWindow(true);
     Window::WindowSize(Vector2{ 1920.0f, 1080.0f });
-    Window::WindowDebugSize(Vector2{ 1920.0f, 1080.0f });
+    Window::WindowDebugSize(Vector2{ 1408.0f, 792.0f });
 }
 
 void App::Start()
