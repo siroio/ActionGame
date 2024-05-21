@@ -92,8 +92,6 @@ set(Component
     Component/Camera/CameraController.cpp
     Component/Camera/CameraRotator.h
     Component/Camera/CameraRotator.cpp
-    Component/Camera/CameraObstacleDetection.h
-    Component/Camera/CameraObstacleDetection.cpp
     Component/Enemy/CharacterSearcher.h
     Component/Enemy/CharacterSearcher.cpp
     Component/Enemy/State/EnemyAttackState.h
