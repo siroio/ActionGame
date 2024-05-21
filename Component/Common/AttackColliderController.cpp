@@ -7,13 +7,21 @@
 
 using namespace Glib;
 
-AttackColliderController::AttackColliderController(const WeakPtr<Collider>& collider, bool onHitDestroy) :
-    collider_{ collider }, onHitDestroy_{ onHitDestroy }
+AttackColliderController::AttackColliderController(bool onHitDestroy) :
+    onHitDestroy_{ onHitDestroy }
 {}
+
+void AttackColliderController::AddCollider(const Glib::WeakPtr<Glib::Collider>& collider)
+{
+    colliders_.push_back(collider);
+}
 
 void AttackColliderController::SetAttackActive(bool enable)
 {
-    collider_->Active(enable);
+    for (const auto& collider : colliders_)
+    {
+        collider->Active(enable);
+    }
 }
 
 void AttackColliderController::SetAttackPower(int power)
@@ -34,8 +42,12 @@ void AttackColliderController::OnTriggerEnter(const GameObjectPtr& other)
         GameObject()->SendMsg(MessageID::Attacked, other);
     }
 
+    // 当たった時にオブジェクトを破棄するか
     if (onHitDestroy_)
     {
-        GameObject()->Destroy();
+        for (const auto& collider : colliders_)
+        {
+            collider->GameObject()->Destroy();
+        }
     }
 }

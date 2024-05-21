@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Component.h>
 #include <GameObjectPtr.h>
+#include <vector>
 
 namespace Glib
 {
@@ -10,7 +11,13 @@ namespace Glib
 class AttackColliderController : public Component
 {
 public:
-    AttackColliderController(const Glib::WeakPtr<Glib::Collider>& collider, bool onHitDestroy = false);
+    AttackColliderController(bool onHitDestroy = false);
+
+    /**
+     * @brief 判定の追加
+     * @param collider
+     */
+    void AddCollider(const Glib::WeakPtr<Glib::Collider>& collider);
 
     /**
      * @brief 攻撃判定の有効切り替え
@@ -31,7 +38,7 @@ public:
     void OnTriggerEnter(const GameObjectPtr& other);
 
 private:
-    Glib::WeakPtr<Glib::Collider> collider_;
+    std::vector<Glib::WeakPtr<Glib::Collider>> colliders_;
     int power_{ 0 };
     bool onHitDestroy_{ false };
 };
