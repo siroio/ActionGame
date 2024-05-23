@@ -41,8 +41,8 @@ void App::Start()
 {
     LoadAssets();
     InitializeSound();
-    ResiterScenes();
-    SceneManager::LoadScene(SceneName::TITLE);
+    ResisterScenes();
+    ResisterInputs();
 
     // 当たり判定のレイヤー設定
     Physics::SetCollisionFlag(CollisionLayer::Player, CollisionLayer::PlayerAttack, false);
@@ -59,19 +59,19 @@ void App::Start()
 
     Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::BattleArea, false);
     Physics::SetCollisionFlag(CollisionLayer::BattleArea, CollisionLayer::Stage, false);
+
+    // タイトルの読み込み
+    SceneManager::LoadScene(SceneName::TITLE);
 }
 
 void App::End()
 {}
 
-void App::LoadAssets()
+void App::ResisterScenes()
 {
-    AssetLoader::Load(ANIMATION, AssetType::Animation);
-    AssetLoader::Load(AUDIO, AssetType::Audio);
-    AssetLoader::Load(EFFECT, AssetType::Effect);
-    AssetLoader::Load(MODEL, AssetType::Mesh);
-    AssetLoader::Load(SKYBOX, AssetType::Skybox);
-    AssetLoader::Load(TEXTURE, AssetType::Texture);
+    SceneManager::Register<TitleScene>();
+    SceneManager::Register<PlayScene>();
+    SceneManager::Register<ResultScene>();
 }
 
 void App::InitializeSound()
@@ -82,9 +82,26 @@ void App::InitializeSound()
     AudioManager::SetSoundGroupVolume(AudioGroupID::SE, SE_VOLUME);
 }
 
-void App::ResiterScenes()
+void App::ResisterInputs()
 {
-    SceneManager::Register<TitleScene>();
-    SceneManager::Register<PlayScene>();
-    SceneManager::Register<ResultScene>();
+    // メニュー
+    InputSystem::AddInput("Pose", GPADKey::START);
+    InputSystem::AddInput("Confirm", GPADKey::A);
+    InputSystem::AddInput("Deny", GPADKey::B);
+    InputSystem::AddInput("Up", GPADKey::UP);
+    InputSystem::AddInput("Down", GPADKey::DOWN);
+
+    // プレイ
+    InputSystem::AddInput("Attack", GPADKey::B);
+    InputSystem::AddInput("Dodge", GPADKey::A);
+}
+
+void App::LoadAssets()
+{
+    AssetLoader::Load(ANIMATION, AssetType::Animation);
+    AssetLoader::Load(AUDIO, AssetType::Audio);
+    AssetLoader::Load(EFFECT, AssetType::Effect);
+    AssetLoader::Load(MODEL, AssetType::Mesh);
+    AssetLoader::Load(SKYBOX, AssetType::Skybox);
+    AssetLoader::Load(TEXTURE, AssetType::Texture);
 }

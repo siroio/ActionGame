@@ -36,6 +36,7 @@ set(Scene
 )
 
 set(Constant
+    Constant/ButtonName.h
     Constant/CameraConstant.h
     Constant/GameObjectName.h
     Constant/ObjectTag.h

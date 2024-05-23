@@ -85,5 +85,9 @@ void BattleArea::EndBattle()
 {
     Debug::Log("=== BattleEnd ===");
     bgmController->Change(AudioID::Field);
+    if (!HasNextWave())
+    {
+        GameObject()->SendMsg(MessageID::GameClear, nullptr);
+    }
     GameObject()->Destroy();
 }
