@@ -4,6 +4,7 @@
 #include <Components/Animator.h>
 #include <GameObjectManager.h>
 #include <GameObject.h>
+#include <InputSystem.h>
 #include <Physics.h>
 #include <RaycastHit.h>
 #include <GameTimer.h>
@@ -15,9 +16,9 @@
 #include <vector>
 
 #include "../../Constant/GameObjectName.h"
+#include "../../Constant/ButtonName.h"
 #include "../../Enum/State/PlayerState.h"
 #include "../../Enum/AnimationID.h"
-#include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
 
@@ -38,17 +39,17 @@ void PlayerMoveState::OnInitialize()
 
 int PlayerMoveState::OnUpdate(float elapsedTime)
 {
-    if (Input::Attack())
+    if (InputSystem::GetInput(ButtonName::ATTACK))
     {
         return PlayerState::Attack1;
     }
 
-    if (Input::Dodge())
+    if (InputSystem::GetInput(ButtonName::DODGE))
     {
         return PlayerState::Rolling;
     }
 
-    moveInput_ = CameraUtility::ConvertToCameraView(camera_, Input::Move());
+    moveInput_ = CameraUtility::ConvertToCameraView(camera_, InputSystem::GetLeftStick());
     return STATE_MAINTAIN;
 }
 

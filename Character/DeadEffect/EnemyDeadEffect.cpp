@@ -25,6 +25,7 @@ GameObjectPtr EnemyDeadEffect::Spawn(const Vector3& position)
     effect->EffectID(EffectID::EnemyDead);
     effect->DestoryOnFinish(true);
     effect->PlayOnStart(true);
+    effect->Speed(0.5f);
 
     auto sound = deadEfk->AddComponent<AudioSource>();
     sound->AudioID(AudioID::EnemyDead);

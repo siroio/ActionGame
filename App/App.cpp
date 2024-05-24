@@ -8,6 +8,7 @@
 #include <Vector2.h>
 
 #include "../Constant/SceneName.h"
+#include "../Constant/ButtonName.h"
 #include "../Enum/AudioGroupID.h"
 #include "../Enum/CollisionLayer.h"
 #include "../Scene/TitleScene.h"
@@ -85,15 +86,15 @@ void App::InitializeSound()
 void App::ResisterInputs()
 {
     // メニュー
-    InputSystem::AddInput("Pose", GPADKey::START);
-    InputSystem::AddInput("Confirm", GPADKey::A);
-    InputSystem::AddInput("Deny", GPADKey::B);
-    InputSystem::AddInput("Up", GPADKey::UP);
-    InputSystem::AddInput("Down", GPADKey::DOWN);
+    InputSystem::AddInput(ButtonName::POSE, GPADKey::START);
+    InputSystem::AddInput(ButtonName::CONFIRM, GPADKey::A);
+    InputSystem::AddInput(ButtonName::DENY, GPADKey::B);
+    InputSystem::AddInput(ButtonName::UP, GPADKey::UP);
+    InputSystem::AddInput(ButtonName::DOWN, GPADKey::DOWN);
 
     // プレイ
-    InputSystem::AddInput("Attack", GPADKey::B);
-    InputSystem::AddInput("Dodge", GPADKey::A);
+    InputSystem::AddInput(ButtonName::ATTACK, GPADKey::B);
+    InputSystem::AddInput(ButtonName::DODGE, GPADKey::A);
 }
 
 void App::LoadAssets()

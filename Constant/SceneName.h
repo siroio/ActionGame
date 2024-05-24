@@ -1,9 +1,8 @@
 ﻿#pragma once
-#include <string>
 
 namespace SceneName
 {
-    static inline std::string TITLE{ "TitleScene" };
-    static inline std::string PLAY{ "PlayScene" };
-    static inline std::string Result{ "ResultScene" };
+    constexpr char TITLE[]{ "TitleScene" };
+    constexpr char PLAY[]{ "PlayScene" };
+    constexpr char Result[]{ "ResultScene" };
 }

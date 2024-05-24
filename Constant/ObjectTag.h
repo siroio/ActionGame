@@ -3,5 +3,5 @@
 
 namespace GameTag
 {
-    static inline std::string OBSTACLE{ "Obstacle" };
+    constexpr char OBSTACLE[]{ "Obstacle" };
 }
