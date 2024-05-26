@@ -8,9 +8,9 @@
 
 #include "../../Common/Rotator.h"
 #include "../../Common/Damageable.h"
+#include "../PlayerInput.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
-#include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
 
@@ -27,12 +27,13 @@ void PlayerRollingState::OnInitialize()
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<AudioSource>();
     rotator_ = GameObject()->GetComponent<Rotator>();
+    input_ = GameObject()->GetComponent<PlayerInput>();
     damageable_ = GameObject()->GetComponent<Damageable>();
 }
 
 void PlayerRollingState::OnEnter()
 {
-    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, input_->Move()));
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
 

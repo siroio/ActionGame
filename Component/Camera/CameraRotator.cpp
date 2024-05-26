@@ -2,10 +2,11 @@
 #include <GameObject.h>
 #include <Components/Transform.h>
 #include <GameTimer.h>
-#include <GLGUI.h>
 #include <Mathf.h>
+#include <Vector2.h>
+#include <GLGUI.h>
 
-#include "../../Input/Input.h"
+#include "../PlayerInput.h"
 #include "../Camera/CameraController.h"
 
 using namespace Glib;
@@ -13,6 +14,7 @@ using namespace Glib;
 void CameraRotator::Start()
 {
     controller_ = GameObject()->GetComponent<CameraController>();
+    input_ = GameObject()->GetComponent<PlayerInput>();
 }
 
 void CameraRotator::FixedUpdate()
@@ -28,7 +30,7 @@ void CameraRotator::Rotate()
     CameraController::Parameter parameter = controller_->GetParameter();
     const float deltaTime = GameTimer::FixedDeltaTime();
 
-    Vector2 angle = Input::CameraRotate() * rotateSpeed_;
+    Vector2 angle = input_->Camera() * rotateSpeed_;
 
     euler.x -= angle.y * deltaTime;
     euler.y += angle.x * deltaTime;

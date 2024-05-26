@@ -11,7 +11,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 include(cmake/MakeFilter.cmake)
 
 # UTF-8コンパイルオプションの追加
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 if(MSVC)
     # UTF8に変更
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
@@ -160,11 +159,6 @@ set(Generator
     Generator/BattleAreaGenerator.cpp
 )
 
-set(Input
-    Input/Input.h
-    Input/Input.cpp
-)
-
 set(Utility
     Utility/AssetLoader.h
     Utility/AssetLoader.cpp
@@ -186,8 +180,7 @@ list(APPEND MODULES
     ${Character}
     ${Component} 
     ${Enum}  
-    ${Generator}  
-    ${Input}
+    ${Generator}
     ${Utility}
 )
 

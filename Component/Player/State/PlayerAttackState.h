@@ -15,6 +15,7 @@ struct Vector3;
 class Rotator;
 class AttackColliderController;
 class DelayedAudioPlayer;
+class PlayerInput;
 
 class PlayerAttackState : public State
 {
@@ -71,6 +72,7 @@ private:
     Glib::WeakPtr<Glib::EffectSystem> slashEfk_{};
     Glib::WeakPtr<DelayedAudioPlayer> audio_{};
     Glib::WeakPtr<Rotator> rotator_{};
+    Glib::WeakPtr<PlayerInput> input_{};
     Glib::WeakPtr<AttackColliderController> attackCollider_{};
     Parameter parameter_;
 };

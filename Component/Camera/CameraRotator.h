@@ -2,6 +2,7 @@
 #include <Component.h>
 
 class CameraController;
+class PlayerInput;
 
 class CameraRotator : public Component
 {
@@ -15,6 +16,7 @@ private:
 
 private:
     Glib::WeakPtr<CameraController> controller_{};
+    Glib::WeakPtr<PlayerInput> input_{};
     float rotateSpeed_{ 130.0f };
     float interpolateRate{ 5.0f };
     float angleLimitPositiveX{ 50.0f };

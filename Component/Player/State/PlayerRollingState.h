@@ -12,6 +12,7 @@ namespace Glib
 }
 
 class Rotator;
+class PlayerInput;
 class Damageable;
 
 class PlayerRollingState : public State
@@ -47,6 +48,7 @@ private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Glib::WeakPtr<Glib::AudioSource> audio_{};
     Glib::WeakPtr<Rotator> rotator_{};
+    Glib::WeakPtr<PlayerInput> input_{};
     Glib::WeakPtr<Damageable> damageable_{};
     Parameter parameter_;
 };

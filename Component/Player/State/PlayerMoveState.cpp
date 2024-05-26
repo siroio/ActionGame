@@ -9,6 +9,7 @@
 #include <RaycastHit.h>
 #include <GameTimer.h>
 #include <Vector3.h>
+#include <Vector2.h>
 #include <Mathf.h>
 #include <Debugger.h>
 #include <Color.h>
@@ -21,6 +22,7 @@
 #include "../../Enum/AnimationID.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
+#include "../PlayerInput.h"
 
 using namespace Glib;
 
@@ -35,6 +37,7 @@ void PlayerMoveState::OnInitialize()
     animator_ = GameObject()->GetComponent<Animator>();
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     rotator_ = GameObject()->GetComponent<Rotator>();
+    input_ = GameObject()->GetComponent<PlayerInput>();
 }
 
 int PlayerMoveState::OnUpdate(float elapsedTime)
@@ -49,7 +52,7 @@ int PlayerMoveState::OnUpdate(float elapsedTime)
         return PlayerState::Rolling;
     }
 
-    moveInput_ = CameraUtility::ConvertToCameraView(camera_, InputSystem::GetLeftStick());
+    moveInput_ = CameraUtility::ConvertToCameraView(camera_, input_->Move());
     return STATE_MAINTAIN;
 }
 

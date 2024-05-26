@@ -13,6 +13,8 @@ namespace Glib
     class Animator;
 }
 
+class PlayerInput;
+
 class PlayerMoveState : public State
 {
 public:
@@ -40,6 +42,7 @@ private:
     Glib::WeakPtr<Glib::Rigidbody> rigidbody_{};
     Glib::WeakPtr<Glib::Animator> animator_{};
     Glib::WeakPtr<Rotator> rotator_;
+    Glib::WeakPtr<PlayerInput> input_;
     Vector3 moveInput_{ Vector3::Zero() };
     Parameter parameter_;
 };

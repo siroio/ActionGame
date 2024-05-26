@@ -11,13 +11,11 @@
 #include "../../Common/Rotator.h"
 #include "../../Common/AttackColliderController.h"
 #include "../../Common/DelayedAudioPlayer.h"
+#include "../PlayerInput.h"
 #include "../../Constant/GameObjectName.h"
 #include "../../Enum/State/PlayerState.h"
-#include "../../Input/Input.h"
 #include "../../Utility/CameraUtility.h"
 #include "../../Utility/RigidbodyUility.h"
-
-
 
 using namespace Glib;
 
@@ -38,6 +36,7 @@ void PlayerAttackState::OnInitialize()
     rigidbody_ = GameObject()->GetComponent<Rigidbody>();
     audio_ = GameObject()->GetComponent<DelayedAudioPlayer>();
     rotator_ = GameObject()->GetComponent<Rotator>();
+    input_ = GameObject()->GetComponent<PlayerInput>();
     attackCollider_ = GameObject()->GetComponentInChildren<AttackColliderController>();
 }
 
@@ -47,7 +46,7 @@ void PlayerAttackState::OnEnter()
     audio_->SetClip(parameter_.attackSEID);
     audio_->SetPitch(Random::Range(SE_PITCH_RANGE.x, SE_PITCH_RANGE.y));
     audio_->Play(SE_DELAY);
-    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, Input::Move()));
+    rotator_->Direction(CameraUtility::ConvertToCameraView(camera_, input_->Move()));
     attackCollider_->SetAttackPower(parameter_.power);
     RigidbodyUtility::KillXZVelocity(rigidbody_);
 }
@@ -85,7 +84,7 @@ int PlayerAttackState::OnFixedUpdate(float elapsedTime)
 
 bool PlayerAttackState::IsAttack(float elapsedTime)
 {
-    return parameter_.inputTimer.Reception(elapsedTime) && Input::Attack();
+    return parameter_.inputTimer.Reception(elapsedTime) && input_->Attack();
 }
 
 bool PlayerAttackState::EnableAttack(float elapsedTime)

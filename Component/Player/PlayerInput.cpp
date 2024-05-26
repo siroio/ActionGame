@@ -2,41 +2,43 @@
 #include <Vector2.h>
 #include <InputSystem.h>
 
+#include "../../Constant/ButtonName.h"
+
 using namespace Glib;
 
 bool PlayerInput::Pose()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::POSE);
 }
 
 bool PlayerInput::Comfirm()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::CONFIRM);
 }
 
 bool PlayerInput::Deny()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::DENY);
 }
 
 bool PlayerInput::Up()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::UP);
 }
 
 bool PlayerInput::Down()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::DOWN);
 }
 
 bool PlayerInput::Attack()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::ATTACK);
 }
 
 bool PlayerInput::Dodge()
 {
-    return false;
+    return InputSystem::GetInputDown(ButtonName::DODGE);
 }
 
 Vector2 PlayerInput::Camera()
@@ -46,5 +48,5 @@ Vector2 PlayerInput::Camera()
 
 Vector2 PlayerInput::Move()
 {
-    return Vector2();
+    return InputSystem::GetLeftStick();
 }
