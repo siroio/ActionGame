@@ -25,6 +25,7 @@ void BattleArea::AddtWave(const WavePtr& wave)
 
 void BattleArea::SetNextWave()
 {
+    if (waves_.size() <= 0) return;
     currentWave_ = waves_.front();
     waves_.pop_front();
 }
@@ -47,10 +48,10 @@ void BattleArea::ReceiveMsg(const Glib::EventMsg& msg)
         case MessageID::WaveClear:
             SetNextWave();
             StartWave();
-            return;
+            break;
         case MessageID::BattleClear:
             EndBattle();
-            return;
+            break;
     }
 }
 
@@ -85,9 +86,5 @@ void BattleArea::EndBattle()
 {
     Debug::Log("=== BattleEnd ===");
     bgmController->Change(AudioID::Field);
-    if (!HasNextWave())
-    {
-        GameObject()->SendMsg(MessageID::GameClear, nullptr);
-    }
     GameObject()->Destroy();
 }

@@ -135,6 +135,8 @@ set(Component
     Component/Fade/UIFader.cpp
     Component/Battle/Area/BattleArea.h
     Component/Battle/Area/BattleArea.cpp
+    Component/Battle/Area/LastBattleArea.h
+    Component/Battle/Area/LastBattleArea.cpp
     Component/Battle/Wave/Wave.h
     Component/Battle/Wave/Wave.cpp
     Component/Audio/BGMController.h

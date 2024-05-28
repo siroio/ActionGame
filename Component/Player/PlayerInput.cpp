@@ -1,7 +1,6 @@
 ﻿#include "PlayerInput.h"
-#include <Vector2.h>
 #include <InputSystem.h>
-
+#include <Vector2.h>
 #include "../../Constant/ButtonName.h"
 
 using namespace Glib;

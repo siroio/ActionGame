@@ -42,12 +42,12 @@ void PlayerMoveState::OnInitialize()
 
 int PlayerMoveState::OnUpdate(float elapsedTime)
 {
-    if (InputSystem::GetInput(ButtonName::ATTACK))
+    if (input_->Attack())
     {
         return PlayerState::Attack1;
     }
 
-    if (InputSystem::GetInput(ButtonName::DODGE))
+    if (input_->Dodge())
     {
         return PlayerState::Rolling;
     }

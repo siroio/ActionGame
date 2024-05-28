@@ -42,7 +42,7 @@ namespace
 
     constexpr char ATK_COLLIDER_RIGHT_PARENT[]{ "hand4.R" };
     constexpr char ATK_COLLIDER_LEFT_PARENT[]{ "hand4.L" };
-    constexpr float ATK_COLLIDER_RADIUS{ 0.9f };
+    constexpr float ATK_COLLIDER_RADIUS{ 1.25f };
     const Vector3 ATK_COLLIDER_CENTER{ 0.0f, -0.5f, 0.0f };
 }
 
@@ -95,28 +95,27 @@ GameObjectPtr Golem::Spawn(const Vector3& position, const Vector3& euler, const 
     auto controller = golem->AddComponent<AttackColliderController>();
     controller->AddCollider(rightCollider);
     controller->AddCollider(leftCollider);
-    controller->SetAttackActive(false);
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     golem->AddComponent<Rotator>();
     golem->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, 10.0f, player);
-    golem->AddComponent<Damageable>(120, 120, 3, EnemyState::Damage, EnemyState::Dead);
+    golem->AddComponent<Damageable>(120, 120, 15, EnemyState::Damage, EnemyState::Dead);
 
     auto stateBehavior = golem->AddComponent<StateBehavior>();
 
     EnemyAttackState::Parameter attackParam1;
     attackParam1.nextStateID = EnemyState::Selector;
-    attackParam1.power = 3;
+    attackParam1.power = 10;
     attackParam1.duration = 2.6f;
-    attackParam1.attackTime = ValidityTimer{ 0.5f, 0.3f };
+    attackParam1.attackTime = ValidityTimer{ 2.0f, 0.2f };
     auto golemAttack1 = golem->AddComponent<EnemyAttackState>(attackParam1);
     golemAttack1->SetAnimationInfo(AnimationInfo{ AnimationID::GolemAttack1 });
     stateBehavior->AddState(golemAttack1, EnemyState::MaelstromAttack);
 
     EnemyAttackState::Parameter attackParam2;
     attackParam2.nextStateID = EnemyState::Selector;
-    attackParam2.power = 3;
+    attackParam2.power = 10;
     attackParam2.duration = 2.0f;
-    attackParam2.attackTime = ValidityTimer{ 0.5f, 0.3f };
+    attackParam2.attackTime = ValidityTimer{ 1.5, 0.2f };
     auto golemAttack2 = golem->AddComponent<EnemyAttackState>(attackParam2);
     golemAttack2->SetAnimationInfo(AnimationInfo{ AnimationID::GolemAttack2 });
     stateBehavior->AddState(golemAttack2, EnemyState::MeleeAttack);
@@ -127,7 +126,7 @@ GameObjectPtr Golem::Spawn(const Vector3& position, const Vector3& euler, const 
 
     EnemyChaseState::Parameter chaseParam;
     chaseParam.completeDistance = 3.0f;
-    chaseParam.moveSpeed = 5.0f;
+    chaseParam.moveSpeed = 10.0f;
     chaseParam.moveForceMultiplier = 10.0f;
     auto golemChase = golem->AddComponent<EnemyChaseState>(chaseParam);
     golemChase->AddNextState(EnemyState::MaelstromAttack);

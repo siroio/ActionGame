@@ -3,16 +3,17 @@
 #include <GameObjectManager.h>
 #include <Components/Rigidbody.h>
 #include <Components/SphereCollider.h>
+#include <Json.h>
+#include <Vector3.h>
+#include <Debugger.h>
 #include <filesystem>
 #include <fstream>
 #include <functional>
-#include <Json.h>
 #include <vector>
 #include <unordered_map>
-#include <Vector3.h>
-#include <Debugger.h>
 
 #include "../Component/Battle/Area/BattleArea.h"
+#include "../Component/Battle/Area/LastBattleArea.h"
 #include "../Component/Battle/Wave/Wave.h"
 #include "../Component/Common/ElapsedTimer.h"
 #include "../Character/Enemy/Golem/Golem.h"
@@ -29,12 +30,9 @@ namespace
     constexpr char AREA_NAME[]{ "AreaName" };
     constexpr char AREA_RANGE[]{ "Range" };
     constexpr char AREA_WAVES[]{ "Waves" };
-
     constexpr char WAVE_NAME[]{ "WaveName" };
     constexpr char WAVE_ENEMIES[]{ "Enemies" };
-
     constexpr char ENEMY_TYPE[]{ "EnemyType" };
-
     constexpr char POSITION[]{ "Position" };
     constexpr char EULER[]{ "Euler" };
     constexpr char SCALE[]{ "Scale" };
@@ -79,7 +77,7 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
     {
         const auto& path = entry.path();
         // json以外はスキップ
-        if (path.extension() != ".json") continue;
+        if (path.extension() != ".json" || fs::is_empty(entry)) continue;
         std::ifstream file{ path };
 
         // 開けているか確認
@@ -139,22 +137,23 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
         Debug::Error(ex.what());
     }
 
-    for (const auto& area : areas)
+    for (size_t i = 0; i < areas.size(); i++)
     {
-        GameObjectPtr areaObject = GameObjectManager::Instantiate(area.name);
-        areaObject->Transform()->Position(area.position);
+        GameObjectPtr areaObject = GameObjectManager::Instantiate(areas[i].name);
+        areaObject->Transform()->Position(areas[i].position);
         areaObject->Layer(CollisionLayer::BattleArea);
         areaObject->AddComponent<ElapsedTimer>();
         auto areaRigidbody = areaObject->AddComponent<Rigidbody>();
         auto areaCollider = areaObject->AddComponent<SphereCollider>();
+        if (i == areas.size() - 1) areaObject->AddComponent<LastBattleArea>();
         auto battleArea = areaObject->AddComponent<BattleArea>();
 
         areaRigidbody->IsKinematic(true);
         areaCollider->IsTrigger(true);
         areaCollider->IsVisible(true);
-        areaCollider->Radius(area.range);
+        areaCollider->Radius(areas[i].range);
 
-        for (const auto& wave : area.waves)
+        for (const auto& wave : areas[i].waves)
         {
             auto waveObject = GameObjectManager::Instantiate(wave.name);
             waveObject->Transform()->Parent(areaObject->Transform());
@@ -170,5 +169,9 @@ void BattleAreaGenerator::Generate(std::string_view filePath)
             }
             waveObject->Active(false);
         }
+    }
+    for (const auto& area : areas)
+    {
+
     }
 }

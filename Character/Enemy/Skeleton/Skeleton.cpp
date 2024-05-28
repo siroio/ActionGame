@@ -77,7 +77,7 @@ GameObjectPtr Skeleton::Spawn(const Vector3& position, const Vector3& euler, con
     GameObjectPtr player = GameObjectManager::Find(ObjectName::Player);
     skeleton->AddComponent<Rotator>();
     skeleton->AddComponent<CharacterSearcher>(SEARCH_FOV, 100.0f, 7.0f, player);
-    skeleton->AddComponent<Damageable>(30, 30, 3, EnemyState::Damage, EnemyState::Dead);
+    skeleton->AddComponent<Damageable>(30, 30, 5, EnemyState::Damage, EnemyState::Dead);
 
     auto stateBehavior = skeleton->AddComponent<StateBehavior>();
 
