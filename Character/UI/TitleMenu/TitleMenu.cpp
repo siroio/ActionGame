@@ -6,19 +6,40 @@
 #include <Vector2.h>
 
 #include "../../../Component/Menu/MenuController.h"
-#include "../../../Component/Menu/MenuButton.h"
+#include "../../../Component/Menu/SceneChangeButton.h"
+#include "../../../Component/Menu/ExitButton.h"
 #include "../../../Component/Player/PlayerInput.h"
 #include "../../../Constant/GameObjectName.h"
+#include "../../../Constant/SceneName.h"
 #include "../../../Enum/TextureID.h"
 
 using namespace Glib;
 
 namespace
 {
-    Vector3 CURSOR_OFFSET{ 100.0f, 0.0f, 0.0f };
+    const Vector3 PLAY_BUTTON_POS{ 700.0f, 700.0f, 0.0f };
+    const Vector3 EXIT_BUTTON_POS{ 700.0f, 900.0f, 0.0f };
+    const Vector3 CURSOR_OFFSET{ -110.0f, 0.0f, 0.0f };
 }
 
-void TitleMenu::Create(const GameObjectPtr& canvas)
+namespace
+{
+    template<class T, class... Args> requires std::derived_from<T, MenuItem>
+    Glib::WeakPtr<MenuItem> SetupButton(const GameObjectPtr& item,
+                                        const Vector3& position,
+                                        unsigned int textureID, Args... args)
+    {
+        auto menuItem = item->AddComponent<T>(std::forward<Args>(args)...);
+        item->Transform()->LocalPosition(position);
+
+        auto itemImage = item->AddComponent<Image>();
+        itemImage->TextureID(textureID);
+        itemImage->Center(Vector2{ 0.0f, 0.5f });
+        return menuItem;
+    }
+}
+
+GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas)
 {
     auto menu = GameObjectManager::Instantiate("TitleMenu");
     auto play = GameObjectManager::Instantiate("Play");
@@ -30,30 +51,18 @@ void TitleMenu::Create(const GameObjectPtr& canvas)
     exit->Transform()->Parent(menu->Transform());
     cursor->Transform()->Parent(menu->Transform());
 
-    auto player = GameObjectManager::Find(ObjectName::Player);
-    auto input = player->GetComponent<PlayerInput>();
+    auto input = GameObjectManager::Find(ObjectName::Player)->GetComponent<PlayerInput>();
 
     auto menuController = menu->AddComponent<MenuController>(input);
-    auto playItem = SetupMenuMenuButton(play, Vector3{ 300.0f, 300.0f, 0.0f }, Vector3::Zero(), Vector3::One(), TextureID::Play);
-    auto exitItem = SetupMenuMenuButton(exit, Vector3{ 300.0f, 300.0f, 0.0f }, Vector3::Zero(), Vector3::One(), TextureID::Exit);
-    menuController->AddFrontItem(playItem);
-    menuController->AddFrontItem(exitItem);
+    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::PLAY);
+    auto exitItem = SetupButton<ExitButton>(exit, EXIT_BUTTON_POS, TextureID::Exit);
+    menuController->AddBackItem(playItem);
+    menuController->AddBackItem(exitItem);
 
     auto cursorImage = cursor->AddComponent<Image>();
     cursorImage->TextureID(TextureID::Cursor);
     menuController->SetCursor(cursor);
     menuController->SetCursorOffset(CURSOR_OFFSET);
-}
 
-Glib::WeakPtr<MenuItem> TitleMenu::SetupMenuMenuButton(const GameObjectPtr& item, const Vector3& position, const Vector3& euler, const Vector3& scale, unsigned int textureID)
-{
-    auto menuItem = item->AddComponent<MenuButton>();
-    item->Transform()->LocalPosition(position);
-    item->Transform()->LocalEulerAngles(euler);
-    item->Transform()->LocalScale(scale);
-
-    auto itemImage = item->AddComponent<Image>();
-    itemImage->TextureID(textureID);
-    itemImage->Center(Vector2{ 0.5f });
-    return menuItem;
+    return menu;
 }

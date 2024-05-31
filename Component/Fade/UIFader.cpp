@@ -17,13 +17,13 @@ void UIFader::Start()
 
 void UIFader::Update()
 {
-    if (InvalidFader() || !isCrossFade_) return;
+    if (InvalidFader() || !isFade_) return;
     UpdateFade();
 }
 
 void UIFader::StartFade(float duration)
 {
-    isCrossFade_ = true;
+    isFade_ = true;
     duration_ = duration;
     if (!elapsedTimer_.expired())
     {
@@ -57,7 +57,7 @@ void UIFader::UpdateFade()
     Color color = image_->Color();
     color.a = alpha;
     image_->Color(color);
-    if (t >= 1.0f) isCrossFade_ = false;
+    if (t >= 1.0f) isFade_ = false;
 }
 
 bool UIFader::InvalidFader()

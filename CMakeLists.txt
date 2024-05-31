@@ -150,8 +150,10 @@ set(Component
     Component/Menu/MenuController.h
     Component/Menu/MenuController.cpp
     Component/Menu/MenuItem.h
-    Component/Menu/MenuButton.h
-    Component/Menu/MenuButton.cpp
+    Component/Menu/ExitButton.h
+    Component/Menu/ExitButton.cpp
+    Component/Menu/SceneChangeButton.h
+    Component/Menu/SceneChangeButton.cpp
 )
 
 set(Enum

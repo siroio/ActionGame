@@ -15,10 +15,12 @@ public:
     /**
      * @brief 拒否
      */
-    virtual void Deny() = 0;
+    virtual void Deny()
+    {};
 
     /**
      * @brief 選択時
      */
-    virtual void Selected() = 0;
+    virtual void Selected()
+    {};
 };

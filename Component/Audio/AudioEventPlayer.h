@@ -13,11 +13,12 @@ namespace Glib
 class AudioEventPlayer : public Component
 {
 public:
-    AudioEventPlayer(unsigned int msgID);
+    AudioEventPlayer(unsigned int clipID, unsigned int msgID);
     void Start();
-    void ReceiveEvent(const Glib::EventMsg& msg);
+    void ReceiveMsg(const Glib::EventMsg& msg);
 
 private:
     Glib::WeakPtr<Glib::AudioSource> audioSource_{};
+    int clipID_{ -1 };
     int msgID_{ -1 };
 };

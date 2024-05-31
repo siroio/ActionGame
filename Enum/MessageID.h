@@ -13,5 +13,6 @@ struct MessageID
         GameOver,
         Comfirm,
         Deny,
+        CursorMove,
     };
 };

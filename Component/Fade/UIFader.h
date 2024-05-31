@@ -39,6 +39,6 @@ private:
     float duration_{ 0.0f };
     float startAlpha_{ 1.0f };
     float endAlpha_{ 0.0f };
-    bool isCrossFade_{ false };
+    bool isFade_{ false };
     Ease easeType_{ Ease::Linear };
 };

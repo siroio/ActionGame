@@ -21,11 +21,13 @@ void MenuController::Start()
         Debug::Warn("MenuItem is empty");
         return;
     }
+
+    SyncCursorPosition();
 }
 
 void MenuController::Update()
 {
-    const auto& item = menuItems_[currentItemIndex_];
+    const auto& item = menuItems_.at(currentItemIndex_);
     if (input_->Comfirm())
     {
         // 決定イベントの発行
@@ -42,11 +44,11 @@ void MenuController::Update()
     }
     if (input_->Up())
     {
-        SelectMenuItem(currentItemIndex_ + 1);
+        SelectMenuItem(currentItemIndex_ - 1);
     }
     if (input_->Down())
     {
-        SelectMenuItem(currentItemIndex_ - 1);
+        SelectMenuItem(currentItemIndex_ + 1);
     }
 }
 
@@ -78,7 +80,7 @@ void MenuController::SetCycleCursor(bool cycle)
 void MenuController::SyncCursorPosition()
 {
     if (menuItems_.empty() || cursor_.expired()) return;
-    const auto& item = menuItems_[currentItemIndex_];
+    const auto& item = menuItems_.at(currentItemIndex_);
     const auto& itemPosition = item->GameObject()->Transform()->Position();
     cursor_->Position(itemPosition + cursorOffset_);
 }
@@ -89,13 +91,13 @@ void MenuController::SelectMenuItem(int index)
     // 選択アイテムのインデックスを循環させるかどうか
     if (isCycleCursor_)
     {
-        if ((menuItems_.size() - 1) > index)
+        if (index >= static_cast<int>(menuItems_.size()))
         {
             selected = 0;
         }
-        if (index < 0)
+        else if (index < 0)
         {
-            selected = static_cast<int>((menuItems_.size() - 1));
+            selected = static_cast<int>(menuItems_.size() - 1);
         }
     }
 
@@ -103,11 +105,14 @@ void MenuController::SelectMenuItem(int index)
     if (selected < 0 || selected >= menuItems_.size()) return;
 
     currentItemIndex_ = selected;
-    const auto& item = menuItems_[currentItemIndex_];
+    const auto& item = menuItems_.at(currentItemIndex_);
     item->Selected();
 
     // カーソルの位置を同期
     SyncCursorPosition();
+
+    // 移動イベント発行
+    GameObject()->SendMsg(MessageID::CursorMove, nullptr);
 }
 
 void MenuController::OnGUI()
