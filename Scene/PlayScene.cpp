@@ -63,13 +63,12 @@ void PlayScene::Start()
     HPGauge::Spawn(uiCanvas);
     UIButton::Spawn(uiCanvas);
 
-
 #ifdef _DEBUG
     // デバッグ時のみ
     SafeArea::Spawn(); // UI調整用
 #endif
 
-    Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+    // Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
 
     ScreenFader::Create(1.5f, true, TimerScale::Scaled);
 
@@ -86,7 +85,6 @@ void PlayScene::Start()
     fader->StartFade(2.0f);
     bgmController->AddComponent<ElapsedTimer>();
 
-    // debug stage
     auto stage = GameObjectManager::Instantiate("Stage");
     stage->Layer(CollisionLayer::Stage);
     stage->Tag(GameTag::OBSTACLE);

@@ -4,6 +4,9 @@
 #include <Components/Transform.h>
 #include <Vector3.h>
 
+/**
+ * @brief カメラ制御コンポーネント
+ */
 class CameraController : public Component
 {
 public:

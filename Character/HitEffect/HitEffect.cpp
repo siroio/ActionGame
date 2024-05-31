@@ -19,21 +19,14 @@ namespace
 
 GameObjectPtr HitEffect::Spawn(const Vector3& position)
 {
-    auto deadEfk = GameObjectManager::Instantiate(EFFECT_OBJECT_NAME);
-    deadEfk->Transform()->LocalPosition(position);
-    deadEfk->Transform()->LocalScale(Vector3{ 0.7f });
-    auto effect = deadEfk->AddComponent<EffectSystem>();
+    auto hitEffect = GameObjectManager::Instantiate(EFFECT_OBJECT_NAME);
+    hitEffect->Transform()->LocalPosition(position);
+    hitEffect->Transform()->LocalScale(Vector3{ 0.7f });
+    auto effect = hitEffect->AddComponent<EffectSystem>();
     effect->EffectID(EffectID::HitEffect);
     effect->EffectColor(Color{ 0.9f, 0.8f, 0.6f, 0.7f });
     effect->DestoryOnFinish(true);
     effect->PlayOnStart(true);
 
-    //auto sound = deadEfk->AddComponent<AudioSource>();
-    //sound->AudioID(AudioID::EnemyDead);
-    //sound->Is3DSound(true);
-    //sound->PlayOnStart(true);
-    //sound->Pitch(SE_PITCH);
-    //sound->SetGroup(AudioGroupID::SE);
-
-    return deadEfk;
+    return hitEffect;
 }

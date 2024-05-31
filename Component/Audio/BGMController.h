@@ -8,6 +8,9 @@ namespace Glib
 }
 class AudioFader;
 
+/**
+ * @brief BGM制御用コンポーネント
+ */
 class BGMController : public Component
 {
 public:

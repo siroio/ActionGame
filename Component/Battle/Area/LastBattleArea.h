@@ -7,7 +7,11 @@ namespace Glib
 }
 
 class BattleArea;
+class GameResultEventer;
 
+/**
+ * @brief 最後のエリア用コンポーネント
+ */
 class LastBattleArea : public Component
 {
 public:
@@ -16,4 +20,5 @@ public:
 
 private:
     Glib::WeakPtr<BattleArea> battleArea_{};
+    Glib::WeakPtr<GameResultEventer> resultEventer_{};
 };

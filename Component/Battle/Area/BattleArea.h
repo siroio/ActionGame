@@ -11,6 +11,9 @@ namespace Glib
 class Wave;
 class BGMController;
 
+/**
+ * @brief 戦闘エリア管理コンポーネント
+ */
 class BattleArea : public Component
 {
 private:

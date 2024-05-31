@@ -1,9 +1,9 @@
 ﻿#include "LastBattleArea.h"
 #include <GameObject.h>
 #include <EventMsg.h>
-#include <Debugger.h>
 
 #include "BattleArea.h"
+#include "../../Event/GameResultEventer.h"
 #include "../../../Enum/MessageID.h"
 #include "../../../Enum/AudioID.h"
 
@@ -16,9 +16,6 @@ void LastBattleArea::Start()
 
 void LastBattleArea::ReceiveMsg(const Glib::EventMsg& msg)
 {
-    if (msg.MsgID() == MessageID::BattleClear)
-    {
-        Debug::Log("=== GameClear ===");
-        GameObject()->SendMsg(MessageID::GameClear, nullptr);
-    }
+    if (msg.MsgID() != MessageID::BattleClear) return;
+    GameObject()->SendMsg(MessageID::GameClear, nullptr, resultEventer_->GameObject());
 }

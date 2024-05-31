@@ -10,5 +10,8 @@ struct TextureID
         HP_Gauge,
         Fade,
         Button,
+        Play,
+        Exit,
+        Cursor,
     };
 };

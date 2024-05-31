@@ -3,6 +3,9 @@
 
 class BattleArea;
 
+/**
+ * @brief ウェーブコンポーネント
+ */
 class Wave : public Component
 {
 public:

@@ -69,6 +69,8 @@ set(Character
     Character/UI/ScreenFader/ScreenFader.cpp
     Character/UI/Button/UIButton.h
     Character/UI/Button/UIButton.cpp
+    Character/UI/TitleMenu/TitleMenu.h
+    Character/UI/TitleMenu/TitleMenu.cpp
 )
 
 set(Component
@@ -140,7 +142,16 @@ set(Component
     Component/Battle/Wave/Wave.h
     Component/Battle/Wave/Wave.cpp
     Component/Audio/BGMController.h
-    Component/Audio/BGMController.cpp
+    Component/Audio/BGMController.cpp    
+    Component/Audio/AudioEventPlayer.h
+    Component/Audio/AudioEventPlayer.cpp    
+    Component/Event/GameResultEventer.h
+    Component/Event/GameResultEventer.cpp
+    Component/Menu/MenuController.h
+    Component/Menu/MenuController.cpp
+    Component/Menu/MenuItem.h
+    Component/Menu/MenuButton.h
+    Component/Menu/MenuButton.cpp
 )
 
 set(Enum

@@ -1,9 +1,12 @@
-#pragma once
+﻿#pragma once
 #include <Component.h>
 
 class CameraController;
 class PlayerInput;
 
+/**
+ * @brief カメラ回転コンポーネント
+ */
 class CameraRotator : public Component
 {
 public:

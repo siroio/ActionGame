@@ -11,5 +11,7 @@ struct MessageID
         WaveClear,
         GameClear,
         GameOver,
+        Comfirm,
+        Deny,
     };
 };
