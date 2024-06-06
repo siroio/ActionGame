@@ -17,15 +17,16 @@ void GameResultEventer::Start()
 
 void GameResultEventer::ReceiveEvent(const Glib::EventMsg& msg)
 {
-    if (msg.MsgID() == MessageID::GameClear)
+    switch (msg.MsgID())
     {
-        Debug::Log("=== GameClear ===");
-        ActivateObjects(gameClearObjects_);
-    }
-    else if (msg.MsgID() == MessageID::GameOver)
-    {
-        Debug::Log("=== GameOver ===");
-        ActivateObjects(gameOverObjects_);
+        case MessageID::GameClear:
+            Debug::Log("=== GameClear ===");
+            ActivateObjects(gameClearObjects_);
+            return;
+        case  MessageID::GameOver:
+            Debug::Log("=== GameOver ===");
+            ActivateObjects(gameOverObjects_);
+            return;
     }
 }
 

@@ -7,6 +7,7 @@
 #include "../../Constant/GameObjectName.h"
 #include "../../Component/Camera/CameraRotator.h"
 #include "../../Component/Camera/CameraController.h"
+#include "../../Component/Player/PlayerInput.h"
 
 using namespace Glib;
 
@@ -24,5 +25,6 @@ GameObjectPtr MainCamera::Spawn(const Vector3& offset, const float distance)
     param.Offset = offset;
     param.Distance = distance;
     cameraParent->AddComponent<CameraController>(param);
+    cameraParent->AddComponent<PlayerInput>();
     return cameraParent;
 }

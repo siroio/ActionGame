@@ -51,11 +51,8 @@ void PlayScene::Start()
     GameObjectPtr player = Player::Spawn();
 
     // カメラのターゲットにプレイヤーを設定
-    if (!player.expired())
-    {
-        auto controller = camera->GetComponentInParent<CameraController>();
-        controller->SetTarget(player->Transform());
-    }
+    auto cameraController = camera->GetComponentInParent<CameraController>();
+    cameraController->SetTarget(player->Transform());
 
     // UI生成
     auto uiCanvas = GameObjectManager::Instantiate("UICanvas");
@@ -63,14 +60,13 @@ void PlayScene::Start()
     HPGauge::Spawn(uiCanvas);
     UIButton::Spawn(uiCanvas);
 
+    // 画面フェード
+    ScreenFader::Create(1.5f, true, TimerScale::Scaled);
+
 #ifdef _DEBUG
     // デバッグ時のみ
     SafeArea::Spawn(); // UI調整用
 #endif
-
-    // Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
-
-    ScreenFader::Create(1.5f, true, TimerScale::Scaled);
 
     auto bgmController = GameObjectManager::Instantiate("BGMController");
     auto bgmSource = bgmController->AddComponent<AudioSource>();
@@ -94,11 +90,14 @@ void PlayScene::Start()
     mc->MeshID(MeshID::Stage);
     mc->FlipNormals(true);
 
-    // 戦闘エリアの生成
+
+    // Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+
+    // 戦闘エリアと敵の生成
     BattleAreaGenerator::Generate(BATTLE_AREA);
 }
 
 void PlayScene::End()
 {
-
+    GameTimer::TimeScale(1.0f);
 }

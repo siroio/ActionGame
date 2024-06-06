@@ -114,7 +114,6 @@ void CameraController::ObstacleDetection()
             parameter_.Position = hit.point - (direction * 0.01f);
         }
     }
-
 }
 
 void CameraController::OnGUI()

@@ -22,6 +22,7 @@
 #include "../../Component/Player/State/PlayerRollingState.h"
 #include "../../Component/Player/State/PlayerDamageState.h"
 #include "../../Component/Player/State/PlayerDeadState.h"
+#include "../../Component/Player/PlayerInput.h"
 #include "../../Component/Player/HitStop.h"
 #include "../HitEffect/HitEffect.h"
 #include "../../Enum/State/PlayerState.h"
@@ -77,6 +78,8 @@ GameObjectPtr Player::Spawn()
     SetDefaultAnimation(player);
     SetBodyCollider(player);
     SetAttackCollider(player, playerAtk);
+
+    player->AddComponent<PlayerInput>();
 
     auto audio = player->AddComponent<AudioSource>();
     audio->SetGroup(AudioGroupID::SE);

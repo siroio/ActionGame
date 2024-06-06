@@ -9,6 +9,9 @@ struct AudioID
 
         Field = 10,
         Battle,
+        Title,
+        GameOver,
+        GameClear,
 
         ButtonPush = 20,
         CursorMove,

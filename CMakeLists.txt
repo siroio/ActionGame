@@ -71,6 +71,8 @@ set(Character
     Character/UI/Button/UIButton.cpp
     Character/UI/TitleMenu/TitleMenu.h
     Character/UI/TitleMenu/TitleMenu.cpp
+    Character/Result/GameResult.h
+    Character/Result/GameResult.cpp
 )
 
 set(Component
@@ -154,6 +156,8 @@ set(Component
     Component/Menu/ExitButton.cpp
     Component/Menu/SceneChangeButton.h
     Component/Menu/SceneChangeButton.cpp
+    Component/Scene/SceneChanger.h
+    Component/Scene/SceneChanger.cpp
 )
 
 set(Enum

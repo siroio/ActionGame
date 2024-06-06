@@ -9,6 +9,7 @@
 #include "../../../Component/Menu/SceneChangeButton.h"
 #include "../../../Component/Menu/ExitButton.h"
 #include "../../../Component/Player/PlayerInput.h"
+#include "../../../Component/Scene/SceneChanger.h"
 #include "../../../Constant/GameObjectName.h"
 #include "../../../Constant/SceneName.h"
 #include "../../../Enum/TextureID.h"
@@ -27,7 +28,7 @@ namespace
     template<class T, class... Args> requires std::derived_from<T, MenuItem>
     Glib::WeakPtr<MenuItem> SetupButton(const GameObjectPtr& item,
                                         const Vector3& position,
-                                        unsigned int textureID, Args... args)
+                                        unsigned int textureID, Args&&... args)
     {
         auto menuItem = item->AddComponent<T>(std::forward<Args>(args)...);
         item->Transform()->LocalPosition(position);
@@ -39,7 +40,7 @@ namespace
     }
 }
 
-GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas)
+GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr<SceneChanger>& sceneChanger)
 {
     auto menu = GameObjectManager::Instantiate("TitleMenu");
     auto play = GameObjectManager::Instantiate("Play");
@@ -54,7 +55,7 @@ GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas)
     auto input = GameObjectManager::Find(ObjectName::Player)->GetComponent<PlayerInput>();
 
     auto menuController = menu->AddComponent<MenuController>(input);
-    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::PLAY);
+    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::PLAY, sceneChanger);
     auto exitItem = SetupButton<ExitButton>(exit, EXIT_BUTTON_POS, TextureID::Exit);
     menuController->AddBackItem(playItem);
     menuController->AddBackItem(exitItem);

@@ -9,11 +9,15 @@
 
 #include "../Character/UI/TitleMenu/TitleMenu.h"
 #include "../Character/UI/ScreenFader/ScreenFader.h"
+#include "../Component/Common/ElapsedTimer.h"
 #include "../Component/Player/PlayerInput.h"
 #include "../Component/Audio/AudioEventPlayer.h"
-#include "../Component/Common/ElapsedTimer.h"
+#include "../Component/Audio/BGMController.h"
+#include "../Component/Fade/AudioFader.h"
 #include "../Component/Fade/UIFader.h"
+#include "../Component/Scene/SceneChanger.h"
 #include "../Constant/SceneName.h"
+#include "../Enum/AudioGroupID.h"
 #include "../Enum/AudioID.h"
 #include "../Enum/MessageID.h"
 
@@ -23,16 +27,31 @@ using namespace Glib;
 void TitleScene::Start()
 {
     SkyboxManager::SetSkybox(0);
-    auto dummy = GameObjectManager::Instantiate("Player");
-    auto camera = dummy->AddComponent<Camera>();
+    auto player = GameObjectManager::Instantiate("Player");
+    auto camera = player->AddComponent<Camera>();
     camera->ClearFlags(CameraClearFlags::SkyBox);
-    dummy->AddComponent<PlayerInput>();
+    player->AddComponent<PlayerInput>();
 
-    ScreenFader::Create(1.5f, true, TimerScale::Scaled);
+    auto fader = ScreenFader::Create(1.5f, true, TimerScale::Scaled);
+    auto sceneChanger = GameObjectManager::Instantiate("SceneChanger")
+        ->AddComponent<SceneChanger>(fader);
+
+    auto bgmController = GameObjectManager::Instantiate("BGMController");
+    auto bgmSource = bgmController->AddComponent<AudioSource>();
+    bgmSource->SetGroup(AudioGroupID::BGM);
+    bgmSource->AudioID(AudioID::Title);
+    bgmSource->PlayOnStart(true);
+    bgmSource->Loop(true);
+    bgmSource->Volume(0.0f);
+    auto controller = bgmController->AddComponent<BGMController>();
+    auto bgmFader = bgmController->AddComponent<AudioFader>();
+    bgmFader->SetVolume(1.0f);
+    bgmFader->StartFade(2.0f);
+    bgmController->AddComponent<ElapsedTimer>();
 
     auto titleCanvas = GameObjectManager::Instantiate("TitleCanvas");
     titleCanvas->AddComponent<Canvas>();
-    auto menu = TitleMenu::Create(titleCanvas);
+    auto menu = TitleMenu::Create(titleCanvas, sceneChanger);
     menu->AddComponent<AudioSource>();
     menu->AddComponent<AudioEventPlayer>(AudioID::ButtonPush, MessageID::Comfirm);
     menu->AddComponent<AudioEventPlayer>(AudioID::CursorMove, MessageID::CursorMove);

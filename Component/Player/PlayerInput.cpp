@@ -5,47 +5,52 @@
 
 using namespace Glib;
 
-bool PlayerInput::Pose()
+bool PlayerInput::Pose() const
 {
-    return InputSystem::GetInputDown(ButtonName::POSE);
+    return InputSystem::GetInputDown(ButtonName::POSE) && enable_;
 }
 
-bool PlayerInput::Comfirm()
+bool PlayerInput::Comfirm() const
 {
-    return InputSystem::GetInputDown(ButtonName::CONFIRM);
+    return InputSystem::GetInputDown(ButtonName::CONFIRM) && enable_;
 }
 
-bool PlayerInput::Deny()
+bool PlayerInput::Deny() const
 {
-    return InputSystem::GetInputDown(ButtonName::DENY);
+    return InputSystem::GetInputDown(ButtonName::DENY) && enable_;
 }
 
-bool PlayerInput::Up()
+bool PlayerInput::Up() const
 {
-    return InputSystem::GetInputDown(ButtonName::UP);
+    return InputSystem::GetInputDown(ButtonName::UP) && enable_;
 }
 
-bool PlayerInput::Down()
+bool PlayerInput::Down() const
 {
-    return InputSystem::GetInputDown(ButtonName::DOWN);
+    return InputSystem::GetInputDown(ButtonName::DOWN) && enable_;
 }
 
-bool PlayerInput::Attack()
+bool PlayerInput::Attack() const
 {
-    return InputSystem::GetInputDown(ButtonName::ATTACK);
+    return InputSystem::GetInputDown(ButtonName::ATTACK) && enable_;
 }
 
-bool PlayerInput::Dodge()
+bool PlayerInput::Dodge() const
 {
-    return InputSystem::GetInputDown(ButtonName::DODGE);
+    return InputSystem::GetInputDown(ButtonName::DODGE) && enable_;
 }
 
-Vector2 PlayerInput::Camera()
+Vector2 PlayerInput::Camera() const
 {
-    return InputSystem::GetRightStick();
+    return enable_ ? InputSystem::GetRightStick() : Vector2::Zero();
 }
 
-Vector2 PlayerInput::Move()
+Vector2 PlayerInput::Move() const
 {
-    return InputSystem::GetLeftStick();
+    return enable_ ? InputSystem::GetLeftStick() : Vector2::Zero();
+}
+
+void PlayerInput::InputEnable(bool enable)
+{
+    enable_ = enable;
 }

@@ -1,11 +1,26 @@
 ﻿#include "ResultScene.h"
-#include <SceneManager.h>
+#include <Components/Camera.h>
+#include <GameObject.h>
+#include <GameObjectManager.h>
+#include <SkyboxManager.h>
+#include "../Character/UI/ScreenFader/ScreenFader.h"
+#include "../Component/Player/PlayerInput.h"
 #include "../Constant/SceneName.h"
+
+using namespace Glib;
 
 void ResultScene::Start()
 {
-    Glib::SceneManager::LoadScene(SceneName::TITLE);
+    SkyboxManager::SetSkybox(0);
+    auto player = GameObjectManager::Instantiate("Player");
+    auto camera = player->AddComponent<Camera>();
+    camera->ClearFlags(CameraClearFlags::SkyBox);
+    player->AddComponent<PlayerInput>();
+
+
 }
 
 void ResultScene::End()
-{}
+{
+
+}
