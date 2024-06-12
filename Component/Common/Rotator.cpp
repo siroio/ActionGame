@@ -37,6 +37,16 @@ const Vector3& Rotator::Direction() const
     return direction_;
 }
 
+float Rotator::Speed() const
+{
+    return turnSpeed_;
+}
+
+void Rotator::Speed(float speed)
+{
+    turnSpeed_ = speed;
+}
+
 void Rotator::OnGUI()
 {
     float turnSpeed{ turnSpeed_ };

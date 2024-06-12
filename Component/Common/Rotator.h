@@ -20,6 +20,8 @@ public:
     bool IsCompleteRotate() const;
     void Direction(const Vector3& direction);
     const Vector3& Direction() const;
+    float Speed() const;
+    void Speed(float speed);
 
 private:
     void OnGUI() override;
