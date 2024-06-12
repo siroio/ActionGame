@@ -8,6 +8,12 @@ struct MeshID
         Skeleton,
         Mage,
         Golem,
-        Stage,
+        Ground,
+        Mountain,
+        WALL_1,
+        WALL_2,
+        WALL_3,
+        WALL_4,
+        WALL_5,
     };
 };

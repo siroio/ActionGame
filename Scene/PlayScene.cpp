@@ -13,6 +13,7 @@
 #include "../Character/Camera/MainCamera.h"
 #include "../Character/Player/Player.h"
 #include "../Character/Enemy/Golem/Golem.h"
+#include "../Character/Stage/Stage.h"
 #include "../Character/Menu/SafeArea/SafeArea.h"
 #include "../Character/UI/HPGauge/HPGauge.h"
 #include "../Character/UI/Button/UIButton.h"
@@ -25,8 +26,6 @@
 #include "../Enum/AudioGroupID.h"
 #include "../Enum/AudioID.h"
 #include "../Enum/CollisionLayer.h"
-#include "../Enum/MeshID.h"
-#include "../Constant/ObjectTag.h"
 
 using namespace Glib;
 
@@ -81,20 +80,11 @@ void PlayScene::Start()
     fader->StartFade(2.0f);
     bgmController->AddComponent<ElapsedTimer>();
 
-    auto stage = GameObjectManager::Instantiate("Stage");
-    stage->Layer(CollisionLayer::Stage);
-    stage->Tag(GameTag::OBSTACLE);
-    auto mr = stage->AddComponent<MeshRenderer>();
-    mr->MeshID(MeshID::Stage);
-    auto mc = stage->AddComponent<MeshCollider>();
-    mc->MeshID(MeshID::Stage);
-    mc->FlipNormals(true);
-
-
-    // Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+    Stage::Spawn();
+    Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
 
     // 戦闘エリアと敵の生成
-    BattleAreaGenerator::Generate(BATTLE_AREA);
+    // BattleAreaGenerator::Generate(BATTLE_AREA);
 }
 
 void PlayScene::End()
