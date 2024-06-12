@@ -14,6 +14,7 @@ void LastBattleArea::Start()
 {
     battleArea_ = GameObject()->GetComponent<BattleArea>();
     auto result = GameObjectManager::Find("GameResult");
+    if (result.expired()) return;
     resultEventer_ = result->GetComponent<GameResultEventer>();
 }
 
