@@ -58,12 +58,22 @@ namespace
     /* === アニメーション関連 === */
 
     constexpr float ANIM_DEFAULT_BLEND_TIME{ 0.1f };
+    constexpr float TURN_SPEED{ 12.0f };
 
     /* === ヒットストップ === */
 
     constexpr unsigned int HITSTOP_MSG{ MessageID::Attacked };
     constexpr float HITSTOP_DURATION{ 0.1f };
     constexpr float HITSTOP_TIMESCALE{ 0.1f };
+
+    /* === オブジェクト関連 === */
+
+    const Vector3 SPAWN_POINT{ 0.0f, 0.0f, 3.0f };
+
+    /* === ステータス ===  */
+
+    constexpr int MAX_HP{ 200 };
+    constexpr int POISE{ 200 };
 }
 
 GameObjectPtr Player::Spawn()
@@ -73,7 +83,7 @@ GameObjectPtr Player::Spawn()
     auto playerEfk = GameObjectManager::Instantiate("PlayerSlashEffect");
     player->Layer(CollisionLayer::Player);
     playerAtk->Layer(CollisionLayer::PlayerAttack);
-    player->Transform()->Position(Vector3{ 0, 0, 3 });
+    player->Transform()->Position(SPAWN_POINT);
     SetMesh(player);
     SetDefaultAnimation(player);
     SetBodyCollider(player);
@@ -93,8 +103,9 @@ GameObjectPtr Player::Spawn()
 
     player->AddComponent<DelayedAudioPlayer>();
     player->AddComponent<ElapsedTimer>();
-    player->AddComponent<Rotator>();
-    player->AddComponent<Damageable>(200, 200, 0, PlayerState::Damage, PlayerState::Dead);
+    auto rotator = player->AddComponent<Rotator>();
+    rotator->Speed(TURN_SPEED);
+    player->AddComponent<Damageable>(MAX_HP, MAX_HP, POISE, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{
@@ -231,6 +242,7 @@ void Player::SetAttackCollider(const GameObjectPtr& player, const GameObjectPtr&
     boxCol->Active(false);
     rb->IsKinematic(true);
     boxCol->IsTrigger(true);
+    boxCol->IsVisible(true);
     boxCol->Size(ATK_COLLIDER_SIZE);
     collider->AddComponent<HitStop>(HITSTOP_MSG, HITSTOP_DURATION, HITSTOP_TIMESCALE);
     collider->AddComponent<EffectSpawner>(HitEffect::Spawn, MessageID::Attacked);
