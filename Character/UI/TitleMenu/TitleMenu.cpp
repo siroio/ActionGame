@@ -18,9 +18,10 @@ using namespace Glib;
 
 namespace
 {
-    const Vector3 PLAY_BUTTON_POS{ 700.0f, 700.0f, 0.0f };
-    const Vector3 EXIT_BUTTON_POS{ 700.0f, 900.0f, 0.0f };
-    const Vector3 CURSOR_OFFSET{ -110.0f, 0.0f, 0.0f };
+    const Vector3 PLAY_BUTTON_POS{ 800.0f, 750.0f, 0.0f };
+    const Vector3 EXIT_BUTTON_POS{ 800.0f, 900.0f, 0.0f };
+    const Vector3 CURSOR_OFFSET{ -35.0f, 0.0f, 0.0f };
+    const Vector3 CURSOR_SCALE{ 0.5f, 0.5f, 1.0f };
 }
 
 namespace
@@ -64,6 +65,7 @@ GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr
     cursorImage->TextureID(TextureID::Cursor);
     menuController->SetCursor(cursor);
     menuController->SetCursorOffset(CURSOR_OFFSET);
+    cursor->Transform()->LocalScale(CURSOR_SCALE);
 
     return menu;
 }
