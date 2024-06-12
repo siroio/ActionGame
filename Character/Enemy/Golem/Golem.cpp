@@ -136,7 +136,7 @@ GameObjectPtr Golem::Spawn(const Vector3& position, const Vector3& euler, const 
 
     EnemyDamageState::Parameter damageParam;
     damageParam.nextStateID = EnemyState::Selector;
-    damageParam.duration = 0.6f;
+    damageParam.duration = 1.3f;
     damageParam.moveSpeed = 1.0f;
     damageParam.moveForceMultiplier = 20.0f;
     auto golemDamage = golem->AddComponent<EnemyDamageState>(damageParam);
