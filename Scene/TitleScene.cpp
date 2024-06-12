@@ -21,7 +21,6 @@
 #include "../Enum/AudioID.h"
 #include "../Enum/MessageID.h"
 
-
 using namespace Glib;
 
 void TitleScene::Start()
@@ -52,7 +51,7 @@ void TitleScene::Start()
     auto titleCanvas = GameObjectManager::Instantiate("TitleCanvas");
     titleCanvas->AddComponent<Canvas>();
     auto menu = TitleMenu::Create(titleCanvas, sceneChanger);
-    menu->AddComponent<AudioSource>();
+    menu->AddComponent<AudioSource>()->SetGroup(AudioGroupID::SE);
     menu->AddComponent<AudioEventPlayer>(AudioID::ButtonPush, MessageID::Comfirm);
     menu->AddComponent<AudioEventPlayer>(AudioID::CursorMove, MessageID::CursorMove);
 }

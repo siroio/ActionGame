@@ -73,6 +73,8 @@ set(Character
     Character/UI/TitleMenu/TitleMenu.cpp
     Character/Result/GameResult.h
     Character/Result/GameResult.cpp
+    Character/Stage/Stage.h
+    Character/Stage/Stage.cpp
 )
 
 set(Component
