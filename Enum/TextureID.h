@@ -13,5 +13,7 @@ struct TextureID
         Play,
         Exit,
         Cursor,
+        Title,
+        Retry,
     };
 };

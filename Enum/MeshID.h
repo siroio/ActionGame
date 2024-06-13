@@ -15,5 +15,6 @@ struct MeshID
         WALL_3,
         WALL_4,
         WALL_5,
+        TitleStage,
     };
 };

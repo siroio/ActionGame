@@ -71,6 +71,8 @@ set(Character
     Character/UI/Button/UIButton.cpp
     Character/UI/TitleMenu/TitleMenu.h
     Character/UI/TitleMenu/TitleMenu.cpp
+    Character/UI/ResultMenu/ResultMenu.h
+    Character/UI/ResultMenu/ResultMenu.cpp
     Character/Result/GameResult.h
     Character/Result/GameResult.cpp
     Character/Stage/Stage.h
