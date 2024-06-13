@@ -4,12 +4,12 @@
 #include <GameObject.h>
 #include <Vector3.h>
 #include <Vector2.h>
+#include <Debugger.h>
 
 #include "../../../Component/Menu/MenuController.h"
 #include "../../../Component/Menu/SceneChangeButton.h"
 #include "../../../Component/Menu/ExitButton.h"
 #include "../../../Component/Player/PlayerInput.h"
-#include "../../../Component/Scene/SceneChanger.h"
 #include "../../../Constant/GameObjectName.h"
 #include "../../../Constant/SceneName.h"
 #include "../../../Enum/TextureID.h"
@@ -56,7 +56,7 @@ GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr
     auto input = GameObjectManager::Find(ObjectName::Player)->GetComponent<PlayerInput>();
 
     auto menuController = menu->AddComponent<MenuController>(input);
-    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::PLAY, sceneChanger);
+    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::RESULT, sceneChanger);
     auto exitItem = SetupButton<ExitButton>(exit, EXIT_BUTTON_POS, TextureID::Exit);
     menuController->AddBackItem(playItem);
     menuController->AddBackItem(exitItem);
