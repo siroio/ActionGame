@@ -61,11 +61,6 @@ void CameraController::FixedUpdate()
         );
     }
 
-    if (parameter_.ObstacleDetection && !parameter_.Target.expired())
-    {
-        ObstacleDetection();
-    }
-
     parent_->Position(parameter_.Position);
     parent_->EulerAngles(parameter_.Angle);
 
@@ -75,6 +70,11 @@ void CameraController::FixedUpdate()
 
     camera_->LocalPosition(parameter_.Offset);
     camera_->LocalEulerAngles(parameter_.OffsetAngle);
+
+    if (parameter_.ObstacleDetection && !parameter_.Target.expired())
+    {
+        ObstacleDetection();
+    }
 }
 
 void CameraController::SetTarget(const WeakPtr<Transform>& target)
@@ -100,19 +100,19 @@ void CameraController::ObstacleDetection()
 
     // 注目対象からの方向
     std::vector<RaycastHit> hits{};
-    if (!Physics::RaycastAll(position, direction, hits, parameter_.Distance * 2.0f)) return;
+    if (!Physics::RaycastAll(position, direction, hits, parameter_.Distance)) return;
     float shortestPath = parameter_.Distance * parameter_.Distance;
     for (const auto& hit : hits)
     {
         if (hit.gameObject.expired()) continue;
         if (hit.gameObject->Tag() != GameTag::OBSTACLE) continue;
-        Vector3 nearestPoint = target->InverseTransformPoint(hit.point);
+        Vector3 nearestPoint = target->Position() - hit.point;
         const float& distSqr = nearestPoint.SqrMagnitude();
         if (distSqr < shortestPath)
         {
             shortestPath = distSqr;
-            parameter_.Position = hit.point - (direction * 0.1f);
-            Debug::Log(parameter_.Position.ToString());
+            parameter_.Position = hit.point;
+            camera_->Position(hit.point - (direction * 0.1f));
         }
     }
 }
