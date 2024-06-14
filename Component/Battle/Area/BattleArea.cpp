@@ -64,6 +64,7 @@ void BattleArea::StartBattle()
 
     SetNextWave(); // ウェーブを設定
 
+    // ウェーブが設定されてない場合は開始しない
     if (currentWave_.expired())
     {
         Debug::Log("BattleStart failed. \nInvalid Wave.");

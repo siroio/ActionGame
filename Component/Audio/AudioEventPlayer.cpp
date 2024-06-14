@@ -12,6 +12,7 @@ AudioEventPlayer::AudioEventPlayer(unsigned int clipID, unsigned int msgID) :
 
 void AudioEventPlayer::Start()
 {
+    // 無効なIDの場合はコンポーネントを削除
     if (clipID_ < 0 || msgID_ < 0)
     {
         Debug::Log("Invalid ID.");
