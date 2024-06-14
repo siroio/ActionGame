@@ -81,10 +81,10 @@ void PlayScene::Start()
     bgmController->AddComponent<ElapsedTimer>();
 
     Stage::Spawn();
-    Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+    //Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
 
     // 戦闘エリアと敵の生成
-    // BattleAreaGenerator::Generate(BATTLE_AREA);
+    BattleAreaGenerator::Generate(BATTLE_AREA);
 }
 
 void PlayScene::End()

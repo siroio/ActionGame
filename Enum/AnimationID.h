@@ -13,6 +13,7 @@ struct AnimationID
         PlayerAttack2,
         PlayerAttack3,
         PlayerAttack4,
+        PlayerUpArm,
 
         SkeletonAttack = 10,
         SkeletonDeath,

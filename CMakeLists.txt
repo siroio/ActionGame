@@ -126,6 +126,8 @@ set(Component
     Component/Player/State/PlayerDeadState.cpp
     Component/Player/State/PlayerRollingState.h
     Component/Player/State/PlayerRollingState.cpp
+    Component/Player/State/PlayerIdleState.h
+    Component/Player/State/PlayerIdleState.cpp
     Component/Player/PlayerInput.h
     Component/Player/PlayerInput.cpp
     Component/Player/HitStop.h
