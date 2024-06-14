@@ -8,6 +8,9 @@
 class StateBehavior;
 class CharacterSearcher;
 
+/**
+ * @brief 敵の遠距離攻撃ステート
+ */
 class EnemyProjectileAttackState : public State
 {
 public:

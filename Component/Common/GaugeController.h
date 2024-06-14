@@ -8,6 +8,9 @@ namespace Glib
 enum class Ease;
 class Damageable;
 
+/**
+ * @brief HPゲージなどの制御用コンポーネント
+ */
 class GaugeController : public Component
 {
 public:

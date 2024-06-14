@@ -4,6 +4,9 @@
 
 class SceneChanger;
 
+/**
+ * @brief シーン変更ボタン
+ */
 class SceneChangeButton : public MenuItem
 {
 public:

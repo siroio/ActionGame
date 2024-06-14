@@ -6,6 +6,9 @@ namespace Glib
     class Rigidbody;
 }
 
+/**
+ * @brief 敵の死亡ステート
+ */
 class EnemyDeadState : public State
 {
 public:

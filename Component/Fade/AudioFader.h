@@ -10,6 +10,9 @@ namespace Glib
 
 class ElapsedTimer;
 
+/**
+ * @brief 音声フェードコンポーネント
+ */
 class AudioFader : public Component
 {
 public:

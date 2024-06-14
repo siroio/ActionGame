@@ -8,6 +8,9 @@ namespace Glib
     class Transform;
 }
 
+/**
+ * @brief ターゲット探索用コンポーネント
+ */
 class CharacterSearcher : public Component
 {
 public:

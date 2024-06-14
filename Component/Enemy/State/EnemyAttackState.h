@@ -11,6 +11,9 @@ namespace Glib
 
 class AttackColliderController;
 
+/**
+ * @brief 敵の攻撃ステート
+ */
 class EnemyAttackState : public State
 {
 public:

@@ -10,6 +10,9 @@ namespace Glib
 
 struct Vector3;
 
+/**
+ * @brief エフェクトをメッセージで再生
+ */
 class EffectSpawner : public Component
 {
 public:

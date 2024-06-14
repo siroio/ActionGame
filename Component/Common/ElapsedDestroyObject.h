@@ -3,6 +3,9 @@
 
 class ElapsedTimer;
 
+/**
+ * @brief 時間経過でオブジェクトを削除
+ */
 class ElapsedDestroyObject : public Component
 {
 public:

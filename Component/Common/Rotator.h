@@ -8,6 +8,9 @@ namespace Glib
     class Transform;
 }
 
+/**
+ * @brief オブジェクトの回転コンポーネント
+ */
 class Rotator : public Component
 {
 public:

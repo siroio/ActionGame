@@ -9,6 +9,9 @@ namespace Glib
 class CharacterSearcher;
 class Damageable;
 
+/**
+ * @brief 敵の探索ステート
+ */
 class EnemySearchState : public State
 {
 public:

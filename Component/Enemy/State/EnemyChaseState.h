@@ -11,6 +11,9 @@ struct Vector3;
 class CharacterSearcher;
 class Rotator;
 
+/**
+ * @brief 敵の追いかけステート
+ */
 class EnemyChaseState : public State
 {
 public:

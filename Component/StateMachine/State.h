@@ -4,12 +4,12 @@
 
 namespace Glib
 {
-    template<class T>
-    class WeakPtr;
-
     class Animator;
 }
 
+/**
+ * @brief ステートの基底クラス
+ */
 class State : public Component
 {
 public:

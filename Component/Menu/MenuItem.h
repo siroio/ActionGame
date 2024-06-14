@@ -2,7 +2,7 @@
 #include <Component.h>
 
 /**
- * @brief メニュー表示用アイテムの基底コンポーネント
+ * @brief メニュー表示アイテムの基底コンポーネント
  */
 class MenuItem : public Component
 {

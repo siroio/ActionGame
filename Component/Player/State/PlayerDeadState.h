@@ -7,6 +7,9 @@ namespace Glib
     class Animator;
 }
 
+/**
+ * @brief プレイヤー死亡ステート
+ */
 class PlayerDeadState : public State
 {
 private:

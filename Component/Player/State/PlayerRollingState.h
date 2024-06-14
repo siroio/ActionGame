@@ -15,6 +15,9 @@ class Rotator;
 class PlayerInput;
 class Damageable;
 
+/**
+ * @brief プレイヤー回避ステート
+ */
 class PlayerRollingState : public State
 {
 public:

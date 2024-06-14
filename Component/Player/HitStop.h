@@ -6,6 +6,9 @@ namespace Glib
     class EventMsg;
 }
 
+/**
+ * @brief ヒットストップコンポーネント
+ */
 class HitStop : public Component
 {
 public:

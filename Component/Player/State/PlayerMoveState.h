@@ -15,6 +15,9 @@ namespace Glib
 
 class PlayerInput;
 
+/**
+ * @brief プレイヤー移動ステート
+ */
 class PlayerMoveState : public State
 {
 public:

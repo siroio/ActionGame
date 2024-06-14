@@ -12,6 +12,9 @@ namespace Glib
 class Damageable;
 struct Vector3;
 
+/**
+ * @brief プレイヤーダメージステート
+ */
 class PlayerDamageState : public State
 {
 public:

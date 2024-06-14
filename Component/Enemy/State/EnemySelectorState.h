@@ -5,6 +5,9 @@
 
 class StateBehavior;
 
+/**
+ * @brief 敵の選択ステート
+ */
 class EnemySelectorState : public State
 {
 public:

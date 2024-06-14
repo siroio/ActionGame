@@ -9,6 +9,9 @@ namespace Glib
 
 class ElapsedTimer;
 
+/**
+ * @brief 画像のフェードコンポーネント
+ */
 class UIFader : public Component
 {
 public:

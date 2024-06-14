@@ -4,6 +4,9 @@
 
 class UIFader;
 
+/**
+ * @brief シーン推移コンポーネント
+ */
 class SceneChanger : public Component
 {
 public:

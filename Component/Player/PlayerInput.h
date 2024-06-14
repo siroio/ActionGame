@@ -4,7 +4,7 @@
 struct Vector2;
 
 /**
- * @brief プレイヤーの入力クラス
+ * @brief プレイヤーの入力コンポーネント
  */
 class PlayerInput : public Component
 {

@@ -12,6 +12,9 @@ namespace Glib
 class MenuItem;
 class PlayerInput;
 
+/**
+ * @brief メニュー制御コンポーネント
+ */
 class MenuController : public Component
 {
 public:

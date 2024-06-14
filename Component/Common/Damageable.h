@@ -4,6 +4,9 @@
 
 class StateBehavior;
 
+/**
+ * @brief ダメージオブジェクトコンポーネント
+ */
 class Damageable : public Component
 {
 public:

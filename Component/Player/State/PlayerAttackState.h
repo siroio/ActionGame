@@ -17,6 +17,9 @@ class AttackColliderController;
 class DelayedAudioPlayer;
 class PlayerInput;
 
+/**
+ * @brief プレイヤー攻撃ステート
+ */
 class PlayerAttackState : public State
 {
 public:

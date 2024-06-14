@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+/**
+ * @brief ステートのアニメーション情報
+ */
 struct AnimationInfo
 {
     AnimationInfo() = default;

@@ -9,6 +9,9 @@ namespace Glib
 struct Vector3;
 class CharacterSearcher;
 
+/**
+ * @brief 敵のダメージステート
+ */
 class EnemyDamageState : public State
 {
 public:

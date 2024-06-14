@@ -9,6 +9,9 @@ namespace Glib
 
 class ElapsedTimer;
 
+/**
+ * @brief 遅延音声再生コンポーネント
+ */
 class DelayedAudioPlayer : public Component
 {
 public:

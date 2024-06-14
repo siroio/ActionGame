@@ -9,6 +9,9 @@ namespace Glib
 
 class State;
 
+/**
+ * @brief ステートの管理コンポーネント
+ */
 class StateBehavior : public Component
 {
 public:

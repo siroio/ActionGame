@@ -8,6 +8,9 @@ namespace Glib
     class Collider;
 }
 
+/**
+ * @brief 攻撃制御ようコンポーネント
+ */
 class AttackColliderController : public Component
 {
 public:
