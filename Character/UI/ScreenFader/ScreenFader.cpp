@@ -12,8 +12,8 @@ using namespace Glib;
 WeakPtr<UIFader> ScreenFader::Create(float fadeTime, bool onStartFade, TimerScale mode)
 {
     auto gameObject = GameObjectManager::Instantiate("ScreenFader");
-    auto canvs = gameObject->AddComponent<Canvas>();
-    canvs->Order(100);
+    auto canvas = gameObject->AddComponent<Canvas>();
+    canvas->Order(100);
 
     auto image = gameObject->AddComponent<Image>();
     image->TextureID(TextureID::Fade);

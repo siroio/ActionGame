@@ -26,7 +26,7 @@ GameObjectPtr ResultMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPt
     auto menu = GameObjectManager::Instantiate("ResultMenu");
     auto clearImg = GameObjectManager::Instantiate("GameClearImg");
     auto titleItem = GameObjectManager::Instantiate("Title");
-    auto cursor = GameObjectManager::Instantiate("cursor");
+    auto cursor = GameObjectManager::Instantiate("Cursor");
 
     menu->Transform()->Parent(canvas->Transform());
     clearImg->Transform()->Parent(menu->Transform());
