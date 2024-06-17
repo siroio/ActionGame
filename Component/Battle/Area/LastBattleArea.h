@@ -7,7 +7,7 @@ namespace Glib
 }
 
 class BattleArea;
-class GameResultEventer;
+class GameResultController;
 
 /**
  * @brief 最後のエリア用コンポーネント
@@ -20,5 +20,5 @@ public:
 
 private:
     Glib::WeakPtr<BattleArea> battleArea_{};
-    Glib::WeakPtr<GameResultEventer> resultEventer_{};
+    Glib::WeakPtr<GameResultController> resultEventer_{};
 };

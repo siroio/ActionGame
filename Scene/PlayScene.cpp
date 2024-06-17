@@ -14,9 +14,10 @@
 #include "../Character/Player/Player.h"
 #include "../Character/Enemy/Golem/Golem.h"
 #include "../Character/Stage/Stage.h"
-#include "../Character/Menu/SafeArea/SafeArea.h"
+#include "../Character/UI/SafeArea/SafeArea.h"
 #include "../Character/UI/HPGauge/HPGauge.h"
 #include "../Character/UI/Button/UIButton.h"
+#include "../Character/Result/GameResult.h"
 #include "../Component/Camera/CameraController.h"
 #include "../Component/Audio/BGMController.h"
 #include "../Component/Fade/AudioFader.h"
@@ -60,7 +61,7 @@ void PlayScene::Start()
     UIButton::Spawn(uiCanvas);
 
     // 画面フェード
-    ScreenFader::Create(1.5f, true, TimerScale::Scaled);
+    ScreenFader::Create(1.5f, true, 0.0f, Color::White(), TimerScale::Scaled);
 
 #ifdef _DEBUG
     // デバッグ時のみ
@@ -81,7 +82,7 @@ void PlayScene::Start()
     bgmController->AddComponent<ElapsedTimer>();
 
     Stage::Spawn();
-    //Golem::Spawn(Vector3{ 0.0f, 0.0f, 4.0f }, Vector3::Zero(), Vector3::One());
+    GameResult::Spawn();
 
     // 戦闘エリアと敵の生成
     BattleAreaGenerator::Generate(BATTLE_AREA);

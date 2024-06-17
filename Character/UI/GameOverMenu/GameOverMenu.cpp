@@ -1,4 +1,4 @@
-﻿#include "TitleMenu.h"
+﻿#include "GameOverMenu.h"
 #include <Components/Image.h>
 #include <GameObjectManager.h>
 #include <GameObject.h>
@@ -8,7 +8,6 @@
 
 #include "../../../Component/Menu/MenuController.h"
 #include "../../../Component/Menu/SceneChangeButton.h"
-#include "../../../Component/Menu/ExitButton.h"
 #include "../../../Component/Player/PlayerInput.h"
 #include "../../../Constant/GameObjectName.h"
 #include "../../../Constant/SceneName.h"
@@ -18,7 +17,7 @@ using namespace Glib;
 
 namespace
 {
-    const Vector3 PLAY_BUTTON_POS{ 800.0f, 750.0f, 0.0f };
+    const Vector3 PLAY_BUTTON_POS{ 780.0f, 750.0f, 0.0f };
     const Vector3 EXIT_BUTTON_POS{ 800.0f, 900.0f, 0.0f };
     const Vector3 CURSOR_OFFSET{ -35.0f, 0.0f, 0.0f };
     const Vector3 CURSOR_SCALE{ 0.5f, 0.5f, 1.0f };
@@ -41,25 +40,25 @@ namespace
     }
 }
 
-GameObjectPtr TitleMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr<SceneChanger>& sceneChanger)
+GameObjectPtr GameOverMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr<SceneChanger>& sceneChanger)
 {
-    auto menu = GameObjectManager::Instantiate("TitleMenu");
-    auto play = GameObjectManager::Instantiate("Play");
-    auto exit = GameObjectManager::Instantiate("Exit");
+    auto menu = GameObjectManager::Instantiate("GameOverMenu");
+    auto retry = GameObjectManager::Instantiate("Retry");
+    auto exit = GameObjectManager::Instantiate("Title");
     auto cursor = GameObjectManager::Instantiate("Cursor");
 
     menu->Transform()->Parent(canvas->Transform());
-    play->Transform()->Parent(menu->Transform());
+    retry->Transform()->Parent(menu->Transform());
     exit->Transform()->Parent(menu->Transform());
     cursor->Transform()->Parent(menu->Transform());
 
     auto input = GameObjectManager::Find(ObjectName::Player)->GetComponent<PlayerInput>();
 
     auto menuController = menu->AddComponent<MenuController>(input);
-    auto playItem = SetupButton<SceneChangeButton>(play, PLAY_BUTTON_POS, TextureID::Play, SceneName::PLAY, sceneChanger);
-    auto exitItem = SetupButton<ExitButton>(exit, EXIT_BUTTON_POS, TextureID::Exit);
-    menuController->AddBackItem(playItem);
-    menuController->AddBackItem(exitItem);
+    auto retryItem = SetupButton<SceneChangeButton>(retry, PLAY_BUTTON_POS, TextureID::Retry, SceneName::PLAY, sceneChanger);
+    auto titleItem = SetupButton<SceneChangeButton>(exit, EXIT_BUTTON_POS, TextureID::Title, SceneName::TITLE, sceneChanger);
+    menuController->AddBackItem(retryItem);
+    menuController->AddBackItem(titleItem);
 
     auto cursorImage = cursor->AddComponent<Image>();
     cursorImage->TextureID(TextureID::Cursor);

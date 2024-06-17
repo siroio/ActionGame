@@ -1,5 +1,6 @@
 ﻿#include "TitleScene.h"
 #include <Components/Canvas.h>
+#include <Components/Image.h>
 #include <Components/Camera.h>
 #include <Components/AudioSource.h>
 #include <Components/MeshRenderer.h>
@@ -23,6 +24,7 @@
 #include "../Enum/AudioID.h"
 #include "../Enum/MessageID.h"
 #include "../Enum/MeshID.h"
+#include "../Enum/TextureID.h"
 
 using namespace Glib;
 
@@ -31,6 +33,7 @@ namespace
     const Vector3 LIGHT_EULER{ 22.0f, 200.0f, 0.0f };
     const Vector3 CAMERA_POSITION{ -6.73f, 1.50f, 24.36f };
     const Vector3 CAMERA_EULER{ 0.0f, 180.0f, 0.0f };
+    const Vector3 LOGO_POSITION{ 950.0f, 350.0f, 0.0f };
 }
 
 void TitleScene::Start()
@@ -47,7 +50,7 @@ void TitleScene::Start()
     player->Transform()->Position(CAMERA_POSITION);
     player->Transform()->EulerAngles(CAMERA_EULER);
 
-    auto fader = ScreenFader::Create(1.5f, true, TimerScale::Scaled);
+    auto fader = ScreenFader::Create(1.5f, true, 0.0f, Color::White(), TimerScale::Scaled);
     auto sceneChanger = GameObjectManager::Instantiate("SceneChanger")
         ->AddComponent<SceneChanger>(fader);
 
@@ -66,6 +69,13 @@ void TitleScene::Start()
 
     auto titleCanvas = GameObjectManager::Instantiate("TitleCanvas");
     titleCanvas->AddComponent<Canvas>();
+
+    auto logo = GameObjectManager::Instantiate("Logo");
+    auto logImg = logo->AddComponent<Image>();
+    logImg->TextureID(TextureID::Logo);
+    logo->Transform()->Parent(titleCanvas->Transform());
+    logo->Transform()->LocalPosition(LOGO_POSITION);
+
     auto menu = TitleMenu::Create(titleCanvas, sceneChanger);
     menu->AddComponent<AudioSource>()->SetGroup(AudioGroupID::SE);
     menu->AddComponent<AudioEventPlayer>(AudioID::ButtonPush, MessageID::Comfirm);

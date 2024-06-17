@@ -4,7 +4,7 @@
 #include <EventMsg.h>
 
 #include "BattleArea.h"
-#include "../../Event/GameResultEventer.h"
+#include "../../Event/GameResultController.h"
 #include "../../../Enum/MessageID.h"
 #include "../../../Enum/AudioID.h"
 
@@ -15,7 +15,7 @@ void LastBattleArea::Start()
     battleArea_ = GameObject()->GetComponent<BattleArea>();
     auto result = GameObjectManager::Find("GameResult");
     if (result.expired()) return;
-    resultEventer_ = result->GetComponent<GameResultEventer>();
+    resultEventer_ = result->GetComponent<GameResultController>();
 }
 
 void LastBattleArea::ReceiveMsg(const Glib::EventMsg& msg)

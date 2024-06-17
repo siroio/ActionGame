@@ -57,8 +57,6 @@ set(Character
     Character/Enemy/Skeleton/Skeleton.cpp
     Character/Light/Light.h
     Character/Light/Light.cpp
-    Character/Menu/SafeArea/SafeArea.h
-    Character/Menu/SafeArea/SafeArea.cpp
     Character/Player/Player.h
     Character/Player/Player.cpp
     Character/Projectile/MagicArrow.h
@@ -73,8 +71,16 @@ set(Character
     Character/UI/TitleMenu/TitleMenu.cpp
     Character/UI/ResultMenu/ResultMenu.h
     Character/UI/ResultMenu/ResultMenu.cpp
+    Character/UI/GameOverMenu/GameOverMenu.h
+    Character/UI/GameOverMenu/GameOverMenu.cpp
+    Character/UI/SafeArea/SafeArea.h
+    Character/UI/SafeArea/SafeArea.cpp
     Character/Result/GameResult.h
     Character/Result/GameResult.cpp
+    Character/Result/GameClear.h
+    Character/Result/GameClear.cpp
+    Character/Result/GameOver.h
+    Character/Result/GameOver.cpp
     Character/Stage/Stage.h
     Character/Stage/Stage.cpp
 )
@@ -153,8 +159,12 @@ set(Component
     Component/Audio/BGMController.cpp    
     Component/Audio/AudioEventPlayer.h
     Component/Audio/AudioEventPlayer.cpp    
-    Component/Event/GameResultEventer.h
-    Component/Event/GameResultEventer.cpp
+    Component/Event/PlayerDeadObserver.h
+    Component/Event/PlayerDeadObserver.cpp
+    Component/Event/GameResultController.h
+    Component/Event/GameResultController.cpp
+    Component/Event/ClearSceneNavigator.h
+    Component/Event/ClearSceneNavigator.cpp
     Component/Menu/MenuController.h
     Component/Menu/MenuController.cpp
     Component/Menu/MenuItem.h
@@ -177,6 +187,7 @@ set(Enum
     Enum/MeshID.h
     Enum/MessageID.h
     Enum/TextureID.h
+    Enum/TimeScale.h
 )
 
 set(Generator

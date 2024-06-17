@@ -14,10 +14,12 @@ struct Vector3;
  */
 class PlayerIdleState : public State
 {
-private:
-    PlayerIdleState(float duration = 0.0f, unsigned int nextState);
+public:
+    PlayerIdleState(unsigned int nextState, float duration = 0.0f);
     void OnInitialize() override;
     int OnUpdate(float elapsedTime) override;
+
+private:
     void OnGUI() override;
 
 private:

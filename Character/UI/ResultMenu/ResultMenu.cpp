@@ -18,7 +18,8 @@ using namespace Glib;
 namespace
 {
     const Vector3 TITLE_BUTTON_POSITION{ 800.0f, 750.0f, 0.0f };
-    const Vector3 RETRY_BUTTON_POS{ 800.0f, 900.0f, 0.0f };
+    const Vector3 CURSOR_OFFSET{ -35.0f, 0.0f, 0.0f };
+    const Vector3 CURSOR_SCALE{ 0.5f, 0.5f, 1.0f };
 }
 
 GameObjectPtr ResultMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPtr<SceneChanger>& sceneChanger)
@@ -43,6 +44,12 @@ GameObjectPtr ResultMenu::Create(const GameObjectPtr& canvas, const Glib::WeakPt
 
     auto menuController = menu->AddComponent<MenuController>(input);
     menuController->AddBackItem(menuItem);
+
+    auto cursorImage = cursor->AddComponent<Image>();
+    cursorImage->TextureID(TextureID::Cursor);
+    menuController->SetCursor(cursor);
+    menuController->SetCursorOffset(CURSOR_OFFSET);
+    cursor->Transform()->LocalScale(CURSOR_SCALE);
 
     return menu;
 }

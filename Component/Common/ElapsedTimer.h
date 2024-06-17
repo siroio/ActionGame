@@ -1,11 +1,6 @@
 ﻿#pragma once
 #include <Component.h>
-
-enum class TimerScale
-{
-    Scaled,
-    UnScaled,
-};
+#include "../../Enum/TimeScale.h"
 
 /**
  * @brief タイマークラス

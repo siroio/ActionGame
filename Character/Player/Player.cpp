@@ -72,8 +72,7 @@ namespace
 
     /* === ステータス ===  */
 
-    constexpr int MAX_HP{ 200 };
-    constexpr int POISE{ 200 };
+    constexpr int MAX_HP{ 300 };
 }
 
 GameObjectPtr Player::Spawn()
@@ -105,7 +104,7 @@ GameObjectPtr Player::Spawn()
     player->AddComponent<ElapsedTimer>();
     auto rotator = player->AddComponent<Rotator>();
     rotator->Speed(TURN_SPEED);
-    player->AddComponent<Damageable>(MAX_HP, MAX_HP, POISE, PlayerState::Damage, PlayerState::Dead);
+    player->AddComponent<Damageable>(MAX_HP, MAX_HP, 0, PlayerState::Damage, PlayerState::Dead);
     auto stateBehavior = player->AddComponent<StateBehavior>();
 
     PlayerMoveState::Parameter move{

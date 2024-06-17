@@ -15,5 +15,8 @@ struct TextureID
         Cursor,
         Title,
         Retry,
+        GameOver,
+        GameClear,
+        Logo,
     };
 };

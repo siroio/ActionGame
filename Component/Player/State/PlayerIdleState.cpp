@@ -8,7 +8,8 @@
 
 using namespace Glib;
 
-PlayerIdleState::PlayerIdleState(float duration, unsigned int nextState)
+PlayerIdleState::PlayerIdleState(unsigned int nextState, float duration) :
+    nextState_{ static_cast<int>(nextState) }, duration_{ duration }
 {}
 
 void PlayerIdleState::OnInitialize()

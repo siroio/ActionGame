@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <GameObjectPtr.h>
 
-class GameResultEventer;
+class GameResultController;
 
 struct GameResult
 {
-    static Glib::WeakPtr<GameResultEventer> Spawn();
+    static Glib::WeakPtr<GameResultController> Spawn();
 };

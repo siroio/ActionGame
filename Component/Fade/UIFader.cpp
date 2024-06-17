@@ -12,6 +12,7 @@ using namespace Glib;
 void UIFader::Start()
 {
     image_ = GameObject()->GetComponent<Image>();
+    if (!image_.expired()) startAlpha_ = image_->Color().a;
     elapsedTimer_ = GameObject()->GetComponent<ElapsedTimer>();
 }
 
